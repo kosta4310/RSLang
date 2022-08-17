@@ -1,4 +1,4 @@
-import { Auth, CreatedUser, IUser, IWord } from './types';
+import { Auth, CreatedUser, IUser, IWord, NoteToWord, NoteToWordUser } from './types';
 
 const BASE = 'http://127.0.0.1:3001';
 const USERS = `${BASE}/users`;
@@ -66,17 +66,17 @@ async function deleteUser(userId: string, token: string): Promise<number> {
     return response.status;
 }
 
-// async function getNewUserToken(userId: string, token: string, refreshToken: string) {
-//     const response = await fetch(`${USERS}/${userId}/${refreshToken}`, {
-//         method: 'GET',
-//         credentials: 'same-origin',
-//         headers: {
-//             Authorization: `Bearer ${token}`,
-//             accept: 'application/json',
-//         },
-//     });
-//     return response;
-// }
+async function getNewUserToken(userId: string, refreshToken: string): Promise<Auth | string> {
+    const response = await fetch(`${USERS}/${userId}/tokens`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${refreshToken}`,
+            accept: 'application/json',
+        },
+    });
+    return response.status === 200 ? response.json() : response.text();
+}
 
 async function getChunkOfWords(group: string, page: string): Promise<Array<IWord>> {
     const response = await fetch(`${WORDS}?group=${group}&page=${page}`);
@@ -88,4 +88,81 @@ async function getWordById(wordId: string): Promise<IWord> {
     return response.json();
 }
 
-export { createUser, getUser, signIn, updateUser, deleteUser, getChunkOfWords, getWordById };
+async function getAllUserWords(userId: string, token: string): Promise<Array<NoteToWordUser> | string> {
+    const response = await fetch(`${USERS}/${userId}/words`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.status === 200 ? response.json() : response.text();
+}
+
+async function createUserWord(
+    userId: string,
+    wordId: string,
+    token: string,
+    body: NoteToWord
+): Promise<NoteToWordUser | string> {
+    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+    return response.status === 200 ? response.json() : response.text();
+}
+
+async function getUserWordById(userId: string, wordId: string, token: string): Promise<NoteToWordUser | string> {
+    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.status === 200 ? response.json() : response.text();
+}
+
+async function updateUserWord(
+    userId: string,
+    wordId: string,
+    token: string,
+    body: NoteToWord
+): Promise<NoteToWordUser | string> {
+    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+    return response.status === 200 ? response.json() : response.text();
+}
+
+export {
+    createUser,
+    getUser,
+    signIn,
+    updateUser,
+    deleteUser,
+    getChunkOfWords,
+    getWordById,
+    getAllUserWords,
+    getNewUserToken,
+    createUserWord,
+    getUserWordById,
+    updateUserWord,
+};

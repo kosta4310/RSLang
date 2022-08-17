@@ -2,7 +2,6 @@ import * as api from './components/api/api';
 import { IUser } from './components/api/types';
 import './style.scss';
 
-console.log('index.js start');
 document.body.innerHTML = `<img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-32px.png" alt="logo">`;
 
 const user: IUser = {
@@ -24,7 +23,7 @@ const user: IUser = {
 const userId = '62fbeda3bc3a4e2688933d6e';
 const token = <string>localStorage.getItem('token');
 const refreshToken = <string>localStorage.getItem('refreshToken');
-
+const wordId = '5e9f5ee35eb9e72bc21af70c';
 // api.getUser(userId, token).then((res) => {
 //     console.log(res);
 // });
@@ -36,8 +35,20 @@ const refreshToken = <string>localStorage.getItem('refreshToken');
 
 // api.deleteUser(userId, token).then((res) => console.log(res));
 
-// api.getNewUserToken(userId, refreshToken, token).then((res) => console.log(res));
+// api.getNewUserToken(userId, refreshToken).then((res) => console.log(res));
 
 // api.getChunkOfWords('1', '1').then((res) => console.log(res));
 
-// api.getWordById('5e9f5ee35eb9e72bc21af70c').then((res) => console.log(res));
+// api.getWordById(wordId).then((res) => console.log(res));
+
+// api.createUserWord(userId, wordId, token, { difficulty: 'middle', optional: { repeat: 'true' } }).then((res) =>
+//     console.log(res)
+// );
+
+// api.getAllUserWords(userId, token).then((res) => console.log(res));
+
+// api.getUserWordById(userId, wordId, token).then((res) => console.log(res));
+
+// api.updateUserWord(userId, wordId, token, { difficulty: 'light', optional: { repeat: 'false' } }).then((res) =>
+//     console.log(res)
+// );

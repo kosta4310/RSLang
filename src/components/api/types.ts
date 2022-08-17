@@ -35,4 +35,14 @@ type Auth = {
     name: string;
 };
 
-export { CreatedUser, IUser, Auth, IWord };
+type NoteToWord = {
+    difficulty: string;
+    optional: object;
+};
+
+type NoteToWordUser = NoteToWord & {
+    id: string;
+    wordId: string;
+};
+
+export { CreatedUser, IUser, Auth, IWord, NoteToWord, NoteToWordUser };
