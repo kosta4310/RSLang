@@ -4,8 +4,7 @@ const BASE = 'http://127.0.0.1:3001';
 // const BASE = 'https://rs-lang-command-task.herokuapp.com';
 const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
-
-// ToDo types for httpstatus
+const OK = 200;
 
 async function createUser(user: IUser): Promise<IUser | string> {
     const response = await fetch(USERS, {
@@ -13,7 +12,7 @@ async function createUser(user: IUser): Promise<IUser | string> {
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function getUser(userId: string, token: string): Promise<IUser | string> {
@@ -26,7 +25,7 @@ async function getUser(userId: string, token: string): Promise<IUser | string> {
             'Content-Type': 'application/json',
         },
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function signIn(user: IUser): Promise<Auth | string> {
@@ -35,7 +34,7 @@ async function signIn(user: IUser): Promise<Auth | string> {
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function updateUser(userId: string, token: string, body: Omit<IUser, 'name'>): Promise<Auth | string> {
@@ -49,7 +48,7 @@ async function updateUser(userId: string, token: string, body: Omit<IUser, 'name
         },
         body: JSON.stringify(body),
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function deleteUser(userId: string, token: string): Promise<Response | boolean> {
@@ -73,7 +72,7 @@ async function getNewUserToken(userId: string, refreshToken: string): Promise<Au
             accept: 'application/json',
         },
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function getChunkOfWords(group: string, page: string): Promise<Array<IWord>> {
@@ -96,7 +95,7 @@ async function getAllUserWords(userId: string, token: string): Promise<Array<Use
             'Content-Type': 'application/json',
         },
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function createUserWord(
@@ -115,7 +114,7 @@ async function createUserWord(
         },
         body: JSON.stringify(body),
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function getUserWordById(userId: string, wordId: string, token: string): Promise<UserWord | string> {
@@ -128,7 +127,7 @@ async function getUserWordById(userId: string, wordId: string, token: string): P
             'Content-Type': 'application/json',
         },
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function updateUserWord(
@@ -147,7 +146,7 @@ async function updateUserWord(
         },
         body: JSON.stringify(body),
     });
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function deleteUserWord(userId: string, wordId: string, token: string): Promise<Response | boolean> {
@@ -191,7 +190,7 @@ async function getUserAggWordById(userId: string, wordId: string, token: string)
             'Content-Type': 'application/json',
         },
     })
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function getStatistics(userId: string, token: string): Promise<Statistic & {id:string} | string> {
@@ -204,7 +203,7 @@ async function getStatistics(userId: string, token: string): Promise<Statistic &
             'Content-Type': 'application/json',
         },
     })
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 async function upsertStatistics(userId: string, token: string, body: Statistic): Promise<Statistic & {id:string} | string> {
@@ -218,7 +217,7 @@ async function upsertStatistics(userId: string, token: string, body: Statistic):
         },
         body: JSON.stringify(body),
     })
-    return response.status === 200 ? response.json() : response.text();
+    return response.status === OK ? response.json() : response.text();
 }
 
 export {
