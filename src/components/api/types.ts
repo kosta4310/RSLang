@@ -45,4 +45,11 @@ type NoteToWordUser = NoteToWord & {
     wordId: string;
 };
 
-export { CreatedUser, IUser, Auth, IWord, NoteToWord, NoteToWordUser };
+type inputAllUserAggWords = {
+    page: string;
+    group?: string;
+    wordsPerPage: string;
+    filter: string;
+};
+
+export { CreatedUser, IUser, Auth, IWord, NoteToWord, NoteToWordUser, inputAllUserAggWords };

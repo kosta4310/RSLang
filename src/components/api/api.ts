@@ -1,13 +1,11 @@
-import { Auth, CreatedUser, IUser, IWord, NoteToWord, NoteToWordUser } from './types';
+import { Auth, CreatedUser, inputAllUserAggWords, IUser, IWord, NoteToWord, NoteToWordUser } from './types';
 
 const BASE = 'http://127.0.0.1:3001';
+// const BASE = 'https://rs-lang-command-task.herokuapp.com';
 const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
 
 // ToDo types for httpstatus
-// function checkStatusCode(response: Response): Promise<IUser | string> {
-//     return response.status === 200 ? response.json() : response;
-// }
 
 async function createUser(user: IUser): Promise<IUser | string> {
     const response = await fetch(USERS, {
@@ -54,7 +52,7 @@ async function updateUser(userId: string, token: string, body: Omit<IUser, 'name
     return response.status === 200 ? response.json() : response.text();
 }
 
-async function deleteUser(userId: string, token: string): Promise<number> {
+async function deleteUser(userId: string, token: string): Promise<Response | boolean> {
     const response = await fetch(`${USERS}/${userId}`, {
         method: 'DELETE',
         credentials: 'same-origin',
@@ -63,7 +61,7 @@ async function deleteUser(userId: string, token: string): Promise<number> {
             accept: '/',
         },
     });
-    return response.status;
+    return response.status === 204 ? true : response;
 }
 
 async function getNewUserToken(userId: string, refreshToken: string): Promise<Auth | string> {
@@ -152,6 +150,33 @@ async function updateUserWord(
     return response.status === 200 ? response.json() : response.text();
 }
 
+async function deleteUserWord(userId: string, wordId: string, token: string): Promise<Response | boolean> {
+    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+        method: 'DELETE',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            accept: '/',
+        },
+    });
+    return response.status === 204 ? true : response;
+}
+
+async function getAllUserAggWords(userId: string, token: string, param: inputAllUserAggWords) {
+    const urlSearchParams = new URLSearchParams(param);
+
+    const response = await fetch(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.json();
+}
+
 export {
     createUser,
     getUser,
@@ -165,4 +190,6 @@ export {
     createUserWord,
     getUserWordById,
     updateUserWord,
+    deleteUserWord,
+    getAllUserAggWords,
 };
