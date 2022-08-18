@@ -1,4 +1,4 @@
-import { Auth, CreatedUser, inputAllUserAggWords, IUser, IWord, NoteToWord, NoteToWordUser } from './types';
+import { Auth, CreatedUser, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
 
 const BASE = 'http://127.0.0.1:3001';
 // const BASE = 'https://rs-lang-command-task.herokuapp.com';
@@ -86,7 +86,7 @@ async function getWordById(wordId: string): Promise<IWord> {
     return response.json();
 }
 
-async function getAllUserWords(userId: string, token: string): Promise<Array<NoteToWordUser> | string> {
+async function getAllUserWords(userId: string, token: string): Promise<Array<UserWord> | string> {
     const response = await fetch(`${USERS}/${userId}/words`, {
         method: 'GET',
         credentials: 'same-origin',
@@ -104,7 +104,7 @@ async function createUserWord(
     wordId: string,
     token: string,
     body: NoteToWord
-): Promise<NoteToWordUser | string> {
+): Promise<UserWord | string> {
     const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
         method: 'POST',
         credentials: 'same-origin',
@@ -118,7 +118,7 @@ async function createUserWord(
     return response.status === 200 ? response.json() : response.text();
 }
 
-async function getUserWordById(userId: string, wordId: string, token: string): Promise<NoteToWordUser | string> {
+async function getUserWordById(userId: string, wordId: string, token: string): Promise<UserWord | string> {
     const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
         method: 'GET',
         credentials: 'same-origin',
@@ -136,7 +136,7 @@ async function updateUserWord(
     wordId: string,
     token: string,
     body: NoteToWord
-): Promise<NoteToWordUser | string> {
+): Promise<UserWord | string> {
     const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
         method: 'PUT',
         credentials: 'same-origin',
@@ -162,7 +162,9 @@ async function deleteUserWord(userId: string, wordId: string, token: string): Pr
     return response.status === 204 ? true : response;
 }
 
-async function getAllUserAggWords(userId: string, token: string, param: inputAllUserAggWords) {
+// Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
+// иметь поле userWord со своими полями
+async function getAllUserAggWords(userId: string, token: string, param: InputAllUserAggWords) {
     const urlSearchParams = new URLSearchParams(param);
 
     const response = await fetch(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`, {
@@ -175,6 +177,48 @@ async function getAllUserAggWords(userId: string, token: string, param: inputAll
         },
     });
     return response.json();
+}
+
+// Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
+// иметь поле userWord со своими полями
+async function getUserAggWordById(userId: string, wordId: string, token: string) {
+    const response = await fetch(`${USERS}/${userId}/aggregatedWords/${wordId}`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+    return response.status === 200 ? response.json() : response.text();
+}
+
+async function getStatistics(userId: string, token: string): Promise<Statistic & {id:string} | string> {
+    const response = await fetch(`${USERS}/${userId}/statistics`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+    return response.status === 200 ? response.json() : response.text();
+}
+
+async function upsertStatistics(userId: string, token: string, body: Statistic): Promise<Statistic & {id:string} | string> {
+    const response = await fetch(`${USERS}/${userId}/statistics`, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    })
+    return response.status === 200 ? response.json() : response.text();
 }
 
 export {
@@ -192,4 +236,7 @@ export {
     updateUserWord,
     deleteUserWord,
     getAllUserAggWords,
+    getUserAggWordById,
+    upsertStatistics,
+    getStatistics
 };

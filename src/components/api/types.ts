@@ -40,16 +40,21 @@ type NoteToWord = {
     optional: object;
 };
 
-type NoteToWordUser = NoteToWord & {
+type UserWord = NoteToWord & {
     id: string;
     wordId: string;
 };
 
-type inputAllUserAggWords = {
+type InputAllUserAggWords = {
     page: string;
     group?: string;
     wordsPerPage: string;
     filter: string;
 };
 
-export { CreatedUser, IUser, Auth, IWord, NoteToWord, NoteToWordUser, inputAllUserAggWords };
+type Statistic = {
+    optional: object,
+    learnedWords: string
+}
+
+export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic };
