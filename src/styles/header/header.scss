@@ -1,0 +1,37 @@
+@import './burger.scss';
+@import './menu.scss';
+
+.wrapper-header {
+    background-color: $color-base;
+}
+
+.container {
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $height-header-footer;
+}
+
+.burger {
+}
+
+.menu {
+    // display: none;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    column-gap: 4rem;
+}
+
+.title {
+}
+
+.btn-enter {
+    display: block;
+    @include font-ABeeZee(3.6rem, 400);
+}

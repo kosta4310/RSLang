@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=ABeeZee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:focus,
+:active {
+  outline: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+nav,
+footer,
+header,
+aside {
+  display: block;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: 400;
+}
+
+.burger::after, .burger::before, .burger__line {
+  position: absolute;
+  display: inline-block;
+  height: 2px;
+  background-color: red;
+  width: 30px;
+}
+
+.burger {
+  display: inline-block;
+  width: 30px;
+  height: 22px;
+  line-height: 0;
+  background-color: transparent;
+  position: relative;
+  transition: all ease-in-out 1s;
+}
+.burger__line {
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+}
+.burger::before {
+  content: "";
+  top: 0;
+  left: 0;
+}
+.burger::after {
+  content: "";
+  bottom: 0;
+  left: 0;
+}
+.burger:hover {
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  width: 320px;
+  max-height: 100%;
+  position: fixed;
+  left: -320px;
+  top: 0;
+  bottom: 0;
+  margin-top: 60px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: gray;
+  gap: 40px 0;
+  font-size: 32px;
+  line-height: 51px;
+  transition: all ease-in-out 0.5s;
+  z-index: 5;
+}
+
+.wrapper-header {
+  background-color: #ffc53d;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.menu {
+  display: none;
+}
+
+.btn-enter {
+  display: block;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 10px;
+}

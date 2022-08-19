@@ -7,8 +7,20 @@ export class Router {
     }
     init() {
         this.router
-            .on('/', function () {
-                console.log(1);
+            .on('/', () => {
+                console.log('start page');
+            })
+            .on('/learnbook', () => {
+                console.log('learn book');
+            })
+            .on('/statistic', () => {
+                console.log('statistic');
+            })
+            .on('/game-listen', () => {
+                console.log('geme listen');
+            })
+            .on('/game-sprint', () => {
+                console.log('geme sprint');
             })
             .resolve();
     }
