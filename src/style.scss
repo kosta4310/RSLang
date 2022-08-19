@@ -1,3 +1,7 @@
-body {
-    background-color: red;
+@import './styles/nullable.scss';
+@import './styles/variables.scss';
+@import './styles/fonts.scss';
+
+.container {
+    max-width: $width-container;
 }
