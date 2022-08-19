@@ -1,9 +1,6 @@
-import { Auth, CreatedUser, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
+import { Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
 import {
-	ReasonPhrases,
 	StatusCodes,
-	getReasonPhrase,
-	getStatusCode,
 } from 'http-status-codes';
 
 
