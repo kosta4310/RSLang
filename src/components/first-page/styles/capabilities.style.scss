@@ -1,0 +1,52 @@
+.wrapper-capabilities {
+    background-color: $color-second;
+}
+.container {
+}
+.capabilities {
+    // .capabilities__title
+
+    &__title {
+    }
+
+    // .capabilities__items
+
+    &__items {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+.title {
+}
+.ca-item {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    height: 46rem;
+    background-color: $color-card-capabilities;
+    border-radius: 1rem;
+    overflow: hidden;
+    // .item__image
+
+    &__image {
+        img {
+            display: block;
+            max-width: 30rem;
+        }
+    }
+
+    // .item__content
+
+    &__content {
+    }
+
+    // .item__title
+
+    &__title {
+    }
+
+    // .item__text
+
+    &__text {
+    }
+}

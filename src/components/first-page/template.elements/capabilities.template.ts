@@ -1,71 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSLang</title>
-</head>
-
-<body>
-    <!-- <div class="wrapper-capabilities">
+export const templateCapabilities = `
+<div class="wrapper-capabilities">
         <div class="container">
             <div class="capabilities">
                 <h2 class="capabilities__title title">
                     Возможности
                 </h2>
                 <div class="capabilities__items">
-                    <div class="item">
-                        <div class="item__image">
+                    <div class="ca-item">
+                        <div class="ca-item__image">
                             <img src="./assets/images/learnbook.png" alt="learnbook">
                         </div>
-                        <div class="item__content">
-                            <h3 class="item__title">
+                        <div class="ca-item__content">
+                            <h3 class="ca-item__title">
                                 Учебник
                             </h3>
-                            <p class="item__text">
+                            <p class="ca-item__text">
                                 Более 3500 тысяч слов для изучения, разбитых на разделы по уровню подготовки.
                             </p>
                         </div>
                     </div>
-                    <div class="item">
-                        <div class="item__image">
+                    <div class="ca-item">
+                        <div class="ca-item__image">
                             <img src="./assets/images/audiocall.png" alt="audiocall">
                         </div>
-                        <div class="item__content">
-                            <h3 class="item__title">
+                        <div class="ca-item__content">
+                            <h3 class="ca-item__title">
                                 <span>Игра</span><span>“Аудиовызов”</span>
                             </h3>
-                            <p class="item__text">
+                            <p class="ca-item__text">
                                 Попробуй понять какое слово было произнесено.
                                 Тренировка восприятия на слух.
                             </p>
                         </div>
                     </div>
-                    <div class="item">
-                        <div class="item__image">
+                    <div class="ca-item">
+                        <div class="ca-item__image">
                             <img src="./assets/images/sprint.png" alt="sprint">
                         </div>
-                        <div class="item__content">
-                            <h3 class="item__title">
+                        <div class="ca-item__content">
+                            <h3 class="ca-item__title">
                                 <span>Игра</span><span>“Спринт”</span>
                             </h3>
-                            <p class="item__text">
+                            <p class="ca-item__text">
                                 Определи верный перевод или нет.
                                 Тренировка на время.
                             </p>
                         </div>
                     </div>
-                    <div class="item">
-                        <div class="item__image">
+                    <div class="ca-item">
+                        <div class="ca-item__image">
                             <img src="./assets/images/statistic.png" alt="statistic">
                         </div>
-                        <div class="item__content">
-                            <h3 class="item__title">
+                        <div class="ca-item__content">
+                            <h3 class="ca-item__title">
                                 Статистика
                             </h3>
-                            <p class="item__text">
+                            <p class="ca-item__text">
                                 Отслеживай свой прогресс каждый день.
                             </p>
                         </div>
@@ -73,7 +63,4 @@
                 </div>
             </div>
         </div>
-    </div> -->
-</body>
-
-</html>
+    </div>`;

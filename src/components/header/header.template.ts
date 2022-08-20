@@ -1,4 +1,4 @@
-export const header = `
+export const templateHeader = `
 <div class="wrapper-header">
         <div class="container">
             <div class="header">
