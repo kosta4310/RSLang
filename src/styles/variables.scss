@@ -1,5 +1,5 @@
 $width-container: 1280px;
-$height-header-footer: 80px;
+$height-header-footer: 8rem;
 
 $color-base: #ffc53d;
 $color-addition: #ffb300;
@@ -9,11 +9,11 @@ $color-violet: #5d6280;
 $color-green: #224957;
 $color-blue: #2959ff;
 $color-black: #000;
+$color-orange: #ff5714;
 
 @mixin font-ABeeZee($size, $weight) {
     font-family: ABeeZee;
     font-size: $size;
-    //  font-style: $style;
     font-weight: $weight;
 }
 

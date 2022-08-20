@@ -1,4 +1,5 @@
 import Navigo from 'navigo';
+import { openCloseMenu } from '../header/header.component';
 
 export class Router {
     router: Navigo;
@@ -17,10 +18,13 @@ export class Router {
                 console.log('statistic');
             })
             .on('/game-listen', () => {
-                console.log('geme listen');
+                console.log('game listen');
             })
             .on('/game-sprint', () => {
-                console.log('geme sprint');
+                console.log('game sprint');
+            })
+            .on('/auth', () => {
+                console.log('auth');
             })
             .resolve();
     }

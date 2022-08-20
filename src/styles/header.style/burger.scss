@@ -7,7 +7,6 @@
 }
 .burger {
     display: inline-block;
-    //  display: none;
     width: 30px;
     height: 22px;
     line-height: 0;
@@ -32,10 +31,6 @@
         bottom: 0;
         left: 0;
     }
-    //   @include media-tablet {
-    //     display: inline-block;
-    //     z-index: 10;
-    //   }
     &:hover {
         cursor: pointer;
     }

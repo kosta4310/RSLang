@@ -1,9 +1,8 @@
 .menu {
     display: inline-flex;
     font-size: 3.2rem;
-    //  width: 32rem;
     padding: 0 2rem;
-    max-height: 32rem;
+    max-height: 40rem;
     position: fixed;
     left: -32rem;
     top: 0;
@@ -15,15 +14,7 @@
     justify-content: flex-start;
     background-color: gray;
     opacity: 50%;
-
     gap: 3rem 0;
-
     line-height: 5rem;
     transition: all ease-in-out 0.5s;
-    z-index: 5;
-    //   @media (max-height: $max-height-mobile-menu) {
-    //       padding-top: 120px;
-    //       justify-content: flex-start;
-    //       overflow: auto;
-    //   }
 }
