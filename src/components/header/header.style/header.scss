@@ -1,0 +1,28 @@
+@import './burger.scss';
+@import './menu.scss';
+
+.wrapper-header {
+    background-color: $color-base;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $height-header-footer;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    column-gap: 4rem;
+}
+
+.btn-enter {
+    display: block;
+    color: $color-orange;
+    line-height: 3.8rem;
+    padding: 1rem 3.8rem;
+    border: 2px solid $color-orange;
+    @include font-ABeeZee(3.6rem, 400);
+}
