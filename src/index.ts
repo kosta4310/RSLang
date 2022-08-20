@@ -1,7 +1,6 @@
 import { Router } from './components/Router/router';
 import './style.scss';
 import './components/first-page/first-page.component';
-// import { header } from './components/header/header.template';
 import './components/header/header.component';
 import { Header } from './components/header/header.component';
 
