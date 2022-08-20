@@ -1,3 +1,4 @@
+import { Authorization } from './components/authorization/authorization.components';
 import { Router } from './components/Router/router';
 import './style.scss';
 import './components/first-page/first-page.component';
@@ -9,3 +10,5 @@ header.init();
 
 const router = new Router();
 router.init();
+const authorization = new Authorization()
+authorization.render()
