@@ -2,9 +2,16 @@
 @import './styles/variables.scss';
 @import './styles/fonts.scss';
 @import './components/header/header.style/header.scss';
+@import './components/footer/footer.style/footer.scss';
 
 .container {
     max-width: $width-container;
     margin: 0 auto;
     padding: 0 1rem;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
