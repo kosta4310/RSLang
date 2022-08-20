@@ -17,4 +17,8 @@
     gap: 3rem 0;
     line-height: 5rem;
     transition: all ease-in-out 0.5s;
+
+    & a {
+        color: $color-white;
+    }
 }

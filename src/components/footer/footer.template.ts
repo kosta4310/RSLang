@@ -1,21 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSLang</title>
-</head>
-
-<body>
-    <div class="wrapper-footer">
-        <div class="container">
+export const footer = `
+<div class="wrapper-footer">
+        
+            <div class="container">
             <footer class="footer">
                 <div class="footer__left">
                     <a href="https://rs.school/js/" target="_blank">
-                        <img class="footer__logo" src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"
-                            alt="logo rs-school">
+                        <img class="footer__logo" src="./assets/images/rs_school_js.png" alt="logo rs-school">
                     </a>
                     <div class="footer__content">
                         <span>&copy</span>
@@ -24,28 +14,25 @@
                 </div>
                 <div class="footer__right">
                     <div class="right__item">
-                        <a href="https://github.com/kosta4310">
+                        <a href="https://github.com/kosta4310" class="item">
                             <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png" alt="logo github">
                             <h4>kosta4310</h4>
                         </a>
                     </div>
                     <div class="right__item">
-                        <a href="https://github.com/kosta4310">
-                            <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-32px.png" alt="logo github">
+                        <a href="https://github.com/rybakovmax23" class="item">
+                            <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png" alt="logo github">
                             <h4>rybakovmax23</h4>
                         </a>
                     </div>
                     <div class="right__item">
-                        <a href="https://github.com/kosta4310">
-                            <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-32px.png" alt="logo github">
+                        <a href="https://github.com/rocks-py" class="item">
+                            <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png" alt="logo github">
                             <h4>rocks-py</h4>
                         </a>
                     </div>
                 </div>
             </footer>
-        </div>
-
-    </div>
-</body>
-
-</html>
+            </div>
+        
+    </div>`;

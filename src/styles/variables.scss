@@ -6,10 +6,12 @@ $color-addition: #ffb300;
 $color-card-capabilities: #f0f0f0;
 $color-card: #d9d9d9;
 $color-violet: #5d6280;
-$color-green: #224957;
+$color-turquoise: #224957;
+$color-green: #16302b;
 $color-blue: #2959ff;
 $color-black: #000;
 $color-orange: #ff5714;
+$color-white: #fff;
 
 @mixin font-ABeeZee($size, $weight) {
     font-family: ABeeZee;
@@ -17,6 +19,16 @@ $color-orange: #ff5714;
     font-weight: $weight;
 }
 
+@mixin font-Inter($size, $weight) {
+    font-family: Inter;
+    font-size: $size;
+    font-weight: $weight;
+}
+
 h1 {
     @include font-ABeeZee(4.8rem, 400);
+}
+
+h4 {
+    @include font-Inter(3.6rem, 400);
 }
