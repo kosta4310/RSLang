@@ -7,6 +7,7 @@
     height: 57rem;
     background: $color-violet;
     border-radius: 15px;
+    overflow: hidden;
 }
 .links-btn {
     padding-top: 8rem;
@@ -27,14 +28,13 @@
     }
 }
 .signIn-container {
-    display: none;
-    padding-top: 3.7rem;
-    transition: opacity .5s ease, transform .5s ease;
+    padding: 3.7rem 6.5rem 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .form-signIn-left {
-    transform: translateX(-5.7rem);
-    opacity: .0;
-  }
+    transform: translateX(-50.7rem);
+
+}
 .form-title {
     font-family: Inter;
     font-style: normal;
@@ -46,13 +46,13 @@
     margin: 0 auto;
     color: #ffffff;
 }
-.form-signIn {
+.form{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 2.5rem;
-    padding-top: 1.6rem;
+    padding-top: 2rem;
 }
 .form-styling {
     width: 30rem;
@@ -71,7 +71,7 @@
     font-size: 2.4rem;
     line-height: 2rem;
 }
-.btn-submit {
+.submit-signIn {
     background: $color-blue;
     box-shadow: 0px 0.4rem 0.4rem rgba(0, 0, 0, 0.3);
     border-radius: 1rem;
@@ -83,4 +83,26 @@
     color: #ffffff;
     margin-top: 3.9rem;
 }
+.signUp-container {
+    padding-top: 3.7rem;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.form-signUp-left {
+    transform: translateX(-50.7rem);
 
+}
+.submit-signUp{
+    background: $color-base;
+    box-shadow: 0px 0.4rem 0.4rem rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    padding: 1.8rem 15rem;
+    font-family: Inter;
+    font-size: 2.4rem;
+    line-height: 2rem;
+    text-transform: capitalize;
+    color: $color-black;
+    margin-top: 3.9rem;
+}
+.signs-container{
+    display: flex;
+}

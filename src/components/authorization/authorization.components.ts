@@ -12,6 +12,7 @@ export class Authorization {
                 (<HTMLElement>document.querySelector('.links-btn__signIn')).classList.remove('active-link');
                 (<HTMLElement>document.querySelector('.links-btn__signUp')).classList.add('active-link');
                 (<HTMLElement>document.querySelector('.signIn-container')).classList.add('form-signIn-left');
+                (<HTMLElement>document.querySelector('.signUp-container')).classList.add('form-signUp-left');
 
                 console.log(1);
             }
@@ -19,6 +20,7 @@ export class Authorization {
                 (<HTMLElement>document.querySelector('.links-btn__signUp')).classList.remove('active-link');
                 (<HTMLElement>document.querySelector('.links-btn__signIn')).classList.add('active-link');
                 (<HTMLElement>document.querySelector('.signIn-container')).classList.remove('form-signIn-left');
+                (<HTMLElement>document.querySelector('.signUp-container')).classList.remove('form-signUp-left');
             }
             console.log(target);
         });
