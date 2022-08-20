@@ -1,7 +1,7 @@
 @import './styles/nullable.scss';
 @import './styles/variables.scss';
 @import './styles/fonts.scss';
-@import './styles/header.style/header.scss';
+@import './components/header/header.style/header.scss';
 
 .container {
     max-width: $width-container;
