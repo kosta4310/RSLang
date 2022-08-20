@@ -11,7 +11,7 @@ burger.addEventListener('click', (e) => {
     openCloseMenu();
 });
 
-document.addEventListener('click', (e) => {
+document.addEventListener('click', () => {
     if (menu.classList.contains('open')) openCloseMenu();
 });
 

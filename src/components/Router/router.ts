@@ -1,5 +1,5 @@
 import Navigo from 'navigo';
-import { openCloseMenu } from '../header/header.component';
+
 
 export class Router {
     router: Navigo;
