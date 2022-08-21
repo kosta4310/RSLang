@@ -6,7 +6,7 @@ export const templateCapabilities = `
                     Возможности
                 </h2>
                 <div class="capabilities__items">
-                    <div class="ca-item">
+                    <a href="/learnbook" class="ca-item" data-navigo>
                         <div class="ca-item__image">
                             <img src="./assets/images/learnbook.png" alt="learnbook">
                         </div>
@@ -18,8 +18,8 @@ export const templateCapabilities = `
                                 Более 3500 тысяч слов для изучения, разбитых на разделы по уровню подготовки.
                             </p>
                         </div>
-                    </div>
-                    <div class="ca-item">
+                    </a>
+                    <a href="/game-listen" class="ca-item" data-navigo>
                         <div class="ca-item__image">
                             <img src="./assets/images/audiocall.png" alt="audiocall">
                         </div>
@@ -32,8 +32,8 @@ export const templateCapabilities = `
                                 Тренировка восприятия на слух.
                             </p>
                         </div>
-                    </div>
-                    <div class="ca-item">
+                    </a>
+                    <a href="/game-sprint" class="ca-item" data-navigo>
                         <div class="ca-item__image">
                             <img src="./assets/images/sprint.png" alt="sprint">
                         </div>
@@ -46,8 +46,8 @@ export const templateCapabilities = `
                                 Тренировка на время.
                             </p>
                         </div>
-                    </div>
-                    <div class="ca-item">
+                    </a>
+                    <a href="/statistic" class="ca-item" data-navigo>
                         <div class="ca-item__image">
                             <img src="./assets/images/statistic.png" alt="statistic">
                         </div>
@@ -59,7 +59,7 @@ export const templateCapabilities = `
                                 Отслеживай свой прогресс каждый день.
                             </p>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

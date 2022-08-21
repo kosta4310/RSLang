@@ -4,9 +4,11 @@
 .container {
 }
 .capabilities {
+    padding: 8rem 0;
+    text-align: center;
     // .capabilities__title
-
     &__title {
+        padding-bottom: 5rem;
     }
 
     // .capabilities__items
@@ -17,21 +19,27 @@
     }
 }
 .title {
+    @include font-Inter(4.8rem, 700);
+    line-height: 4rem;
 }
 .ca-item {
     display: flex;
     flex-direction: column;
-    width: 30rem;
-    height: 46rem;
+    color: $color-black;
+    width: 28rem;
+    height: 40rem;
     background-color: $color-card-capabilities;
     border-radius: 1rem;
     overflow: hidden;
     // .item__image
 
     &__image {
+        height: 22rem;
+        max-width: 30rem;
         img {
             display: block;
-            max-width: 30rem;
+            max-height: 100%;
+            max-width: 100%;
         }
     }
 
@@ -43,10 +51,20 @@
     // .item__title
 
     &__title {
+        @include font-Inter(3rem, 700);
+        margin-bottom: 2rem;
+    }
+
+    &__title span:first-child {
+        @include font-Inter(2.5rem, 400);
     }
 
     // .item__text
 
     &__text {
+        text-align: left;
+        margin: 0 auto;
+        width: 26rem;
+        @include font-Inter(2rem, 400);
     }
 }

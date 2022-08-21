@@ -3,6 +3,7 @@ import { templateHeader } from '../header/header.template';
 import { templateFooter } from '../footer/footer.template';
 import { templateSlogan } from './template.elements/slogan.template';
 import { templateCapabilities } from './template.elements/capabilities.template';
+import { templateOurTeam } from './template.elements/ourteam.template';
 
 export class HomePage {
     header: Header;
@@ -12,6 +13,7 @@ export class HomePage {
     init() {
         const doc = document.body;
 
+        doc.insertAdjacentHTML('afterbegin', templateOurTeam);
         doc.insertAdjacentHTML('afterbegin', templateCapabilities);
         doc.insertAdjacentHTML('afterbegin', templateSlogan);
         doc.insertAdjacentHTML('afterbegin', templateHeader);
