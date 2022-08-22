@@ -2,15 +2,15 @@
 @import '../../styles/fonts.scss';
 
 .auth-wrapper {
-    margin: 9rem auto;
+    margin: 2rem auto;
     width: 57rem;
-    height: 57rem;
+    height: 50rem;
     background: $color-violet;
     border-radius: 15px;
     overflow: hidden;
 }
 .links-btn {
-    padding-top: 8rem;
+    padding-top: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,7 +101,6 @@
     line-height: 2rem;
     text-transform: capitalize;
     color: $color-black;
-    margin-top: 3.9rem;
 }
 .signs-container{
     display: flex;
