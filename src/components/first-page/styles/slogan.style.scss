@@ -1,0 +1,37 @@
+.wrapper-slogan {
+}
+.container {
+}
+.slogan {
+    padding: 7em 12rem;
+    display: flex;
+    column-gap: 3rem;
+    align-items: center;
+    justify-content: space-between;
+
+    // .slogan__image
+
+    &__image {
+    }
+
+    // .slogan__context
+
+    &__context h5 {
+        @include font-Inter(4.8rem, 400);
+        margin-bottom: 2rem;
+        max-width: 55rem;
+    }
+
+    &__context li {
+        @include font-Inter(4rem, 400);
+        list-style: circle;
+        margin-bottom: 2rem;
+        //   padding-left: 2rem;
+        //   margin-left: 2rem;
+    }
+
+    &__context ul {
+        padding-left: 3.5rem;
+        //   margin-left: 2rem;
+    }
+}

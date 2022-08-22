@@ -1,8 +1,9 @@
 @import './styles/nullable.scss';
 @import './styles/variables.scss';
 @import './styles/fonts.scss';
-@import './components/header/header.style/header.scss';
-@import './components/footer/footer.style/footer.scss';
+@import './components/first-page/styles/homepage.scss';
+// @import './components/header/header.style/header.scss';
+// @import './components/footer/footer.style/footer.scss';
 
 .container {
     max-width: $width-container;
@@ -13,5 +14,5 @@
 body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
 }
