@@ -1,0 +1,55 @@
+@import '../../styles/variables.scss';
+@import '../../styles/fonts.scss';
+
+.control-panel__container {
+    @include font-Inter(3.6rem, 400);
+}
+
+.games__container,
+.complexity__container {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 15px;
+}
+
+
+.learnbook__button {
+    display: flex;
+    background-color: $color-card;
+    padding: 5px;
+    border-radius: 15px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.learnbook__icon-container {
+    background-color: white;
+    padding: 5px;
+    border-radius: 45px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.pr10 {
+    padding-right: 10px;
+}
+
+.games_buttons,
+.complexity__buttons {
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
+}
+
+.games__container .title,
+.complexity__container .title {
+    width: 30rem;
+}
+

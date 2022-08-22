@@ -1,9 +1,9 @@
-import './learnbook.style.scss'
+import './controlpanel.style.scss'
 
-export class LearnBook {
+export class ControlPanel {
     render() {
         const template = `
-        <div class="learnbook__container">
+        <div class="control-panel__container">
             <div class="games__container">
                 <span class="title">Игры</span>
                 <div class="games_buttons">
@@ -56,29 +56,11 @@ export class LearnBook {
                     </div>
                 </div>
             </div>
-        </div>`
-        document.body.insertAdjacentHTML('beforeend', template);
-        this.listen();
+        </div>`;
+        return template;
     }
 
     listen() {
-        // (<HTMLElement>document.querySelector('.links-btn')).addEventListener('click', (event) => {
-        //     const target = event?.target as HTMLElement;
-        //     if (target.classList.contains('links-btn__signUp')) {
-        //         (<HTMLElement>document.querySelector('.links-btn__signIn')).classList.remove('active-link');
-        //         (<HTMLElement>document.querySelector('.links-btn__signUp')).classList.add('active-link');
-        //         (<HTMLElement>document.querySelector('.signIn-container')).classList.add('form-signIn-left');
-        //         (<HTMLElement>document.querySelector('.signUp-container')).classList.add('form-signUp-left');
-
-        //         console.log(1);
-        //     }
-        //     if (target.classList.contains('links-btn__signIn')) {
-        //         (<HTMLElement>document.querySelector('.links-btn__signUp')).classList.remove('active-link');
-        //         (<HTMLElement>document.querySelector('.links-btn__signIn')).classList.add('active-link');
-        //         (<HTMLElement>document.querySelector('.signIn-container')).classList.remove('form-signIn-left');
-        //         (<HTMLElement>document.querySelector('.signUp-container')).classList.remove('form-signUp-left');
-        //     }
-        //     console.log(target);
-        // });
+        // do nothing
     }
 }
