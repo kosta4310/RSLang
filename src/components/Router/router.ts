@@ -31,7 +31,7 @@ export class Router {
                 console.log('game sprint');
             })
             .on('/auth', () => {
-                this.authorization.render()
+                this.authorization.init()
             })
             .resolve();
     }

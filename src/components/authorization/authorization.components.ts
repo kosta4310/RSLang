@@ -1,5 +1,22 @@
+import { templateFooter } from './../footer/footer.template';
+import { templateHeader } from './../header/header.template';
+import { Header } from './../header/header.component';
 import { AUTHORIZATION_TEMPLATE } from './authorization.template';
+
+
 export class Authorization {
+    header: Header;
+    constructor() {
+        this.header = new Header();
+    }
+    init() {
+        const body = document.body;
+        body.innerHTML = '';
+        body.insertAdjacentHTML('beforeend', templateHeader);
+        this.header.init();
+        this.render();
+        body.insertAdjacentHTML('beforeend', templateFooter);
+    }
     render() {
         document.body.insertAdjacentHTML('beforeend', AUTHORIZATION_TEMPLATE);
         this.activeLink();
