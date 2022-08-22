@@ -1,4 +1,4 @@
-export const footer = `
+export const templateFooter = `
 <div class="wrapper-footer">
         
             <div class="container">

@@ -1,0 +1,108 @@
+.wrapper-book {
+}
+.container {
+}
+.book {
+}
+.card-words {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    padding: 5rem 0;
+}
+.card {
+    display: flex;
+    @include font-ABeeZee(2.4rem, 400);
+    background-color: $color-card;
+    border-radius: 1rem;
+    overflow: hidden;
+    //  justify-content: space-between;
+    // .card__image
+    &__image {
+        width: 39rem;
+        height: 26rem;
+        img {
+            height: 26rem;
+            width: 39rem;
+            object-fit: cover;
+        }
+    }
+
+    // .card__context
+
+    &__context {
+        flex: 1 1 auto;
+        padding: 1rem 2rem;
+    }
+
+    // .card__header
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 3.4rem;
+        margin-bottom: 2rem;
+    }
+
+    // .card__left
+
+    &__left {
+        display: flex;
+        align-items: center;
+    }
+
+    // .card__word
+
+    &__word {
+        margin-right: 2rem;
+    }
+
+    // .card__transcription
+
+    &__transcription {
+        padding-right: 2rem;
+    }
+
+    // .card__right
+
+    &__right {
+    }
+
+    // .card__translate
+
+    &__translate {
+    }
+
+    // .card__meaning
+
+    &__meaning {
+        padding-bottom: 1rem;
+    }
+
+    // .card__example
+
+    &__example {
+        padding-bottom: 2rem;
+    }
+
+    // .card__translate-meaning
+
+    &__translate-meaning {
+        padding-bottom: 1rem;
+    }
+
+    // .card__translate-example
+
+    &__translate-example {
+    }
+
+    // .card__button
+
+    &__button {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0 1rem;
+    }
+}

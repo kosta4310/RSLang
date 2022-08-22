@@ -3,8 +3,9 @@ $height-header-footer: 8rem;
 
 $color-base: #ffc53d;
 $color-addition: #ffb300;
+$color-second: #ffc53db5;
 $color-card-capabilities: #f0f0f0;
-$color-card: #d9d9d9;
+$color-card: #d9d9d936;
 $color-violet: #5d6280;
 $color-turquoise: #224957;
 $color-green: #16302b;
@@ -21,6 +22,12 @@ $color-white: #fff;
 
 @mixin font-Inter($size, $weight) {
     font-family: Inter;
+    font-size: $size;
+    font-weight: $weight;
+}
+
+@mixin font-Roboto($size, $weight) {
+    font-family: Roboto;
     font-size: $size;
     font-weight: $weight;
 }

@@ -1,20 +1,13 @@
-import { header } from './header.template';
-
 export class Header {
     burger: HTMLElement | undefined;
     menu: HTMLElement | undefined;
     links: Array<HTMLElement> | undefined;
 
     init(): void {
-        this.render();
         this.burger = <HTMLElement>document.querySelector('#burger');
         this.menu = <HTMLElement>document.querySelector('#menu');
         this.links = <Array<HTMLElement>>Array.from(document.querySelectorAll('#menu a'));
         this.listener();
-    }
-
-    render() {
-        document.body.innerHTML = header;
     }
 
     listener() {
