@@ -1,22 +1,17 @@
 import { Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
-import {
-	StatusCodes,
-} from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
+import { BASE } from '../../config';
 
-
-const BASE = 'http://127.0.0.1:3001';
-// const BASE = 'https://rs-lang-command-task.herokuapp.com';
 const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
 
-
-async function createUser(user: IUser): Promise<IUser | string> {
+async function createUser(user: IUser): Promise<IUser | number> {
     const response = await fetch(USERS, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
     });
-    return response.status === StatusCodes.OK ? response.json() : response.text();
+    return response.status === StatusCodes.OK ? response.json() : response.status;
 }
 
 async function getUser(userId: string, token: string): Promise<IUser | string> {
@@ -32,13 +27,13 @@ async function getUser(userId: string, token: string): Promise<IUser | string> {
     return response.status === StatusCodes.OK ? response.json() : response.text();
 }
 
-async function signIn(user: IUser): Promise<Auth | string> {
+async function signIn(user: IUser): Promise<Auth | number> {
     const response = await fetch(`${BASE}/signin`, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
     });
-    return response.status === StatusCodes.OK ? response.json() : response.text();
+    return response.status === StatusCodes.OK ? response.json() : response.status;
 }
 
 async function updateUser(userId: string, token: string, body: Omit<IUser, 'name'>): Promise<Auth | string> {
@@ -193,11 +188,11 @@ async function getUserAggWordById(userId: string, wordId: string, token: string)
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-    })
+    });
     return response.status === StatusCodes.OK ? response.json() : response.text();
 }
 
-async function getStatistics(userId: string, token: string): Promise<Statistic & {id:string} | string> {
+async function getStatistics(userId: string, token: string): Promise<(Statistic & { id: string }) | string> {
     const response = await fetch(`${USERS}/${userId}/statistics`, {
         method: 'GET',
         credentials: 'same-origin',
@@ -206,11 +201,15 @@ async function getStatistics(userId: string, token: string): Promise<Statistic &
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-    })
+    });
     return response.status === StatusCodes.OK ? response.json() : response.text();
 }
 
-async function upsertStatistics(userId: string, token: string, body: Statistic): Promise<Statistic & {id:string} | string> {
+async function upsertStatistics(
+    userId: string,
+    token: string,
+    body: Statistic
+): Promise<(Statistic & { id: string }) | string> {
     const response = await fetch(`${USERS}/${userId}/statistics`, {
         method: 'PUT',
         credentials: 'same-origin',
@@ -220,7 +219,7 @@ async function upsertStatistics(userId: string, token: string, body: Statistic):
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-    })
+    });
     return response.status === StatusCodes.OK ? response.json() : response.text();
 }
 
@@ -241,5 +240,5 @@ export {
     getAllUserAggWords,
     getUserAggWordById,
     upsertStatistics,
-    getStatistics
+    getStatistics,
 };
