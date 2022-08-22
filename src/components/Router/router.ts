@@ -1,10 +1,13 @@
+import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
 
 
 export class Router {
     router: Navigo;
+    authorization: Authorization;
     constructor() {
         this.router = new Navigo('/', { hash: true });
+        this.authorization = new Authorization()
     }
     init() {
         this.router
@@ -24,7 +27,7 @@ export class Router {
                 console.log('game sprint');
             })
             .on('/auth', () => {
-                console.log('auth');
+                this.authorization.render()
             })
             .resolve();
     }
