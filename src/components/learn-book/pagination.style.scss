@@ -1,0 +1,31 @@
+@import '../../styles/variables.scss';
+
+.pagination__container {
+  @include font-Inter(3.6rem, 400);
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.pagination__container div {
+  cursor: pointer;
+}
+
+
+.pagination_selected {
+  padding: 2rem;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 45px;
+  background-color: $color-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.disabled {
+  color: grey;
+}

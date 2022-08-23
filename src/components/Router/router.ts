@@ -1,15 +1,18 @@
 import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
+import { Book } from '../learn-book/classLearnBook';
 
 export class Router {
     router: Navigo;
     authorization: Authorization;
     homePage: HomePage;
+    book: Book;
     constructor() {
         this.homePage = new HomePage();
         this.router = new Navigo('/', { hash: true });
-        this.authorization = new Authorization()
+        this.authorization = new Authorization();
+        this.book = new Book();
     }
     init() {
         this.router
@@ -20,6 +23,7 @@ export class Router {
             })
             .on('/learnbook', () => {
                 console.log('learn book');
+                this.book.init();
             })
             .on('/statistic', () => {
                 console.log('statistic');
@@ -31,7 +35,7 @@ export class Router {
                 console.log('game sprint');
             })
             .on('/auth', () => {
-                this.authorization.render()
+                this.authorization.render();
             })
             .resolve();
     }
