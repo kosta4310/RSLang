@@ -1,9 +1,12 @@
+import { Book } from './classLearnBook';
 import './controlpanel.style.scss'
 import { MyWords } from './mywords.component';
 
 export class ControlPanel {
     myWords: MyWords
-    constructor() {
+    parent: Book
+    constructor(parent: Book) {
+        this.parent = parent
         this.myWords = new MyWords()
     }
 
@@ -31,32 +34,32 @@ export class ControlPanel {
                 <div class="complexity__container">
                     <span class="title">Сложность</span>
                     <div class="complexity__buttons">
-                        <div class="learnbook__button learnbook__button_selected">
+                        <div class="learnbook__button learnbook__button_selected" data-complexity="0">
                             <div class="learnbook__icon-container">
                                 <span>A1</span>
                             </div>
                         </div>  
-                        <div class="learnbook__button">
+                        <div class="learnbook__button" data-complexity="1">
                             <div class="learnbook__icon-container">
                                 <span>A2</span>
                             </div>
                         </div>
-                        <div class="learnbook__button">
+                        <div class="learnbook__button" data-complexity="2">
                             <div class="learnbook__icon-container">
                                 <span>B1</span>
                             </div>
                         </div>
-                        <div class="learnbook__button">
+                        <div class="learnbook__button" data-complexity="3">
                             <div class="learnbook__icon-container">
                                 <span>B2</span>
                             </div>
                         </div>
-                        <div class="learnbook__button">
+                        <div class="learnbook__button" data-complexity="4">
                             <div class="learnbook__icon-container">
                                 <span>C1</span>
                             </div>
                         </div>
-                        <div class="learnbook__button">
+                        <div class="learnbook__button" data-complexity="5">
                             <div class="learnbook__icon-container">
                                 <span>C2</span>
                             </div>
@@ -71,9 +74,22 @@ export class ControlPanel {
         
         const controlPanel = <HTMLElement>document.querySelector('#control-panel');
         controlPanel.insertAdjacentHTML('beforeend', template);
+        this.listen();
     }
 
     listen() {
         // do nothing
+        const complexityButtons = document.querySelector('.complexity__buttons')
+        complexityButtons?.addEventListener('click', (e) => {
+            const target = <HTMLElement>e.target;
+            const btn = target.closest('.learnbook__button')
+            if (btn) {
+                const buttons = complexityButtons.querySelectorAll('.learnbook__button');
+                buttons.forEach(i => i.classList.remove('learnbook__button_selected'));
+                btn.classList.add('learnbook__button_selected');
+                const complexity = +<string>btn.getAttribute('data-complexity');
+                this.parent.renderWords(complexity);
+            }
+        });
     }
 }

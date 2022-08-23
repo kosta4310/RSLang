@@ -10,27 +10,32 @@ import { Pagination } from './pagination.component';
 
 export class Book {
     async init() {
-        const arrayWords = await this.getArrayWords();
         document.body.innerHTML = '';
         //   document.body.style.height = '100%';
         document.body.insertAdjacentHTML('afterbegin', templateInitPage);
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         document.body.insertAdjacentHTML('beforeend', templateFooter);
         new Header().init();
-        const controlPanel = new ControlPanel();
+        const controlPanel = new ControlPanel(this);
         controlPanel.render();
-        const pagination = new Pagination()
+        const pagination = new Pagination(this)
         pagination.render()
-
+        
+        await this.renderWords(0, 0);
+        this.listen();
+    }
+    
+    async renderWords(complexity = 0, page = 0) {
+        const arrayWords = await this.getArrayWords(complexity, page);
         const words = <HTMLElement>document.body.querySelector('#words');
+        words.innerHTML = '';
         await arrayWords.map(async (obj) => {
             words.insertAdjacentHTML('beforeend', await getCard(obj));
         });
-        this.listen();
     }
 
-    async getArrayWords() {
-        return API.getChunkOfWords('1', '1');
+    async getArrayWords(complexity: number, page: number) {
+        return API.getChunkOfWords(complexity.toString(), page.toString());
     }
 
     listen() {

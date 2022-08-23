@@ -1,13 +1,17 @@
+import { Book } from './classLearnBook';
 import './pagination.style.scss'
 
 export class Pagination {
-  totalElementsCount: number
-  elementsPerPage: number
-  pagesCount: number
-  constructor(totalElementsCount = 600, elementsPerPage = 20) {
-    this.totalElementsCount = totalElementsCount
-    this.elementsPerPage = elementsPerPage
-    this.pagesCount = Math.ceil(this.totalElementsCount / this.elementsPerPage)
+  totalElementsCount: number;
+  elementsPerPage: number;
+  pagesCount: number;
+  parent: Book;
+  
+  constructor(parent: Book, totalElementsCount = 600, elementsPerPage = 20) {
+    this.totalElementsCount = totalElementsCount;
+    this.elementsPerPage = elementsPerPage;
+    this.pagesCount = Math.ceil(this.totalElementsCount / this.elementsPerPage);
+    this.parent = parent;
   }
 
   render() {
