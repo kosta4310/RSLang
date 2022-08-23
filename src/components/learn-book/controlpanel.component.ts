@@ -68,7 +68,9 @@ export class ControlPanel {
                 ${this.myWords.render()}
             </div>
         </div>`;
-        return template;
+        
+        const controlPanel = <HTMLElement>document.querySelector('#control-panel');
+        controlPanel.insertAdjacentHTML('beforeend', template);
     }
 
     listen() {

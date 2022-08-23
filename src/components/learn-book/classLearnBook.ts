@@ -5,6 +5,8 @@ import { templateInitPage } from './initPage.template';
 import * as API from '../api/api';
 import { getCard } from './card.template';
 import { BASE } from '../../config';
+import { ControlPanel } from './controlpanel.component';
+import { Pagination } from './pagination.component';
 
 export class Book {
     async init() {
@@ -15,6 +17,11 @@ export class Book {
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         document.body.insertAdjacentHTML('beforeend', templateFooter);
         new Header().init();
+        const controlPanel = new ControlPanel();
+        controlPanel.render();
+        const pagination = new Pagination()
+        pagination.render()
+
         const words = <HTMLElement>document.body.querySelector('#words');
         await arrayWords.map(async (obj) => {
             words.insertAdjacentHTML('beforeend', await getCard(obj));
