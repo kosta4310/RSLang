@@ -1,4 +1,4 @@
-export const templateInitPage = `
+export const INIT_PAGE_TEMPLATE = `
 <div class="wrapper-book">
         <div class="container">
             <div class="book">
@@ -8,4 +8,4 @@ export const templateInitPage = `
                 <div id="pagination"></div>
             </div>
         </div>
-    </div>`;
+    </div>`

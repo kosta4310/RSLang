@@ -1,5 +1,6 @@
-import { IWord } from '../api/types';
-import { BASE } from '../../config';
+import { IWord } from '../../api/types';
+import { BASE } from '../../../config';
+import './card.style.scss';
 
 export async function getCard(word: IWord) {
     const pathImage = `${BASE}/${word.image}`;

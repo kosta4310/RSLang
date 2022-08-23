@@ -1,7 +1,7 @@
 import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
-import { Book } from '../learn-book/classLearnBook';
+import { Book } from '../learn-book/LearnBook';
 
 export class Router {
     router: Navigo;
@@ -35,7 +35,7 @@ export class Router {
                 console.log('game sprint');
             })
             .on('/auth', () => {
-                this.authorization.render();
+                this.authorization.init();
             })
             .resolve();
     }

@@ -1,5 +1,5 @@
-@import '../../styles/variables.scss';
-@import '../../styles/fonts.scss';
+@import '../../../styles/variables.scss';
+@import '../../../styles/fonts.scss';
 
 .control-panel__container {
     @include font-Inter(3.6rem, 400);
@@ -58,4 +58,23 @@
 
 .learnbook__button_selected {
     background-color: $color-lightgreen;
+}
+
+.mywords__container {
+    @include font-Inter(3.6rem, 400);
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.mywords__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.words_buttons {
+    display: flex;
+    gap: 1rem;
 }

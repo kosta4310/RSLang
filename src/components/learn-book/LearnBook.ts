@@ -1,12 +1,12 @@
+import { INIT_PAGE_TEMPLATE } from './initPage/initPage.template';
 import { templateFooter } from '../footer/footer.template';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
-import { templateInitPage } from './initPage.template';
 import * as API from '../api/api';
-import { getCard } from './card.template';
+import { getCard } from './card/card.template';
 import { BASE } from '../../config';
-import { ControlPanel } from './controlpanel.component';
-import { Pagination } from './pagination.component';
+import { ControlPanel } from './controlPanel/controlPanel.component';
+import { Pagination } from './pagination/pagination.component';
 
 export class Book {
     complexity: number;
@@ -20,7 +20,7 @@ export class Book {
     async init() {
         document.body.innerHTML = '';
         //   document.body.style.height = '100%';
-        document.body.insertAdjacentHTML('afterbegin', templateInitPage);
+        document.body.insertAdjacentHTML('afterbegin', INIT_PAGE_TEMPLATE);
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         document.body.insertAdjacentHTML('beforeend', templateFooter);
         new Header().init();
