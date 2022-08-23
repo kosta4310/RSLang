@@ -3,6 +3,9 @@
 
 .control-panel__container {
     @include font-Inter(3.6rem, 400);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .games__container,
