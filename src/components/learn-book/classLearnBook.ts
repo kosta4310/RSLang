@@ -9,6 +9,14 @@ import { ControlPanel } from './controlpanel.component';
 import { Pagination } from './pagination.component';
 
 export class Book {
+    complexity: number;
+    page: number;
+
+    constructor() {
+        this.complexity = 0;
+        this.page = 0;
+    }
+
     async init() {
         document.body.innerHTML = '';
         //   document.body.style.height = '100%';
@@ -21,12 +29,12 @@ export class Book {
         const pagination = new Pagination(this)
         pagination.render()
         
-        await this.renderWords(0, 0);
+        await this.renderWords();
         this.listen();
     }
     
-    async renderWords(complexity = 0, page = 0) {
-        const arrayWords = await this.getArrayWords(complexity, page);
+    async renderWords() {
+        const arrayWords = await this.getArrayWords(this.complexity, this.page);
         const words = <HTMLElement>document.body.querySelector('#words');
         words.innerHTML = '';
         await arrayWords.map(async (obj) => {
