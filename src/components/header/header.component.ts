@@ -8,6 +8,7 @@ export class Header {
         this.menu = <HTMLElement>document.querySelector('#menu');
         this.links = <Array<HTMLElement>>Array.from(document.querySelectorAll('#menu a'));
         this.listener();
+        this.checkAuthorization();
     }
 
     listener() {
@@ -32,5 +33,19 @@ export class Header {
             (<HTMLElement>this.menu).style.left = '0';
         }
         (<HTMLElement>this.menu).classList.toggle('open');
+    }
+    checkAuthorization() {
+        if (localStorage.getItem('rslang')) {
+            const authBtn = <HTMLAnchorElement>document.querySelector('.btn-enter');
+            authBtn.innerHTML = 'выйти';
+            authBtn.href = '/';
+            authBtn.addEventListener('click', () => {
+                localStorage.removeItem('rslang');
+                authBtn.innerHTML = 'войти';
+                setTimeout(() => {
+                    authBtn.href = '/auth';
+                }, 0);
+            });
+        }
     }
 }
