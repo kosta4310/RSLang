@@ -86,7 +86,7 @@ export class Pagination {
         item5.innerHTML = (page + 1).toString();
         const item6 = <HTMLElement>paginationBlock.querySelector('.pagination__6');
         item6.innerHTML = PAGINATION_BUTTONS.MORE;
-        item2.classList.add('pagination__more');
+        item6.classList.add('pagination__more');
     }
 
     redraw() {

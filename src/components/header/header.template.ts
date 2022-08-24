@@ -1,25 +1,52 @@
 export const templateHeader = `
 <div class="wrapper-header">
-        <div class="container">
-            <div class="header">
-                <div class="left">
-                    <nav>
-                        <div id="burger" class="burger">
-                            <span class="burger__line"></span>
-                        </div>
-                        <ul id="menu" class="menu">
-                            <li><a href="/" data-navigo>Домой</a></li>
-                            <li><a href="/learnbook" data-navigo>Учебник</a></li>
-                            <li><a href="/statistic" data-navigo>Статистика</a></li>
-                            <li><a href="/game-listen" data-navigo>Аудиовызов</a></li>
-                            <li><a href="/game-sptint" data-navigo>Спринт</a></li>
-                        </ul>
-                    </nav>
-                    <div class="title">
-                        <h1>RSLang</h1>
+    <div class="container">
+        <div class="header">
+            <div class="left">
+                <nav>
+                    <div id="burger" class="burger">
+                        <span class="burger__line"></span>
                     </div>
+                    <ul id="menu" class="menu">
+                        <li>
+                            <a href="/" data-navigo>
+                                <img class="learnbook__icon" src="./assets/svg/home.svg" alt="" class="src">
+                                <span>Домой</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/learnbook" data-navigo>
+                                <img class="learnbook__icon" src="./assets/svg/book.svg" alt="" class="src">
+                                <span>Учебник</span>
+                            </a>
+                        </li>
+                        <li>
+                        <a href="/game-listen" data-navigo>
+                                <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="" class="src">
+                                <span>Аудиовызов</span>
+                            </a>
+                            </li>
+                        <li>
+                            <a href="/game-sptint" data-navigo>
+                                <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
+                                <span>Спринт</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/statistic" data-navigo>
+                                <img class="learnbook__icon" src="./assets/svg/stat.svg" alt="" class="src">
+                                <span>Статистика</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="title">
+                    <h1>RSLang</h1>
                 </div>
-                <a href="/auth" class="btn-enter" data-navigo>войти</a>
             </div>
+            <a href="/auth" class="btn-enter" data-navigo>войти</a>
         </div>
-    </div>`;
+    </div>
+</div>
+<div class="header__mt"></div>
+`;

@@ -1,25 +1,12 @@
 import './controlPanel.style.scss';
 
 const MY_WORDS_TEMPLATE = `
-<div class="mywords__container">
-    <div class="mywords__title">
-        <span>Мои слова</span>
-    </div>
-    <div class="words_buttons">
-        <div class="learnbook__button pr10">
+        <div class="learnbook__button pr10 hard-words">
             <div class="learnbook__icon-container mr10">
-                <img class="learnbook__icon" src="./assets/learnbook/learned.svg" alt="" class="src">
-            </div>
-            <span>Изученное</span>
-        </div>  
-        <div class="learnbook__button pr10">
-            <div class="learnbook__icon-container mr10">
-                <img class="learnbook__icon" src="./assets/learnbook/fire.svg" alt="" class="src">
+                <img class="learnbook__icon" src="./assets/svg/fire.svg" alt="" class="src">
             </div>
             <span>Сложные</span>
-        </div>
-    </div>
-</div>`
+        </div>`
 
 export const CONTROL_PANEL_TEMPLATE = `
 <div class="control-panel__container">
@@ -29,13 +16,13 @@ export const CONTROL_PANEL_TEMPLATE = `
             <div class="games_buttons">
                 <div class="learnbook__button pr10">
                     <div class="learnbook__icon-container mr10">
-                        <img class="learnbook__icon" src="./assets/learnbook/sound.svg" alt="" class="src">
+                        <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="" class="src">
                     </div>
                     <span>Аудио</span>
                 </div>  
                 <div class="learnbook__button pr10">
                     <div class="learnbook__icon-container mr10">
-                        <img class="learnbook__icon" src="./assets/learnbook/timer.svg" alt="" class="src">
+                        <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>
                     <span>Спринт</span>
                 </div>
