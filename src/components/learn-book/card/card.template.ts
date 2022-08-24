@@ -27,13 +27,13 @@ export async function getCard(word: IWord, isAuth: boolean) {
        <div class="card__translate-example">${word.textExampleTranslate}</div>
    </div>
    <div class="card__button">
-       <button class="sound"><svg height="62" width="52" fill="#000"><use xlink:href="../../../assets/images/icons.svg#sound"></use></svg></button>
+       <button class="sound"><svg height="62" width="52" fill="#000"><use xlink:href="../../../assets/svg/icons.svg#sound"></use></svg></button>
        <button class="easy-word ${
            isAuth ? 'auth' : 'none'
-       }"><svg height="48" width="48" fill="#CBCBCB"><use xlink:href="../../../assets/images/icons.svg#easy"></use></svg></button>
+       }"><svg height="48" width="48" fill="#CBCBCB"><use xlink:href="../../../assets/svg/icons.svg#easy"></use></svg></button>
        <button class="hard-word ${
            isAuth ? 'auth' : 'none'
-       }"><svg  height="49" width="56" fill="#CBCBCB"><use xlink:href="../../../assets/images/icons.svg#hard"></use></svg></button>
+       }"><svg  height="49" width="56" fill="#CBCBCB"><use xlink:href="../../../assets/svg/icons.svg#hard"></use></svg></button>
    </div>
 </div>`;
 }
