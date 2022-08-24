@@ -29,13 +29,13 @@ export const CONTROL_PANEL_TEMPLATE = `
             <div class="games_buttons">
                 <div class="learnbook__button pr10">
                     <div class="learnbook__icon-container mr10">
-                        <img class="learnbook__icon" src="./assets/learnbook/sound.svg" alt="" class="src">
+                        <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="" class="src">
                     </div>
                     <span>Аудио</span>
                 </div>  
                 <div class="learnbook__button pr10">
                     <div class="learnbook__icon-container mr10">
-                        <img class="learnbook__icon" src="./assets/learnbook/timer.svg" alt="" class="src">
+                        <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>
                     <span>Спринт</span>
                 </div>
