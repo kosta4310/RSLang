@@ -12,7 +12,7 @@ export class HomePage {
     }
     init() {
         const doc = document.body;
-
+        doc.innerHTML = '';
         doc.insertAdjacentHTML('afterbegin', templateOurTeam);
         doc.insertAdjacentHTML('afterbegin', templateCapabilities);
         doc.insertAdjacentHTML('afterbegin', templateSlogan);

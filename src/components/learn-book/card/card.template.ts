@@ -2,10 +2,12 @@ import { IWord } from '../../api/types';
 import { BASE } from '../../../config';
 import './card.style.scss';
 
-export async function getCard(word: IWord) {
+export async function getCard(word: IWord, isAuth: boolean) {
     const pathImage = `${BASE}/${word.image}`;
     return `
-<div class="card" data-id=${word.id} data-audio=${word.audio} data-audioMeaning=${word.audioMeaning} data-audioExample=${word.audioExample}>
+<div class="card" data-id=${word.id} data-audio=${word.audio} data-audioMeaning=${
+        word.audioMeaning
+    } data-audioExample=${word.audioExample}>
    <div class="card__image">
        <img src="${pathImage}" alt="${word.word}">
    </div>
@@ -25,9 +27,13 @@ export async function getCard(word: IWord) {
        <div class="card__translate-example">${word.textExampleTranslate}</div>
    </div>
    <div class="card__button">
-       <img class="speaker" src="../../../assets/images/wordAudio.png" alt="speaker">
-       <img src="../../../assets/images/wordLearned.png" alt="learned">
-       <img src="../../../assets/images/wordHard.png" alt="hard">
+       <button class="sound"><svg height="62" width="52" fill="#000"><use xlink:href="../../../assets/images/icons.svg#sound"></use></svg></button>
+       <button class="easy-word ${
+           isAuth ? 'auth' : 'none'
+       }"><svg height="48" width="48" fill="#CBCBCB"><use xlink:href="../../../assets/images/icons.svg#easy"></use></svg></button>
+       <button class="hard-word ${
+           isAuth ? 'auth' : 'none'
+       }"><svg  height="49" width="56" fill="#CBCBCB"><use xlink:href="../../../assets/images/icons.svg#hard"></use></svg></button>
    </div>
 </div>`;
 }

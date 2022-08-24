@@ -7,6 +7,7 @@ import { getCard } from './card/card.template';
 import { BASE } from '../../config';
 import { ControlPanel } from './controlPanel/controlPanel.component';
 import { Pagination } from './pagination/pagination.component';
+import { state } from '../../state';
 
 export class Book {
     complexity: number;
@@ -26,19 +27,19 @@ export class Book {
         new Header().init();
         const controlPanel = new ControlPanel(this);
         controlPanel.render();
-        const pagination = new Pagination(this)
-        pagination.render()
-        
+        const pagination = new Pagination(this);
+        pagination.render();
+
         await this.renderWords();
         this.listen();
     }
-    
+
     async renderWords() {
         const arrayWords = await this.getArrayWords(this.complexity, this.page);
         const words = <HTMLElement>document.body.querySelector('#words');
         words.innerHTML = '';
         await arrayWords.map(async (obj) => {
-            words.insertAdjacentHTML('beforeend', await getCard(obj));
+            words.insertAdjacentHTML('beforeend', await getCard(obj, state.isAuth()));
         });
     }
 
@@ -53,21 +54,21 @@ export class Book {
         let audio2: HTMLAudioElement | null = null;
         const playAudio1 = async () => {
             await audio1?.play();
-        }
+        };
         const playAudio2 = async () => {
             await audio2?.play();
             isPlayed = false;
-        }
+        };
 
         function playAudioArray(soundTracks: Array<string>) {
             if (isPlayed) {
-                audio?.removeEventListener('ended', playAudio1)
-                audio1?.removeEventListener('ended', playAudio2)
+                audio?.removeEventListener('ended', playAudio1);
+                audio1?.removeEventListener('ended', playAudio2);
                 audio?.pause();
                 audio1?.pause();
                 audio2?.pause();
             }
-            
+
             audio = new Audio(soundTracks[0]);
             audio1 = new Audio(soundTracks[1]);
             audio2 = new Audio(soundTracks[2]);
@@ -76,19 +77,19 @@ export class Book {
             audio.addEventListener('ended', playAudio1);
             audio1.addEventListener('ended', playAudio2);
         }
-        // для оптимизации вешаем обработчик на весь блок - делегирование событий
-        // а не на каждую кнопку
-        const words = document.body.querySelector('#words')
+
+        const words = document.body.querySelector('#words');
         words?.addEventListener('click', (e) => {
             const target = <HTMLElement>e.target;
-            if (target.classList.contains('speaker')) {
-                const card = <HTMLElement>(<HTMLElement>e.target).closest('.card');
+            const buttonSound = target.closest('.sound');
+            if (buttonSound) {
+                const card = <HTMLElement>target.closest('.card');
                 const pathAudio = `${BASE}/${card.getAttribute('data-audio')}`;
                 const pathAudioMeaning = `${BASE}/${card.getAttribute('data-audioMeaning')}`;
                 const pathAudioExample = `${BASE}/${card.getAttribute('data-audioExample')}`;
 
                 playAudioArray([pathAudio, pathAudioMeaning, pathAudioExample]);
             }
-        })
+        });
     }
 }

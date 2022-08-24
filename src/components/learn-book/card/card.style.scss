@@ -41,10 +41,11 @@
 
     &__header {
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         align-items: center;
         font-size: 3.4rem;
         margin-bottom: 2rem;
+        column-gap: 3rem;
     }
 
     // .card__left
@@ -57,13 +58,13 @@
     // .card__word
 
     &__word {
-        margin-right: 2rem;
+        margin-right: 1rem;
     }
 
     // .card__transcription
 
     &__transcription {
-        padding-right: 2rem;
+        // padding-right: 1rem;
     }
 
     // .card__right
@@ -106,5 +107,23 @@
         flex-direction: column;
         justify-content: space-around;
         padding: 0 1rem;
+        button {
+            background-color: inherit;
+        }
+        .sound svg:hover {
+            fill: #ff1d1d;
+        }
+        .easy-word svg:hover {
+            fill: #20df7f;
+        }
+        .hard-word svg:hover {
+            fill: #ff1d1d;
+        }
     }
+}
+.auth {
+    display: block;
+}
+.none {
+    display: none;
 }
