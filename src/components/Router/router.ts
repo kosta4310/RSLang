@@ -32,7 +32,7 @@ export class Router {
             .on('/statistic', () => {
                 console.log('statistic');
             })
-            .on('/game-listen', () => {
+            .on('/audio-call', () => {
                 console.log('game listen');
             })
             .on('/game-sprint', () => {
