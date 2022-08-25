@@ -19,7 +19,7 @@ export const templateCapabilities = `
                             </p>
                         </div>
                     </a>
-                    <a href="/game-listen" class="ca-item" data-navigo>
+                    <a href="/audio-call" class="ca-item" data-navigo>
                         <div class="ca-item__image">
                             <img src="./assets/images/audiocall.png" alt="audiocall">
                         </div>
