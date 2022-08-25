@@ -37,6 +37,7 @@ export class Book {
     async renderWords() {
         const arrayWords = await this.getArrayWords(this.complexity, this.page);
         const words = <HTMLElement>document.body.querySelector('#words');
+        words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         await arrayWords.map(async (obj) => {
             words.insertAdjacentHTML('beforeend', await getCard(obj, state.isAuth()));

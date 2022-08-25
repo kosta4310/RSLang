@@ -30,6 +30,8 @@
         }
     }
 
+    box-shadow: 0px 5px 10px darkgrey;
+
     // .card__context
 
     &__context {
@@ -126,4 +128,28 @@
 }
 .none {
     display: none;
+}
+
+#words[data-complexity="0"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-a1;
+}
+
+#words[data-complexity="1"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-a2;
+}
+
+#words[data-complexity="2"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-b1;
+}
+
+#words[data-complexity="3"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-b2;
+}
+
+#words[data-complexity="4"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-c1;
+}
+
+#words[data-complexity="5"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-c2;
 }

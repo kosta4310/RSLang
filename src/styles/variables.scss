@@ -15,7 +15,14 @@ $color-black: #000;
 $color-orange: #ff5714;
 $color-white: #fff;
 $color-lightgreen: #20df7f;
-$color-red: ff1d1d;
+$color-red: #ff1d1d;
+
+$learnbook-color-a1: #5edb8f;
+$learnbook-color-a2: #ffc839;
+$learnbook-color-b1: #ff6d4d;
+$learnbook-color-b2: #d91f54;
+$learnbook-color-c1: #9c224d;
+$learnbook-color-c2: #6b2155;
 
 @mixin font-ABeeZee($size, $weight) {
     font-family: ABeeZee;

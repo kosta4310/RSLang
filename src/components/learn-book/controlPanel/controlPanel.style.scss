@@ -59,8 +59,33 @@
     width: 30rem;
 }
 
-.learnbook__button_selected {
-    background-color: $color-lightgreen;
+.learnbook__button.learnbook__button_selected {
+    color: white;
+    border: #a9a9a9 3px solid;
+}
+
+.learnbook__button_selected[data-complexity="0"] .learnbook__icon-container {
+    background-color: $learnbook-color-a1;
+}
+
+.learnbook__button_selected[data-complexity="1"] .learnbook__icon-container {
+    background-color: $learnbook-color-a2;
+}
+
+.learnbook__button_selected[data-complexity="2"] .learnbook__icon-container {
+    background-color: $learnbook-color-b1;
+}
+
+.learnbook__button_selected[data-complexity="3"] .learnbook__icon-container {
+    background-color: $learnbook-color-b2;
+}
+
+.learnbook__button_selected[data-complexity="4"] .learnbook__icon-container {
+    background-color: $learnbook-color-c1;
+}
+
+.learnbook__button_selected[data-complexity="5"] .learnbook__icon-container {
+    background-color: $learnbook-color-c2;
 }
 
 .mywords__container {
