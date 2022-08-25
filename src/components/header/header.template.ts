@@ -21,13 +21,13 @@ export const templateHeader = `
                             </a>
                         </li>
                         <li>
-                        <a href="/game-listen" data-navigo>
+                        <a href="/audio-call" data-navigo>
                                 <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="" class="src">
                                 <span>Аудиовызов</span>
                             </a>
                             </li>
                         <li>
-                            <a href="/game-sptint" data-navigo>
+                            <a href="/game-sprint" data-navigo>
                                 <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                                 <span>Спринт</span>
                             </a>
@@ -44,7 +44,7 @@ export const templateHeader = `
                     <h1>RSLang</h1>
                 </div>
             </div>
-            <a href="/auth" class="btn-enter" data-navigo>войти</a>
+            <a href="/auth" class="btn-enter" data-navigo>Войти</a>
         </div>
     </div>
 </div>

@@ -37,11 +37,11 @@ export class Header {
     checkAuthorization() {
         if (localStorage.getItem('rslang')) {
             const authBtn = <HTMLAnchorElement>document.querySelector('.btn-enter');
-            authBtn.innerHTML = 'выйти';
+            authBtn.innerHTML = 'Выйти';
             authBtn.href = '/';
             authBtn.addEventListener('click', () => {
                 localStorage.removeItem('rslang');
-                authBtn.innerHTML = 'войти';
+                authBtn.innerHTML = 'Войти';
                 setTimeout(() => {
                     authBtn.href = '/auth';
                 }, 0);
