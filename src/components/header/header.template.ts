@@ -27,7 +27,7 @@ export const templateHeader = `
                             </a>
                             </li>
                         <li>
-                            <a href="/game-sptint" data-navigo>
+                            <a href="/game-sprint" data-navigo>
                                 <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                                 <span>Спринт</span>
                             </a>
