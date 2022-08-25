@@ -9,7 +9,8 @@ const MY_WORDS_TEMPLATE = `
             <span>Сложные</span>
         </div>`;
 
-export const CONTROL_PANEL_TEMPLATE = `
+export const getContolPanelTemplate = () => {
+    return `
 <div class="control-panel__container">
     <div class="left-block">
         <div class="games__container">
@@ -69,3 +70,4 @@ export const CONTROL_PANEL_TEMPLATE = `
         ${state.isAuth() ? MY_WORDS_TEMPLATE : ''}
     </div>
 </div>`;
+};
