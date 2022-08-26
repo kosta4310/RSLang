@@ -29,11 +29,11 @@ export class ControlPanel {
                 this.parent.renderWords();
             }
         });
-        const gameBtns= document.querySelectorAll('.pr10')
-        gameBtns.forEach(el=>{
-            el.addEventListener('click',()=>{        
-                state.learnBookGame=true
-            })
-        })
+        const gameBtns = document.querySelectorAll('.pr10');
+        gameBtns.forEach((el) => {
+            el.addEventListener('click', () => {
+                state.setItem({ isFromBook: true });
+            });
+        });
     }
 }

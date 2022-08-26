@@ -33,7 +33,7 @@ export class Sprint {
     }
     timer() {
         const countdown = <HTMLElement>document.querySelector('.timer__time');
-        let item = 60;
+        let item = 59;
         const interval = setInterval(() => {
             countdown.innerHTML = `${item}`;
             item = item - 1;
