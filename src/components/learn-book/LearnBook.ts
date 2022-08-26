@@ -14,8 +14,8 @@ export class Book {
     page: number;
 
     constructor() {
-        this.complexity = 0;
-        this.page = 0;
+        this.complexity = state.complexity;
+        this.page = state.page;
     }
 
     async init() {

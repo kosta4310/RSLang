@@ -68,7 +68,7 @@ export class Authorization {
                     }
                 } else {
                     signIn({ name, email, password }).then((res) => {
-                        localStorage.setItem('rslang', JSON.stringify(res));
+                        localStorage.setItem('rslang', JSON.stringify({ auth: res }));
                         document.location.href = '/';
                     });
                 }
@@ -93,7 +93,7 @@ export class Authorization {
                             break;
                     }
                 } else {
-                    localStorage.setItem('rslang', JSON.stringify(res));
+                    localStorage.setItem('rslang', JSON.stringify({ auth: res }));
                     document.location.href = '/';
                 }
             });
