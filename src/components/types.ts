@@ -1,6 +1,9 @@
 type StateParam = {
-    page?: string;
-    group?: string;
+    page: string;
+    group: string;
+    isFromBook: boolean;
 };
 
-export { StateParam };
+type ParamPage = Pick<StateParam, 'page' | 'group'>;
+
+export { StateParam, ParamPage };

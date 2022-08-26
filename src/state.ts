@@ -11,8 +11,8 @@ export const state = {
     },
     page: 0,
     complexity: 0,
-    
-    setItem(data: StateParam) {
+
+    setItem(data: Partial<StateParam>) {
         localStorage.setItem('rsLang', JSON.stringify(data));
     },
     getItem(key: string) {

@@ -40,7 +40,7 @@ export const START_PAGE_GAME_TEMPLATE = (title: string, description: string) => 
                 </div>
             </div>
         </div>
-            <button class="start-game">Начать</button>
+            <a href="/start-game-${title.toLowerCase()}" class="start-game" data-navigo>Начать</a href="/start-game-sprint">
     </div>    
     </div>`;
 };
