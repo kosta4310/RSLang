@@ -15,7 +15,7 @@ export const SPRINT_TEMPLATE = `
                     </svg>
                 </div>
                 <div class="timer">
-                    <span class="timer__time"></span>
+                    <span class="timer__time">60</span>
                     <span>сек</span>
                 </div>
                 <div class="words">
