@@ -1,3 +1,5 @@
+import { StateParam } from './components/types';
+
 export const state = {
     isAuth() {
         const rsLangString = localStorage.getItem('rslang');
@@ -9,11 +11,13 @@ export const state = {
     },
     page: 0,
     complexity: 0,
-    setItem(data = { page: 0, complexity: 0 }) {
+    
+    setItem(data: StateParam) {
         localStorage.setItem('rsLang', JSON.stringify(data));
     },
     getItem(key: string) {
-        const rsLangString = localStorage.getItem('rslang');
+        const rsLangString = localStorage.getItem('rsLang');
+
         if (rsLangString) {
             const rsLang = JSON.parse(rsLangString);
             return rsLang[key];
