@@ -6,4 +6,8 @@ type StateParam = {
 
 type ParamPage = Pick<StateParam, 'page' | 'complexity'>;
 
-export { StateParam, ParamPage };
+type IndexObject = {
+    [key: string]: string | boolean;
+};
+
+export { StateParam, ParamPage, IndexObject };

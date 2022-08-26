@@ -4,9 +4,6 @@ import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
 import { Book } from '../learn-book/LearnBook';
 import { Sprint } from '../sprint/sprint.component';
-import { StartGamePage } from '../start-page-game/start-game-page.components';
-import { Header } from '../header/header.component';
-import { on } from 'events';
 
 export class Router {
     router: Navigo;

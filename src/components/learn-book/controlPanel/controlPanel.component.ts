@@ -26,16 +26,14 @@ export class ControlPanel {
                 btn.classList.add('learnbook__button_selected');
                 const complexity = +(<string>btn.getAttribute('data-complexity'));
                 this.parent.complexity = complexity;
+                state.setItem({ complexity: complexity.toString() });
                 this.parent.renderWords();
             }
         });
         const gameBtns = document.querySelectorAll('.pr10');
         gameBtns.forEach((el) => {
             el.addEventListener('click', () => {
-                console.log(state.getItem('isFromBook'));
-
                 state.setItem({ isFromBook: true });
-                console.log(state.getItem('isFromBook'));
             });
         });
     }
