@@ -22,8 +22,13 @@ export class Header {
         });
 
         (<Array<HTMLElement>>this.links).map((link) => link.addEventListener('click', () => this.openCloseMenu()));
-    }
 
+        document.querySelector('.audio-call')?.addEventListener('click', () => {
+            if (document.location.hash === '#/audio-call') {
+                location.reload();
+            }
+        });
+    }
     openCloseMenu() {
         if ((<HTMLElement>this.menu).classList.contains('open')) {
             (<HTMLElement>this.burger).style.transform = 'rotate(0deg)';
@@ -37,11 +42,11 @@ export class Header {
     checkAuthorization() {
         if (localStorage.getItem('rslang')) {
             const authBtn = <HTMLAnchorElement>document.querySelector('.btn-enter');
-            authBtn.innerHTML = 'выйти';
+            authBtn.innerHTML = 'Выйти';
             authBtn.href = '/';
             authBtn.addEventListener('click', () => {
                 localStorage.removeItem('rslang');
-                authBtn.innerHTML = 'войти';
+                authBtn.innerHTML = 'Войти';
                 setTimeout(() => {
                     authBtn.href = '/auth';
                 }, 0);

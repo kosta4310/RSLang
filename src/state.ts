@@ -3,4 +3,6 @@ export const state = {
         const rsLang = localStorage.getItem('rslang');
         return !!rsLang;
     },
+    learnBookGame:false,
+    complexityMainGame:0
 };

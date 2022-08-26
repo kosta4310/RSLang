@@ -1,3 +1,4 @@
+import { state } from './../../../state';
 import { getContolPanelTemplate } from './controlPanel.template';
 import { Book } from '../LearnBook';
 
@@ -28,5 +29,11 @@ export class ControlPanel {
                 this.parent.renderWords();
             }
         });
+        const gameBtns= document.querySelectorAll('.pr10')
+        gameBtns.forEach(el=>{
+            el.addEventListener('click',()=>{        
+                state.learnBookGame=true
+            })
+        })
     }
 }
