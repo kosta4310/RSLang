@@ -16,13 +16,13 @@ export const getContolPanelTemplate = () => {
         <div class="games__container">
             <span class="title">Игры</span>
             <div class="games_buttons">
-                <div class="learnbook__button pr10">
+                <a href="/audio-call" class="learnbook__button pr10" data-navigo>
                     <div class="learnbook__icon-container mr10">
                         <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="sound" class="src">
                     </div>
                     <span>Аудио</span>
-                </div>  
-                <a href="/learnbook/game-start" class="learnbook__button pr10" data-navigo>
+                </a>  
+                <div class="learnbook__button pr10">
                     <div class="learnbook__icon-container mr10">
                         <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>
