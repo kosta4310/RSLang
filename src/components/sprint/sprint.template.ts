@@ -3,7 +3,7 @@ export const SPRINT_TEMPLATE = `
         <div class="container">
             <div class="sprint">
                 <div class="sprint__cancel">
-                    <a href="/game-start" class="btn-cancel" data-navigo>
+                    <a href="/sprint" class="btn-cancel" data-navigo>
                         <svg class="btn-cancel__svg" width="55" height="55">
                             <use xlink:href="../../assets/svg/icons.svg#cancel"></use>
                         </svg>
@@ -30,3 +30,5 @@ export const SPRINT_TEMPLATE = `
             </div>
         </div>
     </div>`;
+export const SPRINT_TITLE = `Sprint`;
+export const SPRINT_DESCRIPTION = `This game for the real men`;

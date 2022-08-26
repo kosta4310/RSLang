@@ -28,6 +28,12 @@ export class Header {
                 location.reload();
             }
         });
+
+        document.querySelector('#menu .sprint')?.addEventListener('click', () => {
+            if (document.location.hash === '#/sprint') {
+                location.reload();
+            }
+        });
     }
     openCloseMenu() {
         if ((<HTMLElement>this.menu).classList.contains('open')) {

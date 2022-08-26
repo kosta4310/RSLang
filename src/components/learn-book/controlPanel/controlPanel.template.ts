@@ -22,7 +22,7 @@ export const getContolPanelTemplate = () => {
                     </div>
                     <span>Аудио</span>
                 </a>  
-                <div class="learnbook__button pr10">
+                <a href="/sprint" class="learnbook__button pr10" data-navigo>
                     <div class="learnbook__icon-container mr10">
                         <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>

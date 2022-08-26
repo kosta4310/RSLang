@@ -11,6 +11,7 @@ export const state = {
     },
     page: 0,
     complexity: 0,
+    isFromBook: false.valueOf,
 
     setItem(data: Partial<StateParam>) {
         localStorage.setItem('rsLang', JSON.stringify(data));
@@ -23,6 +24,6 @@ export const state = {
             return rsLang[key];
         }
     },
-    learnBookGame:false,
-    complexityMainGame:0
+    learnBookGame: false,
+    complexityMainGame: 0,
 };

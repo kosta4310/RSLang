@@ -32,7 +32,10 @@ export class ControlPanel {
         const gameBtns = document.querySelectorAll('.pr10');
         gameBtns.forEach((el) => {
             el.addEventListener('click', () => {
+                console.log(state.getItem('isFromBook'));
+
                 state.setItem({ isFromBook: true });
+                console.log(state.getItem('isFromBook'));
             });
         });
     }
