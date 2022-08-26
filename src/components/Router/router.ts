@@ -4,9 +4,6 @@ import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
 import { Book } from '../learn-book/LearnBook';
 import { Sprint } from '../sprint/sprint.component';
-import { StartGamePage } from '../start-page-game/start-game-page.components';
-import { Header } from '../header/header.component';
-import { on } from 'events';
 
 export class Router {
     router: Navigo;
@@ -46,7 +43,6 @@ export class Router {
 
             })
             .on('/game-start', () => {
-                this.startGamePage.init('Sprint', 'This game for the real men', false);
                 this.sprint.init();
             })
             .on('/auth', () => {
@@ -55,7 +51,6 @@ export class Router {
             .on('/learnbook/game-start', () => {
                 console.log('learnbookgamestart');
 
-                this.startGamePage.init('Sprint', 'This game for the real men', true);
                 this.sprint.init();
             })
             .on('/start-game-sprint', () => {
