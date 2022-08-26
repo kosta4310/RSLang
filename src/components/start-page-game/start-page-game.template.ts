@@ -44,3 +44,4 @@ export const START_PAGE_GAME_TEMPLATE = (title: string, description: string) => 
     </div>    
     </div>`;
 };
+

@@ -1,6 +1,7 @@
 import { PAGINATION_BUTTONS, ELEMENTS } from './constants';
 import { PAGINATION_TEMPLATE } from './pagination.template';
 import { Book } from '../LearnBook';
+import { state } from '../../../state';
 
 export class Pagination {
     totalElementsCount: number;
@@ -121,6 +122,9 @@ export class Pagination {
                     )
                 ) {
                     this.currentPage = +target.innerText;
+                    state.setItem({ page: this.currentPage.toString() });
+                    console.log(state.getItem('page'));
+
                     this.redraw();
 
                     this.parent.page = this.currentPage - 1;

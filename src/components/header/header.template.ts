@@ -21,7 +21,7 @@ export const templateHeader = `
                             </a>
                         </li>
                         <li>
-                        <a href="/audio-call" class="audio-call" data-navigo>
+                        <a href="/audio-call" class="audio-call" data-navig                       
                                 <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="" class="src">
                                 <span>Аудиовызов</span>
                             </a>
