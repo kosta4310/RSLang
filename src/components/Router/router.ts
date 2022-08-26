@@ -1,3 +1,4 @@
+import { AudioCall } from './../audio-call/audio-call.components';
 import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
@@ -8,11 +9,13 @@ export class Router {
     authorization: Authorization;
     homePage: HomePage;
     book: Book;
+    audioCall: AudioCall;
     constructor() {
         this.homePage = new HomePage();
         this.router = new Navigo('/', { hash: true });
         this.authorization = new Authorization();
         this.book = new Book();
+        this.audioCall = new AudioCall()
     }
     init() {
         this.router
@@ -29,7 +32,7 @@ export class Router {
                 console.log('statistic');
             })
             .on('/audio-call', () => {
-                console.log('game listen');
+           this.audioCall.init()
             })
             .on('/game-sprint', () => {
                 console.log('game sprint');
