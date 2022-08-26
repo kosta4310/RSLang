@@ -1,4 +1,4 @@
-import './start-game-page.scss';
+import './start-page-game.scss';
 
 export const START_PAGE_GAME_TEMPLATE = (title: string, description: string) => {
     return `<div class="container">
@@ -40,7 +40,8 @@ export const START_PAGE_GAME_TEMPLATE = (title: string, description: string) => 
                 </div>
             </div>
         </div>
-            <a href="/start-game-${title.toLowerCase()}" class="start-game" data-navigo>Начать</a href="/start-game-sprint">
+            <button class="start-game">Начать</button>
     </div>    
     </div>`;
 };
+

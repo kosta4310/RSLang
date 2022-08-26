@@ -21,13 +21,13 @@ export const templateHeader = `
                             </a>
                         </li>
                         <li>
-                        <a href="/audio-call" data-navigo>
+                        <a href="/audio-call" class="audio-call" data-navig                       
                                 <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="" class="src">
                                 <span>Аудиовызов</span>
                             </a>
                             </li>
                         <li>
-                            <a href="/game-start" data-navigo>
+                            <a href="/game-sprint" data-navigo>
                                 <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                                 <span>Спринт</span>
                             </a>

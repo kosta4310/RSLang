@@ -23,4 +23,6 @@ export const state = {
             return rsLang[key];
         }
     },
+    learnBookGame:false,
+    complexityMainGame:0
 };
