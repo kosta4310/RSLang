@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: $color-grey;
     @include font-ABeeZee(3.4rem, 400);
 
     // .sprint__cancel
@@ -50,13 +51,17 @@
 }
 .words {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    flex-direction: column;
+    row-gap: 2rem;
     align-items: center;
-    column-gap: 5rem;
+    // column-gap: 5rem;
     padding-bottom: 2rem;
     // .words__en
 
     &__en {
+        font-size: 5rem;
+        color: $color-white;
     }
 
     // .words__ru
@@ -66,7 +71,14 @@
 }
 .btn-yes {
     background-color: $color-lightgreen;
+    &:hover {
+        background-color: darken($color: $color-lightgreen, $amount: 10);
+    }
 }
+
 .btn-no {
     background-color: $color-red;
+    &:hover {
+        background-color: darken($color: $color-red, $amount: 10);
+    }
 }

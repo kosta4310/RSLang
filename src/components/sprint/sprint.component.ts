@@ -77,11 +77,7 @@ export class Sprint {
         const buttonsBlock = <HTMLElement>document.querySelector('.sprint__buttons');
 
         buttonsBlock.addEventListener('click', (e) => {
-            if ((<HTMLElement>e.target).classList.contains('btn-yes')) {
-                this.showWords(iterator);
-            } else {
-                this.showWords(iterator);
-            }
+            this.handlerToButtons(e, iterator);
         });
     }
 
@@ -127,6 +123,14 @@ export class Sprint {
 
         for (let i = 0; i < arrayWords.length; i++) {
             this.map.set(wordArray[i], wordTranslateArray[i]);
+        }
+    }
+
+    handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
+        if ((<HTMLElement>e.target).classList.contains('btn-yes')) {
+            this.showWords(iterator);
+        } else {
+            this.showWords(iterator);
         }
     }
 }

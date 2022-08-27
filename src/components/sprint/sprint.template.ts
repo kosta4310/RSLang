@@ -19,9 +19,8 @@ export const SPRINT_TEMPLATE = `
                     <span>сек</span>
                 </div>
                 <div class="words">
-                    <div class="words__en">immigrant</div>
-                    <span>это</span>
-                    <div class="words__ru">иммигрант</div>
+                    <div class="words__en"></div>
+                    <div class="words__ru"></div>
                 </div>
                 <div class="sprint__buttons">
                     <button class="btn-yes">да</button>
