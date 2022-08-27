@@ -19,14 +19,14 @@ export class Pagination {
         this.elementsPerPage = elementsPerPage;
         this.pagesCount = Math.ceil(this.totalElementsCount / this.elementsPerPage);
         this.parent = parent;
+        this.currentPage = this.parent.page + 1;
     }
 
     render() {
         const paginationBlock = <HTMLElement>document.querySelector('#pagination');
         paginationBlock.insertAdjacentHTML('beforeend', PAGINATION_TEMPLATE);
 
-        const firstItem = <HTMLElement>document.querySelector('.pagination__first');
-        firstItem.classList.add('pagination_selected');
+        this.redraw();
         this.listen();
     }
 

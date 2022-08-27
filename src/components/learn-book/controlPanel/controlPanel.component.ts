@@ -12,6 +12,9 @@ export class ControlPanel {
         const CONTROL_PANEL_TEMPLATE = getContolPanelTemplate();
         const controlPanel = <HTMLElement>document.querySelector('#control-panel');
         controlPanel.insertAdjacentHTML('beforeend', CONTROL_PANEL_TEMPLATE);
+        const complexity = this.parent.complexity;
+        const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
+        elem.classList.add('learnbook__button_selected');
         this.listen();
     }
 
