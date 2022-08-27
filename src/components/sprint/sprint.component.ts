@@ -8,7 +8,7 @@ export class Sprint {
         this.header = new Header();
     }
 
-    init() {
+    init(fromLearnBookParam: number) {
         const body = document.body;
         body.innerHTML = '';
         body.insertAdjacentHTML('beforeend', templateHeader);
