@@ -8,6 +8,9 @@
     // .sprint__cancel
     &__cancel {
         align-self: end;
+        button {
+            background-color: inherit;
+        }
     }
 
     // .sprint__buttons

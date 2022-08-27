@@ -3,11 +3,11 @@ export const SPRINT_TEMPLATE = `
         <div class="container">
             <div class="sprint">
                 <div class="sprint__cancel">
-                    <a href="/sprint" class="btn-cancel" data-navigo>
+                    <button class="btn-cancel">
                         <svg class="btn-cancel__svg" width="55" height="55">
                             <use xlink:href="../../assets/svg/icons.svg#cancel"></use>
                         </svg>
-                    </a>
+                    </button>
                 </div>
                 <div class="watch">
                     <svg class="watch__svg">

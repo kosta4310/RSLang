@@ -45,7 +45,6 @@ export class Router {
             .on('/auth', () => {
                 this.authorization.init();
             })
-
             .resolve();
     }
 }
