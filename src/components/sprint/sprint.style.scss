@@ -23,6 +23,11 @@
             width: 33rem;
             height: 9rem;
             border-radius: 1rem;
+            box-shadow: 0 0.9rem $color-shadow;
+        }
+        button:active {
+            box-shadow: 0 0.5rem $color-shadow-dark;
+            transform: translateY(0.4rem);
         }
     }
 }
@@ -61,7 +66,7 @@
 
     &__en {
         font-size: 5rem;
-        color: $color-white;
+        color: darken($color: $color-base, $amount: 30);
     }
 
     // .words__ru

@@ -16,11 +16,13 @@ export class Sprint {
     // isFromBook: boolean;
     startPage: StartGamePage;
     map: Map<string, string>;
+    mapRightWords: Map<string, string>;
     constructor() {
         this.startPage = new StartGamePage();
         this.complexity = 0;
         this.page = 0;
         this.map = <Map<string, string>>new Map();
+        this.mapRightWords = <Map<string, string>>new Map();
         // this.isFromBook = false;
         // this.param = { page: '0', group: '0' };
     }
@@ -79,6 +81,10 @@ export class Sprint {
         buttonsBlock.addEventListener('click', (e) => {
             this.handlerToButtons(e, iterator);
         });
+
+        document.addEventListener('keydown', (e) => {
+            this.handlerKeys(e, iterator);
+        });
     }
 
     async gameProcess() {
@@ -89,22 +95,26 @@ export class Sprint {
 
         const iterator = this.map.entries();
         this.timer();
-        this.showWords(iterator);
+        this.iteration(iterator);
         this.listen(iterator);
     }
 
-    showWords(iterator: IterableIterator<[string, string]>) {
-        const nextElement = iterator.next();
+    showWords(word: string, wordTranslate: string) {
         const wordEn = <HTMLElement>document.querySelector('.words__en');
         const wordRu = <HTMLElement>document.querySelector('.words__ru');
 
-        if (!nextElement.done) {
-            const [word, wordTranslate] = nextElement.value;
-            wordEn.innerHTML = word;
-            wordRu.innerHTML = wordTranslate;
-        } else {
-            alert('Page of statistic');
-        }
+        wordEn.innerHTML = word;
+        wordRu.innerHTML = wordTranslate;
+
+        // const nextElement = iterator.next();
+
+        // if (!nextElement.done) {
+        //     const [word, wordTranslate] = nextElement.value;
+        //     wordEn.innerHTML = word;
+        //     wordRu.innerHTML = wordTranslate;
+        // } else {
+        //     alert('Page of statistic');
+        // }
     }
 
     async setSortArraysWords(group: string, page: string) {
@@ -114,6 +124,7 @@ export class Sprint {
         const arrayWords = await getChunkOfWords(group, page);
         arrayWords.map((words) => {
             const { word, wordTranslate } = words;
+            this.mapRightWords.set(word, wordTranslate);
             wordArray.push(word);
             wordTranslateArray.push(wordTranslate);
         });
@@ -128,9 +139,34 @@ export class Sprint {
 
     handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
         if ((<HTMLElement>e.target).classList.contains('btn-yes')) {
-            this.showWords(iterator);
+            console.log('yes');
         } else {
-            this.showWords(iterator);
+            console.log('no');
+        }
+        this.iteration(iterator);
+    }
+
+    handlerKeys(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
+        if (e.key === 'ArrowLeft') {
+            console.log('left');
+        } else if (e.key === 'ArrowRight') {
+            console.log('right');
+        }
+        this.iteration(iterator);
+    }
+
+    iteration(iterator: IterableIterator<[string, string]>) {
+        const nextElement = iterator.next();
+
+        if (!nextElement.done) {
+            const [word, wordTranslate] = nextElement.value;
+            this.showWords(word, wordTranslate);
+        } else {
+            alert('Page of statistic');
         }
     }
+
+    // checkRightTranslate() {
+
+    // }
 }
