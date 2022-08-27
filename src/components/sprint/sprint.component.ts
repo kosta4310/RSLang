@@ -89,24 +89,11 @@ export class Sprint {
         const group = <string>state.getItem('complexity');
         const page = <string>state.getItem('page');
 
-        const wordArray = <Array<string>>[];
-        let wordTranslateArray = <Array<string>>[];
-
-        const arrayWords = await getChunkOfWords(group, page);
-        arrayWords.map((words) => {
-            const { word, wordTranslate } = words;
-            wordArray.push(word);
-            wordTranslateArray.push(wordTranslate);
-        });
-
-        wordTranslateArray = shuffle(wordTranslateArray);
-
-        for (let i = 0; i < arrayWords.length; i++) {
-            this.map.set(wordArray[i], wordTranslateArray[i]);
-        }
+        await this.setSortArraysWords(group, page);
 
         const iterator = this.map.entries();
         this.timer();
+        this.showWords(iterator);
         this.listen(iterator);
     }
 
@@ -121,6 +108,25 @@ export class Sprint {
             wordRu.innerHTML = wordTranslate;
         } else {
             alert('Page of statistic');
+        }
+    }
+
+    async setSortArraysWords(group: string, page: string) {
+        let wordArray = <Array<string>>[];
+        let wordTranslateArray = <Array<string>>[];
+
+        const arrayWords = await getChunkOfWords(group, page);
+        arrayWords.map((words) => {
+            const { word, wordTranslate } = words;
+            wordArray.push(word);
+            wordTranslateArray.push(wordTranslate);
+        });
+
+        wordTranslateArray = shuffle(wordTranslateArray);
+        wordArray = shuffle(wordArray);
+
+        for (let i = 0; i < arrayWords.length; i++) {
+            this.map.set(wordArray[i], wordTranslateArray[i]);
         }
     }
 }
