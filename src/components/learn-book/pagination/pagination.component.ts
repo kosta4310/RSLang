@@ -122,12 +122,12 @@ export class Pagination {
                     )
                 ) {
                     this.currentPage = +target.innerText;
-                    state.setItem({ page: this.currentPage.toString() });
                     console.log(state.getItem('page'));
-
+                    
                     this.redraw();
-
+                    
                     this.parent.page = this.currentPage - 1;
+                    state.setItem({ page: this.parent.page.toString() });
                     this.parent.renderWords();
                 }
 
