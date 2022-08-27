@@ -1,14 +1,14 @@
 import { IndexObject, StateParam } from './components/types';
 
 export const state = {
-    isAuth() {
-        const rsLangString = localStorage.getItem('rslang');
-        if (rsLangString) {
-            const rsLang = JSON.parse(rsLangString);
-            return rsLang.auth;
-        }
-        return false;
-    },
+    // isAuth() {
+    //     const rsLangString = localStorage.getItem('rslang');
+    //     if (rsLangString) {
+    //         const rsLang = JSON.parse(rsLangString);
+    //         return rsLang.auth;
+    //     }
+    //     return false;
+    // },
     // page: 0,
     // complexity: 0,
     isFromBook: false,
@@ -28,15 +28,26 @@ export const state = {
             localStorage.setItem('rsLang', JSON.stringify(data));
         }
     },
+
     getItem(key: string) {
         const rsLangString = localStorage.getItem('rsLang');
-        console.log(`storage ${rsLangString}`);
+        console.log(`storage ${key} - ${rsLangString}`);
 
         if (rsLangString) {
             const rsLang = JSON.parse(rsLangString);
             return rsLang[key];
         }
     },
+
+    delItem(key: string) {
+        const rsLangString = localStorage.getItem('rsLang');
+
+        if (rsLangString) {
+            const rsLangObject: IndexObject = JSON.parse(rsLangString);
+            delete rsLangObject[key];
+            localStorage.setItem('rsLang', JSON.stringify(rsLangObject));
+        }
+    },
     // learnBookGame: false,
-    complexityMainGame: 0,
+    // complexityMainGame: 0,
 };

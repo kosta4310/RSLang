@@ -39,8 +39,11 @@ export class Book {
         const words = <HTMLElement>document.body.querySelector('#words');
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
+        const isAuth = <boolean>state.getItem('isAuth');
+        console.log(isAuth);
+
         await arrayWords.map(async (obj) => {
-            words.insertAdjacentHTML('beforeend', await getCard(obj, state.isAuth()));
+            words.insertAdjacentHTML('beforeend', await getCard(obj, isAuth));
         });
     }
 

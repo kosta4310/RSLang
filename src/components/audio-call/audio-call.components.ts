@@ -22,7 +22,7 @@ export class AudioCall {
         state.setItem({ isFromBook: false });
         document.querySelector('.start-game')?.addEventListener('click', () => {
             if (!state.getItem('isFromBook')) {
-                this.complexity = state.complexityMainGame;
+                this.complexity = state.getItem('complexity');
                 this.page = Math.floor(Math.random() * 20);
             }
             this.game();
