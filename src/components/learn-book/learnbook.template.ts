@@ -1,4 +1,4 @@
-export const INIT_PAGE_TEMPLATE = `
+export const LEARNBOOK_PAGE_TEMPLATE = `
 <div class="wrapper-book">
         <div class="container">
             <div class="book">

@@ -1,6 +1,6 @@
 import { state } from './../../../state';
 import { getContolPanelTemplate } from './controlPanel.template';
-import { Book } from '../LearnBook';
+import { Book } from '../learnbook.component';
 
 export class ControlPanel {
     parent: Book;

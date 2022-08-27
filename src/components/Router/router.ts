@@ -2,7 +2,7 @@ import { AudioCall } from './../audio-call/audio-call.components';
 import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
-import { Book } from '../learn-book/LearnBook';
+import { Book } from '../learn-book/learnbook.component';
 import { Sprint } from '../sprint/sprint.component';
 
 export class Router {

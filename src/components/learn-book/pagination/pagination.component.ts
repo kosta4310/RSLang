@@ -1,6 +1,6 @@
 import { PAGINATION_BUTTONS, ELEMENTS } from './constants';
 import { PAGINATION_TEMPLATE } from './pagination.template';
-import { Book } from '../LearnBook';
+import { Book } from '../learnbook.component';
 import { state } from '../../../state';
 
 export class Pagination {

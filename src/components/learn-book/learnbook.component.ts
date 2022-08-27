@@ -1,4 +1,4 @@
-import { INIT_PAGE_TEMPLATE } from './initPage/initPage.template';
+import { LEARNBOOK_PAGE_TEMPLATE } from './learnbook.template';
 import { templateFooter } from '../footer/footer.template';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
@@ -21,7 +21,7 @@ export class Book {
     async init() {
         document.body.innerHTML = '';
         //   document.body.style.height = '100%';
-        document.body.insertAdjacentHTML('afterbegin', INIT_PAGE_TEMPLATE);
+        document.body.insertAdjacentHTML('afterbegin', LEARNBOOK_PAGE_TEMPLATE);
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         document.body.insertAdjacentHTML('beforeend', templateFooter);
         new Header().init();
