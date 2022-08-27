@@ -41,12 +41,12 @@ export const templateHeader = `
                     </ul>
                 </nav>
                 <div class="title">
-                    <h1>RSLang</h1>
+                <a class="logo-link" href="/" data-navigo><h1>RSLang</h1></a>
                 </div>
             </div>
             <a href="/auth" class="btn-enter" data-navigo>Войти</a>
         </div>
     </div>
 </div>
-<div class="header__mt"></div>
+<div><div class="header__mt"></div></div>
 `;

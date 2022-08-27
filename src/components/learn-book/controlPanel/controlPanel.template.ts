@@ -33,7 +33,7 @@ export const getContolPanelTemplate = () => {
         <div class="complexity__container">
             <span class="title">Сложность</span>
             <div class="complexity__buttons">
-                <div class="learnbook__button learnbook__button_selected" data-complexity="0">
+                <div class="learnbook__button" data-complexity="0">
                     <div class="learnbook__icon-container">
                         <span>A1</span>
                     </div>

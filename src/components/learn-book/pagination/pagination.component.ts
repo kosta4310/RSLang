@@ -1,6 +1,6 @@
 import { PAGINATION_BUTTONS, ELEMENTS } from './constants';
 import { PAGINATION_TEMPLATE } from './pagination.template';
-import { Book } from '../LearnBook';
+import { Book } from '../learnbook.component';
 import { state } from '../../../state';
 
 export class Pagination {
@@ -19,14 +19,14 @@ export class Pagination {
         this.elementsPerPage = elementsPerPage;
         this.pagesCount = Math.ceil(this.totalElementsCount / this.elementsPerPage);
         this.parent = parent;
+        this.currentPage = this.parent.page + 1;
     }
 
     render() {
         const paginationBlock = <HTMLElement>document.querySelector('#pagination');
         paginationBlock.insertAdjacentHTML('beforeend', PAGINATION_TEMPLATE);
 
-        const firstItem = <HTMLElement>document.querySelector('.pagination__first');
-        firstItem.classList.add('pagination_selected');
+        this.redraw();
         this.listen();
     }
 
@@ -122,12 +122,12 @@ export class Pagination {
                     )
                 ) {
                     this.currentPage = +target.innerText;
-                    state.setItem({ page: this.currentPage.toString() });
                     console.log(state.getItem('page'));
-
+                    
                     this.redraw();
-
+                    
                     this.parent.page = this.currentPage - 1;
+                    state.setItem({ page: this.parent.page.toString() });
                     this.parent.renderWords();
                 }
 
