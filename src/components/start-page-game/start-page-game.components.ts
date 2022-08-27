@@ -23,6 +23,7 @@ export class StartGamePage {
     }
 
     choiceComplexity() {
+        state.setItem({ complexity: '0' });
         const complexityButtons = <HTMLElement>document.querySelector('.complexity__buttons');
         complexityButtons.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;

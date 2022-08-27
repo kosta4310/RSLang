@@ -17,12 +17,15 @@ export class Sprint {
     startPage: StartGamePage;
     map: Map<string, string>;
     mapRightWords: Map<string, string>;
+    tempWordsPair: { word: string; wordRandomTranslate: string };
+
     constructor() {
         this.startPage = new StartGamePage();
         this.complexity = 0;
         this.page = 0;
         this.map = <Map<string, string>>new Map();
         this.mapRightWords = <Map<string, string>>new Map();
+        this.tempWordsPair = { word: 'lion', wordRandomTranslate: 'лев' };
         // this.isFromBook = false;
         // this.param = { page: '0', group: '0' };
     }
@@ -48,10 +51,8 @@ export class Sprint {
         const body = document.body;
         body.innerHTML = '';
         body.insertAdjacentHTML('beforeend', templateHeader);
-        // this.header.init();
         body.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
         this.gameProcess();
-        console.log('start game', param);
     }
 
     timer() {
@@ -95,7 +96,7 @@ export class Sprint {
 
         const iterator = this.map.entries();
         this.timer();
-        this.iteration(iterator);
+        this.tempWordsPair = <{ word: string; wordRandomTranslate: string }>this.iteration(iterator);
         this.listen(iterator);
     }
 
@@ -138,35 +139,48 @@ export class Sprint {
     }
 
     handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
+        let isTrue = false;
         if ((<HTMLElement>e.target).classList.contains('btn-yes')) {
-            console.log('yes');
+            isTrue = true;
         } else {
-            console.log('no');
+            isTrue = false;
         }
-        this.iteration(iterator);
+        this.checkRightTranslate(iterator, isTrue);
     }
 
     handlerKeys(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
         if (e.key === 'ArrowLeft') {
-            console.log('left');
+            this.checkRightTranslate(iterator, true);
         } else if (e.key === 'ArrowRight') {
-            console.log('right');
+            this.checkRightTranslate(iterator, false);
         }
-        this.iteration(iterator);
     }
 
     iteration(iterator: IterableIterator<[string, string]>) {
         const nextElement = iterator.next();
 
         if (!nextElement.done) {
-            const [word, wordTranslate] = nextElement.value;
-            this.showWords(word, wordTranslate);
+            const [word, wordRandomTranslate] = nextElement.value;
+            this.showWords(word, wordRandomTranslate);
+            return { word, wordRandomTranslate };
         } else {
             alert('Page of statistic');
+            return false;
         }
     }
 
-    // checkRightTranslate() {
+    checkRightTranslate(iterator: IterableIterator<[string, string]>, isTrue: boolean) {
+        const { word, wordRandomTranslate } = this.tempWordsPair;
+        if (
+            (this.mapRightWords.get(word) === wordRandomTranslate && isTrue) ||
+            !(this.mapRightWords.get(word) === wordRandomTranslate && !isTrue)
+        ) {
+            console.log('все-таки ты что-то знаешь');
+        } else console.log(`you are lier ${word}=${wordRandomTranslate}`);
 
-    // }
+        const iteration = this.iteration(iterator);
+        if (iteration) {
+            this.tempWordsPair = iteration;
+        }
+    }
 }
