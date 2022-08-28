@@ -34,7 +34,6 @@ export class StartGamePage {
                 btn.classList.add('learnbook__button_selected');
                 (<HTMLButtonElement>document.querySelector('.start-game')).disabled = false;
                 this.complexity = +(<string>btn.getAttribute('data-complexity'));
-                // state.complexityMainGame= this.complexity
                 state.setItem({ complexity: this.complexity.toString() });
             }
         });

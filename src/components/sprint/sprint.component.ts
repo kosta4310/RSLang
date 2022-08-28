@@ -10,14 +10,14 @@ import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.temp
 const quantityWordsInPage = 20;
 
 export class Sprint {
-    // param: ParamPage;
     complexity: number;
     page: number;
-    // isFromBook: boolean;
     startPage: StartGamePage;
     map: Map<string, string>;
     mapRightWords: Map<string, string>;
     tempWordsPair: { word: string; wordRandomTranslate: string };
+    audio: HTMLAudioElement;
+    resultOfGame: Map<string, boolean>;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -26,8 +26,8 @@ export class Sprint {
         this.map = <Map<string, string>>new Map();
         this.mapRightWords = <Map<string, string>>new Map();
         this.tempWordsPair = { word: 'lion', wordRandomTranslate: 'лев' };
-        // this.isFromBook = false;
-        // this.param = { page: '0', group: '0' };
+        this.audio = new Audio();
+        this.resultOfGame = new Map();
     }
 
     init() {
@@ -75,8 +75,6 @@ export class Sprint {
             location.reload();
         });
 
-        const btnNo = <HTMLElement>document.querySelector('.btn-no');
-        const btnYes = <HTMLElement>document.querySelector('.btn-yes');
         const buttonsBlock = <HTMLElement>document.querySelector('.sprint__buttons');
 
         buttonsBlock.addEventListener('click', (e) => {
@@ -84,7 +82,11 @@ export class Sprint {
         });
 
         document.addEventListener('keydown', (e) => {
-            this.handlerKeys(e, iterator);
+            this.handlerKeysDown(e, iterator);
+        });
+
+        document.addEventListener('keyup', (e) => {
+            this.handlerKeysUp(e);
         });
     }
 
@@ -106,16 +108,6 @@ export class Sprint {
 
         wordEn.innerHTML = word;
         wordRu.innerHTML = wordTranslate;
-
-        // const nextElement = iterator.next();
-
-        // if (!nextElement.done) {
-        //     const [word, wordTranslate] = nextElement.value;
-        //     wordEn.innerHTML = word;
-        //     wordRu.innerHTML = wordTranslate;
-        // } else {
-        //     alert('Page of statistic');
-        // }
     }
 
     async setSortArraysWords(group: string, page: string) {
@@ -148,11 +140,21 @@ export class Sprint {
         this.checkRightTranslate(iterator, isTrue);
     }
 
-    handlerKeys(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
+    handlerKeysDown(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
         if (e.key === 'ArrowLeft') {
+            this.addActiveToButtonYes();
             this.checkRightTranslate(iterator, true);
         } else if (e.key === 'ArrowRight') {
+            this.addActiveToButtonNo();
             this.checkRightTranslate(iterator, false);
+        }
+    }
+
+    handlerKeysUp(e: KeyboardEvent) {
+        if (e.key === 'ArrowLeft') {
+            this.deleteActiveToButtonYes();
+        } else if (e.key === 'ArrowRight') {
+            this.deleteActiveToButtonNo();
         }
     }
 
@@ -173,14 +175,63 @@ export class Sprint {
         const { word, wordRandomTranslate } = this.tempWordsPair;
         if (
             (this.mapRightWords.get(word) === wordRandomTranslate && isTrue) ||
-            !(this.mapRightWords.get(word) === wordRandomTranslate && !isTrue)
+            (!(this.mapRightWords.get(word) === wordRandomTranslate) && !isTrue)
         ) {
-            console.log('все-таки ты что-то знаешь');
-        } else console.log(`you are lier ${word}=${wordRandomTranslate}`);
+            this.handlerCorrectAnswer(word);
+        } else this.handlerIncorrectAnswer(word);
 
         const iteration = this.iteration(iterator);
         if (iteration) {
             this.tempWordsPair = iteration;
         }
+    }
+
+    addDeleteActiveToButton(metod: string, isYes: boolean) {
+        let button: HTMLElement;
+        if (isYes) {
+            button = <HTMLElement>document.querySelector('.btn-yes');
+        } else {
+            button = <HTMLElement>document.querySelector('.btn-no');
+        }
+        if (metod === 'add') {
+            button.classList.add('btn__active');
+        } else {
+            button.classList.remove('btn__active');
+        }
+    }
+
+    addActiveToButtonYes() {
+        const button = <HTMLElement>document.querySelector('.btn-yes');
+        button.classList.add('btn-yes__active');
+    }
+
+    addActiveToButtonNo() {
+        const button = <HTMLElement>document.querySelector('.btn-no');
+        button.classList.add('btn-no__active');
+    }
+
+    deleteActiveToButtonYes() {
+        const button = <HTMLElement>document.querySelector('.btn-yes');
+        button.classList.remove('btn-yes__active');
+    }
+
+    deleteActiveToButtonNo() {
+        const button = <HTMLElement>document.querySelector('.btn-no');
+        button.classList.remove('btn-no__active');
+    }
+
+    handlerCorrectAnswer(word: string) {
+        this.playSound('../../assets/sounds/correct1.mp3');
+        this.resultOfGame.set(word, true);
+    }
+
+    handlerIncorrectAnswer(word: string) {
+        this.playSound('../../assets/sounds/incorrect2.mp3');
+        this.resultOfGame.set(word, false);
+    }
+
+    playSound(src: string) {
+        this.audio.src = src;
+        this.audio.play();
     }
 }
