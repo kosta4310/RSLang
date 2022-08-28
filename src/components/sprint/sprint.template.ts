@@ -4,7 +4,7 @@ export const SPRINT_TEMPLATE = `
             <div class="sprint">
                 <div class="sprint__cancel">
                     <a href="/sprint" class="btn-cancel" data-navigo>
-                        <svg class="btn-cancel__svg" width="55" height="55">
+                        <svg class="btn-cancel__svg" width="30" height="30">
                             <use xlink:href="../../assets/svg/icons.svg#cancel"></use>
                         </svg>
                     </a>

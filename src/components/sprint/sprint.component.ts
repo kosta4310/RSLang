@@ -1,5 +1,6 @@
 import { state } from '../../state';
 import { getChunkOfWords } from '../api/api';
+import { IWord } from '../api/types';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
 import { Router } from '../Router/router';
@@ -7,7 +8,7 @@ import { StartGamePage } from '../start-page-game/start-page-game.components';
 import { ParamPage } from '../types';
 import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
-import { statisticGameSprint } from './statisticSprintGame.template';
+import { templateStatisticGameSprint, templateTableLine } from './statisticSprintGame.template';
 const quantityWordsInPage = 20;
 
 export class Sprint {
@@ -21,6 +22,7 @@ export class Sprint {
     resultOfGame: Map<string, boolean>;
     interval: NodeJS.Timer | undefined;
     header: Header;
+    arrayWords: Array<IWord>;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -33,6 +35,7 @@ export class Sprint {
         this.resultOfGame = new Map();
         this.interval = undefined;
         this.header = new Header();
+        this.arrayWords = [];
     }
 
     init() {
@@ -131,9 +134,11 @@ export class Sprint {
         let wordArray = <Array<string>>[];
         let wordTranslateArray = <Array<string>>[];
 
-        const arrayWords = await getChunkOfWords(group, page);
-        arrayWords.map((words) => {
+        this.arrayWords = await getChunkOfWords(group, page);
+
+        this.arrayWords.map((words) => {
             const { word, wordTranslate } = words;
+
             this.mapRightWords.set(word, wordTranslate);
             wordArray.push(word);
             wordTranslateArray.push(wordTranslate);
@@ -142,19 +147,17 @@ export class Sprint {
         wordTranslateArray = shuffle(wordTranslateArray);
         wordArray = shuffle(wordArray);
 
-        for (let i = 0; i < arrayWords.length; i++) {
+        for (let i = 0; i < this.arrayWords.length; i++) {
             this.map.set(wordArray[i], wordTranslateArray[i]);
         }
     }
 
     handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
-        let isTrue = false;
-        if ((<HTMLElement>e.target).classList.contains('btn-yes')) {
-            isTrue = true;
-        } else {
-            isTrue = false;
+        if ((<HTMLElement>e.target).closest('.btn-yes')) {
+            this.checkRightTranslate(iterator, true);
+        } else if ((<HTMLElement>e.target).closest('.btn-no')) {
+            this.checkRightTranslate(iterator, false);
         }
-        this.checkRightTranslate(iterator, isTrue);
     }
 
     handlerKeysDown(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
@@ -196,6 +199,7 @@ export class Sprint {
             (!(this.mapRightWords.get(word) === wordRandomTranslate) && !isTrue)
         ) {
             this.handlerCorrectAnswer(word);
+            console.log(`word: ${word} - translate: ${wordRandomTranslate}`);
         } else this.handlerIncorrectAnswer(word);
 
         const iteration = this.iteration(iterator);
@@ -260,6 +264,19 @@ export class Sprint {
     }
 
     showStatistic() {
-        document.body.innerHTML = statisticGameSprint();
+        document.body.innerHTML = templateStatisticGameSprint();
+        this.getArrayLinesWithWords();
+    }
+
+    getArrayLinesWithWords() {
+        const table = <HTMLElement>document.body.querySelector('.statistic-sprint__table');
+        this.arrayWords.map((iword) => {
+            const { audio, word, transcription, wordTranslate } = iword;
+            const isRight = <boolean>this.resultOfGame.get(word);
+            table.insertAdjacentHTML(
+                'beforeend',
+                templateTableLine(audio, word, transcription, wordTranslate, isRight)
+            );
+        });
     }
 }

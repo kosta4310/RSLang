@@ -7,3 +7,4 @@ state.setItem({ page: '0', complexity: '0' });
 
 const router = new Router();
 router.init();
+
