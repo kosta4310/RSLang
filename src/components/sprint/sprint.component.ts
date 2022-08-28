@@ -7,6 +7,7 @@ import { StartGamePage } from '../start-page-game/start-page-game.components';
 import { ParamPage } from '../types';
 import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
+import { statisticGameSprint } from './statisticSprintGame.template';
 const quantityWordsInPage = 20;
 
 export class Sprint {
@@ -18,6 +19,8 @@ export class Sprint {
     tempWordsPair: { word: string; wordRandomTranslate: string };
     audio: HTMLAudioElement;
     resultOfGame: Map<string, boolean>;
+    interval: NodeJS.Timer | undefined;
+    header: Header;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -28,6 +31,8 @@ export class Sprint {
         this.tempWordsPair = { word: 'lion', wordRandomTranslate: 'лев' };
         this.audio = new Audio();
         this.resultOfGame = new Map();
+        this.interval = undefined;
+        this.header = new Header();
     }
 
     init() {
@@ -35,35 +40,44 @@ export class Sprint {
         this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, isFromBook);
         state.setItem({ isFromBook: false });
 
-        const btnStartGame = <HTMLButtonElement>document.querySelector('.start-game');
-        btnStartGame.addEventListener('click', () => {
-            const param = isFromBook
-                ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
-                : {
-                      page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
-                      complexity: state.getItem('complexity'),
-                  };
-            this.startGame(param);
-        });
+        // const btnStartGame = <HTMLButtonElement>document.querySelector('.start-game');
+        // btnStartGame.addEventListener('click', () => {
+        //     const param = isFromBook
+        //         ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
+        //         : {
+        //               page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
+        //               complexity: state.getItem('complexity'),
+        //           };
+        //     this.startGame(param);
+        // });
     }
 
-    startGame(param: ParamPage) {
+    startGame() {
+        const isFromBook = state.getItem('isFromBook');
+        const param = isFromBook
+            ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
+            : {
+                  page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
+                  complexity: state.getItem('complexity'),
+              };
         const body = document.body;
         body.innerHTML = '';
         body.insertAdjacentHTML('beforeend', templateHeader);
         body.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
+        this.header.init();
         this.gameProcess();
     }
 
     timer() {
         const countdown = <HTMLElement>document.querySelector('.timer__time');
         let item = 59;
-        const interval = setInterval(() => {
+        this.interval = setInterval(() => {
             countdown.innerHTML = `${item}`;
             item = item - 1;
             if (item < 0) {
-                clearInterval(interval);
-                alert('Page of statistic');
+                clearInterval(this.interval);
+                location.href = '/#/sprint-statistic';
+                // location.reload();
             }
         }, 1000);
     }
@@ -71,8 +85,10 @@ export class Sprint {
     listen(iterator: IterableIterator<[string, string]>) {
         const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
         btnCancel.addEventListener('click', () => {
-            this.init();
-            location.reload();
+            console.log('click cancel');
+            // this.init();
+            // location.reload();
+            this.stopGame();
         });
 
         const buttonsBlock = <HTMLElement>document.querySelector('.sprint__buttons');
@@ -91,6 +107,7 @@ export class Sprint {
     }
 
     async gameProcess() {
+        // Не правильно, нужно брать из param
         const group = <string>state.getItem('complexity');
         const page = <string>state.getItem('page');
 
@@ -166,7 +183,8 @@ export class Sprint {
             this.showWords(word, wordRandomTranslate);
             return { word, wordRandomTranslate };
         } else {
-            alert('Page of statistic');
+            location.href = '/#/sprint-statistic';
+            // location.reload();
             return false;
         }
     }
@@ -233,5 +251,15 @@ export class Sprint {
     playSound(src: string) {
         this.audio.src = src;
         this.audio.play();
+    }
+
+    stopGame() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    }
+
+    showStatistic() {
+        document.body.innerHTML = statisticGameSprint();
     }
 }

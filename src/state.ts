@@ -31,7 +31,6 @@ export const state = {
 
     getItem(key: string) {
         const rsLangString = localStorage.getItem('rsLang');
-        console.log(`storage ${key} - ${rsLangString}`);
 
         if (rsLangString) {
             const rsLang = JSON.parse(rsLangString);

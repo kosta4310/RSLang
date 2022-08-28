@@ -42,6 +42,12 @@ export class Router {
             .on('/sprint', () => {
                 this.sprint.init();
             })
+            .on('/sprint-start', () => {
+                this.sprint.startGame();
+            })
+            .on('/sprint-statistic', () => {
+                this.sprint.showStatistic();
+            })
             .on('/auth', () => {
                 this.authorization.init();
             })

@@ -1,8 +1,16 @@
+@import './statisticSprintGame.style.scss';
+
+.wrapper__sprint,
+.container__sprint {
+    height: 100%;
+}
+
 .sprint {
     padding: 5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
     background-color: $color-grey;
     @include font-ABeeZee(3.4rem, 400);
 
