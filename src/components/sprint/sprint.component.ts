@@ -1,9 +1,9 @@
+import { BASE } from '../../config';
 import { state } from '../../state';
 import { getChunkOfWords } from '../api/api';
 import { IWord } from '../api/types';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
-import { Router } from '../Router/router';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
 import { ParamPage } from '../types';
 import { shuffle } from '../utils';
@@ -42,17 +42,6 @@ export class Sprint {
         const isFromBook = state.getItem('isFromBook');
         this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, isFromBook);
         state.setItem({ isFromBook: false });
-
-        // const btnStartGame = <HTMLButtonElement>document.querySelector('.start-game');
-        // btnStartGame.addEventListener('click', () => {
-        //     const param = isFromBook
-        //         ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
-        //         : {
-        //               page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
-        //               complexity: state.getItem('complexity'),
-        //           };
-        //     this.startGame(param);
-        // });
     }
 
     startGame() {
@@ -68,7 +57,7 @@ export class Sprint {
         body.insertAdjacentHTML('beforeend', templateHeader);
         body.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
         this.header.init();
-        this.gameProcess();
+        this.gameProcess(param);
     }
 
     timer() {
@@ -87,12 +76,13 @@ export class Sprint {
 
     listen(iterator: IterableIterator<[string, string]>) {
         const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
-        btnCancel.addEventListener('click', () => {
-            console.log('click cancel');
-            // this.init();
-            // location.reload();
-            this.stopGame();
-        });
+        btnCancel.addEventListener(
+            'click',
+            () => {
+                this.stopGame();
+            },
+            true
+        );
 
         const buttonsBlock = <HTMLElement>document.querySelector('.sprint__buttons');
 
@@ -109,12 +99,11 @@ export class Sprint {
         });
     }
 
-    async gameProcess() {
-        // Не правильно, нужно брать из param
-        const group = <string>state.getItem('complexity');
-        const page = <string>state.getItem('page');
+    async gameProcess({ page, complexity }: ParamPage) {
+        complexity = <string>state.getItem('complexity');
+        page = <string>state.getItem('page');
 
-        await this.setSortArraysWords(group, page);
+        await this.setSortArraysWords(complexity, page);
 
         const iterator = this.map.entries();
         this.timer();
@@ -199,7 +188,6 @@ export class Sprint {
             (!(this.mapRightWords.get(word) === wordRandomTranslate) && !isTrue)
         ) {
             this.handlerCorrectAnswer(word);
-            console.log(`word: ${word} - translate: ${wordRandomTranslate}`);
         } else this.handlerIncorrectAnswer(word);
 
         const iteration = this.iteration(iterator);
@@ -266,6 +254,16 @@ export class Sprint {
     showStatistic() {
         document.body.innerHTML = templateStatisticGameSprint();
         this.getArrayLinesWithWords();
+
+        const table = <HTMLElement>document.querySelector('.statistic-sprint__table');
+        table.addEventListener('click', (e) => {
+            if ((<HTMLElement>e.target).closest('.table__sound')) {
+                const wordSound = <HTMLElement>(<HTMLElement>e.target).closest('.table__sound');
+                const linkToAudioFile = <string>wordSound.dataset.sound;
+                this.audio.src = `${BASE}/${linkToAudioFile}`;
+                this.audio.play();
+            }
+        });
     }
 
     getArrayLinesWithWords() {
