@@ -1,0 +1,59 @@
+.wrapper {
+    background-color: $color-base;
+    // .wrapper__statistic-sprint
+
+    &__statistic-sprint {
+    }
+}
+.container {
+}
+.statistic-sprint {
+    // .statistic-sprint__block
+
+    &__block {
+        width: 50rem;
+        height: 20rem;
+        background-color: aqua;
+    }
+
+    // .statistic-sprint__title
+
+    &__title {
+    }
+
+    // .statistic-sprint__table
+
+    &__table {
+    }
+}
+.table {
+    // .table__line
+
+    &__line {
+    }
+
+    // .table__sound
+
+    &__sound {
+    }
+
+    // .table__word-en
+
+    &__word-en {
+    }
+
+    // .table__word-transcript
+
+    &__word-transcript {
+    }
+
+    // .table__word-translate
+
+    &__word-translate {
+    }
+
+    // .table__word-result
+
+    &__word-result {
+    }
+}
