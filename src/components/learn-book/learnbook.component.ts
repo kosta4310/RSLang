@@ -1,5 +1,4 @@
 import { LEARNBOOK_PAGE_TEMPLATE } from './learnbook.template';
-import { templateFooter } from '../footer/footer.template';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
 import * as API from '../api/api';
@@ -23,15 +22,20 @@ export class Book {
         //   document.body.style.height = '100%';
         document.body.insertAdjacentHTML('afterbegin', LEARNBOOK_PAGE_TEMPLATE);
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
-        document.body.insertAdjacentHTML('beforeend', templateFooter);
         new Header().init();
         const controlPanel = new ControlPanel(this);
         controlPanel.render();
         const pagination = new Pagination(this);
         pagination.render();
 
+        this.renderLoading();
         await this.renderWords();
         this.listen();
+    }
+
+    renderLoading() {
+        const words = <HTMLElement>document.body.querySelector('#words');
+        words.innerHTML = '<div class="loader-container"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>';
     }
 
     async renderWords() {

@@ -48,5 +48,5 @@ export const templateHeader = `
         </div>
     </div>
 </div>
-<div class="header__mt"></div>
+<div><div class="header__mt"></div></div>
 `;
