@@ -1,13 +1,25 @@
+@import './statisticSprintGame.style.scss';
+
+.wrapper__sprint,
+.container__sprint {
+    height: 100%;
+}
+
 .sprint {
     padding: 5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+    background-color: $color-grey;
     @include font-ABeeZee(3.4rem, 400);
 
     // .sprint__cancel
     &__cancel {
         align-self: end;
+        button {
+            background-color: inherit;
+        }
     }
 
     // .sprint__buttons
@@ -19,6 +31,11 @@
             width: 33rem;
             height: 9rem;
             border-radius: 1rem;
+            box-shadow: 0 0.9rem $color-shadow;
+        }
+        button:active {
+            box-shadow: 0 0.5rem $color-shadow-dark;
+            transform: translateY(0.4rem);
         }
     }
 }
@@ -47,13 +64,17 @@
 }
 .words {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    flex-direction: column;
+    row-gap: 2rem;
     align-items: center;
-    column-gap: 5rem;
+    // column-gap: 5rem;
     padding-bottom: 2rem;
     // .words__en
 
     &__en {
+        font-size: 5rem;
+        color: darken($color: $color-base, $amount: 30);
     }
 
     // .words__ru
@@ -63,7 +84,28 @@
 }
 .btn-yes {
     background-color: $color-lightgreen;
+    &:hover {
+        background-color: darken($color: $color-lightgreen, $amount: 10);
+    }
 }
+
 .btn-no {
     background-color: $color-red;
+    &:hover {
+        background-color: darken($color: $color-red, $amount: 10);
+    }
+}
+
+.btn-yes__active {
+    background-color: darken($color: $color-lightgreen, $amount: 10);
+    box-shadow: 0 0.5rem $color-shadow-dark;
+    // box-shadow: none;
+    transform: translateY(0.4rem);
+}
+
+.btn-no__active {
+    background-color: darken($color: $color-red, $amount: 10);
+    box-shadow: 0 0.5rem $color-shadow-dark;
+    // box-shadow: none;
+    transform: translateY(0.4rem);
 }

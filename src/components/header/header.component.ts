@@ -1,3 +1,5 @@
+import { state } from '../../state';
+
 export class Header {
     burger: HTMLElement | undefined;
     menu: HTMLElement | undefined;
@@ -28,6 +30,12 @@ export class Header {
                 location.reload();
             }
         });
+
+        document.querySelector('#menu .sprint')?.addEventListener('click', () => {
+            if (document.location.hash === '#/sprint') {
+                location.reload();
+            }
+        });
     }
     openCloseMenu() {
         if ((<HTMLElement>this.menu).classList.contains('open')) {
@@ -40,12 +48,13 @@ export class Header {
         (<HTMLElement>this.menu).classList.toggle('open');
     }
     checkAuthorization() {
-        if (localStorage.getItem('rslang')) {
+        if (state.getItem('isAuth')) {
             const authBtn = <HTMLAnchorElement>document.querySelector('.btn-enter');
             authBtn.innerHTML = 'Выйти';
             authBtn.href = '/';
             authBtn.addEventListener('click', () => {
-                localStorage.removeItem('rslang');
+                state.delItem('auth');
+                state.delItem('isAuth');
                 authBtn.innerHTML = 'Войти';
                 setTimeout(() => {
                     authBtn.href = '/auth';

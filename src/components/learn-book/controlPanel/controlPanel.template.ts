@@ -22,7 +22,7 @@ export const getContolPanelTemplate = () => {
                     </div>
                     <span>Аудио</span>
                 </a>  
-                <div class="learnbook__button pr10">
+                <a href="/sprint" class="learnbook__button pr10" data-navigo>
                     <div class="learnbook__icon-container mr10">
                         <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>
@@ -33,7 +33,7 @@ export const getContolPanelTemplate = () => {
         <div class="complexity__container">
             <span class="title">Сложность</span>
             <div class="complexity__buttons">
-                <div class="learnbook__button learnbook__button_selected" data-complexity="0">
+                <div class="learnbook__button" data-complexity="0">
                     <div class="learnbook__icon-container">
                         <span>A1</span>
                     </div>
@@ -67,7 +67,7 @@ export const getContolPanelTemplate = () => {
         </div>
     </div>
     <div class="right-block ">
-        ${state.isAuth() ? MY_WORDS_TEMPLATE : ''}
+        ${state.getItem('isAuth') ? MY_WORDS_TEMPLATE : ''}
     </div>
 </div>`;
 };

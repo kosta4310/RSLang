@@ -27,7 +27,7 @@ export const templateHeader = `
                             </a>
                             </li>
                         <li>
-                            <a href="/game-sprint" data-navigo>
+                            <a href="/sprint" class="sprint" data-navigo>
                                 <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                                 <span>Спринт</span>
                             </a>
@@ -41,12 +41,12 @@ export const templateHeader = `
                     </ul>
                 </nav>
                 <div class="title">
-                    <h1>RSLang</h1>
+                <a class="logo-link" href="/" data-navigo><h1>RSLang</h1></a>
                 </div>
             </div>
             <a href="/auth" class="btn-enter" data-navigo>Войти</a>
         </div>
     </div>
 </div>
-<div class="header__mt"></div>
+<div><div class="header__mt"></div></div>
 `;

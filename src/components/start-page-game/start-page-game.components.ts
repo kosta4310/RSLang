@@ -23,6 +23,7 @@ export class StartGamePage {
     }
 
     choiceComplexity() {
+        state.setItem({ complexity: '0' });
         const complexityButtons = <HTMLElement>document.querySelector('.complexity__buttons');
         complexityButtons.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;
@@ -33,7 +34,7 @@ export class StartGamePage {
                 btn.classList.add('learnbook__button_selected');
                 (<HTMLButtonElement>document.querySelector('.start-game')).disabled = false;
                 this.complexity = +(<string>btn.getAttribute('data-complexity'));
-                state.complexityMainGame= this.complexity
+                state.setItem({ complexity: this.complexity.toString() });
             }
         });
     }

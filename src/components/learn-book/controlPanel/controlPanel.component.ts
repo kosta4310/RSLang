@@ -1,6 +1,6 @@
 import { state } from './../../../state';
 import { getContolPanelTemplate } from './controlPanel.template';
-import { Book } from '../LearnBook';
+import { Book } from '../learnbook.component';
 
 export class ControlPanel {
     parent: Book;
@@ -12,6 +12,9 @@ export class ControlPanel {
         const CONTROL_PANEL_TEMPLATE = getContolPanelTemplate();
         const controlPanel = <HTMLElement>document.querySelector('#control-panel');
         controlPanel.insertAdjacentHTML('beforeend', CONTROL_PANEL_TEMPLATE);
+        const complexity = this.parent.complexity;
+        const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
+        elem.classList.add('learnbook__button_selected');
         this.listen();
     }
 
@@ -26,14 +29,15 @@ export class ControlPanel {
                 btn.classList.add('learnbook__button_selected');
                 const complexity = +(<string>btn.getAttribute('data-complexity'));
                 this.parent.complexity = complexity;
+                state.setItem({ complexity: complexity.toString() });
                 this.parent.renderWords();
             }
         });
-        const gameBtns= document.querySelectorAll('.pr10')
-        gameBtns.forEach(el=>{
-            el.addEventListener('click',()=>{        
-                state.learnBookGame=true
-            })
-        })
+        const gameBtns = document.querySelectorAll('.pr10');
+        gameBtns.forEach((el) => {
+            el.addEventListener('click', () => {
+                state.setItem({ isFromBook: true });
+            });
+        });
     }
 }

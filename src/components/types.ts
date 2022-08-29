@@ -1,9 +1,13 @@
 type StateParam = {
     page: string;
-    group: string;
+    complexity: string;
     isFromBook: boolean;
 };
 
-type ParamPage = Pick<StateParam, 'page' | 'group'>;
+type ParamPage = Pick<StateParam, 'page' | 'complexity'>;
 
-export { StateParam, ParamPage };
+type IndexObject = {
+    [key: string]: string | boolean;
+};
+
+export { StateParam, ParamPage, IndexObject };

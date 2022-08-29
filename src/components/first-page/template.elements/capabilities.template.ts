@@ -33,7 +33,7 @@ export const templateCapabilities = `
                             </p>
                         </div>
                     </a>
-                    <a href="/game-sprint" class="ca-item" data-navigo>
+                    <a href="/sprint" class="ca-item" data-navigo>
                         <div class="ca-item__image">
                             <img src="./assets/images/sprint.png" alt="sprint">
                         </div>

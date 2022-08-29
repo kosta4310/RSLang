@@ -1,0 +1,34 @@
+html,
+body {
+  height: 100%;
+}
+
+.wrapper-book {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  // overflow-x:scroll;
+  // overflow-y:scroll;
+}
+
+.learnbook-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-words {
+  flex-grow: 1;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.loader {
+  width: 8rem;
+  height: 8rem;
+}

@@ -7,23 +7,24 @@ export class AudioCall {
     startPage: StartGamePage;
     complexity: number;
     page: number;
-    learnBookGame: boolean;
+    // learnBookGame: boolean;
 
     constructor() {
         this.startPage = new StartGamePage();
         this.complexity = 0;
         this.page = 0;
-        this.learnBookGame = false;
+        // this.learnBookGame = false;
     }
 
     init() {
-        this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.learnBookGame);
+        this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.getItem('isFromBook'));
         this.learnBookGame = state.learnBookGame;
         state.learnBookGame = false;
+        state.setItem({ isFromBook: false });
         document.querySelector('.start-game')?.addEventListener('click', () => {
             if (!this.learnBookGame) {
                 this.complexity = state.complexityMainGame;
-                // this.page = Math.floor(Math.random() * 20);
+                this.page = Math.floor(Math.random() * 20);
             }
             this.game();
             this.learnBookGame = false;
@@ -38,6 +39,5 @@ export class AudioCall {
     }
     async getArrayWords(complexity: number, page: number){
         return getChunkOfWords(complexity.toString(), page.toString())
-
     }
 }
