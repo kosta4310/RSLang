@@ -19,6 +19,7 @@ interface IWord {
     wordTranslate: string;
     textMeaningTranslate: string;
     textExampleTranslate: string;
+    userWord?: NoteToWord;
 }
 
 type CreatedUser = {
@@ -62,15 +63,23 @@ type UserWord = NoteToWord & {
 };
 
 type InputAllUserAggWords = {
-    page: string;
+    page?: string;
     group?: string;
-    wordsPerPage: string;
-    filter: string;
+    wordsPerPage?: string;
+    filter?: string;
 };
+
+type AggregatedWordCount = { count: number; }
+type AggregatedWordItem = {
+    paginatedResults: IWord[],
+    totalCount: AggregatedWordCount[]
+}
+
+type AggregatedWordResponse = AggregatedWordItem[]
 
 type Statistic = {
     optional: object,
     learnedWords: string
 }
 
-export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic };
+export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic, AggregatedWordResponse };

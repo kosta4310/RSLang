@@ -2,7 +2,7 @@ import { IWord } from '../../api/types';
 import { BASE } from '../../../config';
 import './card.style.scss';
 
-export async function getCard(word: IWord, isAuth: boolean) {
+export function getCard(word: IWord, isAuth: boolean) {
     const pathImage = `${BASE}/${word.image}`;
     return `
 <div class="card" data-id=${word.id} data-audio=${word.audio} data-audioMeaning=${
@@ -28,12 +28,16 @@ export async function getCard(word: IWord, isAuth: boolean) {
     </div>
     <div class="card__button">
         <button class="sound"><svg height="62" width="62" fill="#000"><use xlink:href="../../../assets/svg/icons.svg#sound"></use></svg></button>
-        <button class="easy-word ${
-            isAuth ? 'auth' : 'none'
-        }"><svg height="62" width="62" fill="#CBCBCB"><use xlink:href="../../../assets/svg/icons.svg#easy"></use></svg></button>
-        <button class="hard-word ${
-            isAuth ? 'auth' : 'none'
-        }"><svg  height="62" width="62" fill="#CBCBCB"><use xlink:href="../../../assets/svg/icons.svg#hard"></use></svg></button>
+        <button class="easy-word ${isAuth ? 'auth' : ''} ${(word.userWord?.difficulty === 'easy') ? 'selected': ''}">
+            <svg height="62" width="62" fill="#CBCBCB">
+                <use xlink:href="../../../assets/svg/icons.svg#easy"></use>
+            </svg>
+        </button>
+        <button class="hard-word ${isAuth ? 'auth' : ''} ${(word.userWord?.difficulty === 'hard') ? 'selected': ''}">
+            <svg  height="62" width="62" fill="#CBCBCB">
+                <use xlink:href="../../../assets/svg/icons.svg#hard"></use>
+            </svg>
+        </button>
     </div>
 </div>`;
 }

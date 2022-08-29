@@ -8,6 +8,7 @@ import { ControlPanel } from './controlPanel/controlPanel.component';
 import { Pagination } from './pagination/pagination.component';
 import { state } from '../../state';
 import { getTodayString, saveWord } from '../utils';
+import { IWord } from '../api/types';
 
 export class Book {
     complexity: number;
@@ -40,7 +41,17 @@ export class Book {
     }
 
     async renderWords() {
-        const arrayWords = await this.getArrayWords(this.complexity, this.page);
+        const {userId, token } = state.getItem('auth');
+        let arrayWords: IWord[];
+        if (userId) {
+            arrayWords = await this.getArrayUserWords(this.complexity, this.page, userId, token);
+        } else {
+            arrayWords = await this.getArrayWords(this.complexity, this.page);
+        }
+        console.log(`arrayWords`)
+        console.log(arrayWords)
+        
+
         const words = <HTMLElement>document.body.querySelector('#words');
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
@@ -54,6 +65,14 @@ export class Book {
 
     async getArrayWords(complexity: number, page: number) {
         return API.getChunkOfWords(complexity.toString(), page.toString());
+    }
+
+    async getArrayUserWords(complexity: number, page: number, userId: string, token: string) {
+        const response = await API.getAllUserAggWords(userId, token, {
+            group: complexity.toString(),
+            page: page.toString(),
+        })
+        return response[0].paginatedResults;
     }
 
     listen() {
