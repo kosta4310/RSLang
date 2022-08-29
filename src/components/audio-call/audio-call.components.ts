@@ -42,9 +42,10 @@ export class AudioCall {
         this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.isFromBook);
         this.learnBookGame = state.isFromBook;
         state.isFromBook = false;
-        document.querySelector('.start-game')?.addEventListener('click', () => {
+        
+         document.querySelector('.start-game')?.addEventListener('click', () => {
             if (!this.learnBookGame) {
-                this.complexity = state.complexityMainGame;
+                this.complexity = state.getItem('complexity');
                 this.page = Math.floor(Math.random() * 20);
             }
             this.game();
@@ -53,6 +54,7 @@ export class AudioCall {
     }
 
     async game() {
+
         const arrayWords = await this.getArrayWords(this.complexity, this.page);
         const searchWord = arrayWords[this.indexWord];
         const pathImage = `${BASE}/${searchWord.image}`;
@@ -154,5 +156,6 @@ export class AudioCall {
                 audio.play();
             }
         });
+
     }
 }

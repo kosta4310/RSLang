@@ -1,3 +1,5 @@
+import { IOptionalToWord } from '../types';
+
 interface IUser {
     name: string;
     email: string;
@@ -19,6 +21,7 @@ interface IWord {
     wordTranslate: string;
     textMeaningTranslate: string;
     textExampleTranslate: string;
+    option?: IOptionalToWord;
 }
 
 type CreatedUser = {
@@ -36,8 +39,8 @@ type Auth = {
 };
 
 type NoteToWord = {
-    difficulty: string;
-    optional: object;
+    difficulty: 'normal' | 'easy' | 'hard';
+    optional: IOptionalToWord;
 };
 
 type UserWord = NoteToWord & {
@@ -53,8 +56,8 @@ type InputAllUserAggWords = {
 };
 
 type Statistic = {
-    optional: object,
-    learnedWords: string
-}
+    optional: object;
+    learnedWords: string;
+};
 
 export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic };

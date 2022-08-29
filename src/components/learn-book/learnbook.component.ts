@@ -35,7 +35,8 @@ export class Book {
 
     renderLoading() {
         const words = <HTMLElement>document.body.querySelector('#words');
-        words.innerHTML = '<div class="loader-container"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>';
+        words.innerHTML =
+            '<div class="loader-container"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>';
     }
 
     async renderWords() {
@@ -44,7 +45,6 @@ export class Book {
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         const isAuth = <boolean>state.getItem('isAuth');
-        console.log(isAuth);
 
         await arrayWords.map(async (obj) => {
             words.insertAdjacentHTML('beforeend', await getCard(obj, isAuth));

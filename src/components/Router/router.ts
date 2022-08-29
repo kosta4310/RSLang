@@ -22,7 +22,6 @@ export class Router {
         this.sprint = new Sprint();
     }
     init() {
-        console.log('router');
         this.router
             .on('/', () => {
                 console.log('start page');
