@@ -58,8 +58,8 @@ export class Book {
         const isAuth = <boolean>state.getItem('isAuth');
         console.log(isAuth);
 
-        await arrayWords.map(async (obj) => {
-            words.insertAdjacentHTML('beforeend', await getCard(obj, isAuth));
+        arrayWords.map((word) => {
+            words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
         });
     }
 
