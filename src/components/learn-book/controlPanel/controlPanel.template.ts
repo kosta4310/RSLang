@@ -27,7 +27,7 @@ export const getContolPanelTemplate = () => {
                         <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>
                     <span>Спринт</span>
-                </div>
+                </a>
             </div>
         </div>
         <div class="complexity__container">

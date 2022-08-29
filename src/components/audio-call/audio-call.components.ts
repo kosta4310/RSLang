@@ -7,23 +7,23 @@ export class AudioCall {
     startPage: StartGamePage;
     complexity: number;
     page: number;
-    // learnBookGame: boolean;
+    learnBookGame: boolean;
 
     constructor() {
         this.startPage = new StartGamePage();
         this.complexity = 0;
         this.page = 0;
-        // this.learnBookGame = false;
+        this.learnBookGame = false;
     }
 
     init() {
         this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.getItem('isFromBook'));
-        this.learnBookGame = state.learnBookGame;
-        state.learnBookGame = false;
+        this.learnBookGame = state.isFromBook;
+        state.setItem({ complexity: false });
         state.setItem({ isFromBook: false });
         document.querySelector('.start-game')?.addEventListener('click', () => {
             if (!this.learnBookGame) {
-                this.complexity = state.complexityMainGame;
+                this.complexity = state.getItem('complexity');
                 this.page = Math.floor(Math.random() * 20);
             }
             this.game();
@@ -31,13 +31,18 @@ export class AudioCall {
         });
     }
     async game() {
-        (<HTMLElement>document.querySelector('.start-game_container')).style.display='none'
-       document.body.insertAdjacentHTML('beforeend',AUDIO_CALL_TEMPLATE)
-       console.log(this.getArrayWords(this.complexity,this.page));
-       const arrayWords = await this.getArrayWords(this.complexity, this.page);
-       console.log(arrayWords.sort(() => Math.random() - 0.5).filter(el=>el.word!=='love').slice(0,4));
+        (<HTMLElement>document.querySelector('.start-game_container')).style.display = 'none';
+        document.body.insertAdjacentHTML('beforeend', AUDIO_CALL_TEMPLATE);
+        console.log(this.getArrayWords(this.complexity, this.page));
+        const arrayWords = await this.getArrayWords(this.complexity, this.page);
+        console.log(
+            arrayWords
+                .sort(() => Math.random() - 0.5)
+                .filter((el) => el.word !== 'love')
+                .slice(0, 4)
+        );
     }
-    async getArrayWords(complexity: number, page: number){
-        return getChunkOfWords(complexity.toString(), page.toString())
+    async getArrayWords(complexity: number, page: number) {
+        return getChunkOfWords(complexity.toString(), page.toString());
     }
 }
