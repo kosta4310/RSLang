@@ -108,7 +108,21 @@ export class Book {
                     
                     await saveWord(wordId, 'hard', { lastCorrectDate: getTodayString() });
                     buttonHard.classList.add('selected');
+                    card.querySelector('.easy-word')?.classList.remove('selected');
                 }
+                return;
+            }
+            const easyWord = target.closest('.easy-word');
+            if (easyWord) {
+                if (!easyWord.classList.contains('selected')) {
+                    const card = <HTMLElement>target.closest('.card');
+                    const wordId = <string>card.getAttribute('data-id');
+                    
+                    await saveWord(wordId, 'easy', { lastCorrectDate: getTodayString() });
+                    easyWord.classList.add('selected');
+                    card.querySelector('.hard-word')?.classList.remove('selected');
+                }
+                return;
             }
         });
     }
