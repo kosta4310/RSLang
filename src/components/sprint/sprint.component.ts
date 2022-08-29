@@ -1,21 +1,22 @@
 import { BASE } from '../../config';
 import { state } from '../../state';
 import { getChunkOfWords } from '../api/api';
-import { IWord } from '../api/types';
+import { IWord, NoteToWord, UserWord } from '../api/types';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
-import { ParamPage } from '../types';
+import { IOptionalToWord, ParamPage } from '../types';
 import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
 import { templateStatisticGameSprint, templateTableLine } from './statisticSprintGame.template';
+import * as API from '../api/api';
 const quantityWordsInPage = 20;
 
 export class Sprint {
     complexity: number;
     page: number;
     startPage: StartGamePage;
-    map: Map<string, string>;
+    mapWordPairs: Map<string, string>;
     mapRightWords: Map<string, string>;
     tempWordsPair: { word: string; wordRandomTranslate: string };
     audio: HTMLAudioElement;
@@ -23,12 +24,15 @@ export class Sprint {
     interval: NodeJS.Timer | undefined;
     header: Header;
     arrayWords: Array<IWord>;
+    numberOfTimesPressed: number;
+    arrayTappedWords: Array<IWord>;
+    isFromBook: boolean;
 
     constructor() {
         this.startPage = new StartGamePage();
         this.complexity = 0;
         this.page = 0;
-        this.map = <Map<string, string>>new Map();
+        this.mapWordPairs = <Map<string, string>>new Map();
         this.mapRightWords = <Map<string, string>>new Map();
         this.tempWordsPair = { word: 'lion', wordRandomTranslate: 'лев' };
         this.audio = new Audio();
@@ -36,33 +40,46 @@ export class Sprint {
         this.interval = undefined;
         this.header = new Header();
         this.arrayWords = [];
+        this.numberOfTimesPressed = 0;
+        this.arrayTappedWords = [];
+        this.isFromBook = state.getItem('isFromBook');
     }
 
     init() {
-        const isFromBook = state.getItem('isFromBook');
-        this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, isFromBook);
+        this.isFromBook = state.getItem('isFromBook');
+        this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, this.isFromBook);
         state.setItem({ isFromBook: false });
+        this.mapRightWords.clear();
+        this.mapWordPairs.clear();
+        this.arrayTappedWords = [];
+        this.arrayWords = [];
+        this.numberOfTimesPressed = 0;
+        this.arrayTappedWords = [];
     }
 
     startGame() {
-        const isFromBook = state.getItem('isFromBook');
-        const param = isFromBook
+        // const isFromBook = state.getItem('isFromBook');
+
+        const param = this.isFromBook
             ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
             : {
                   page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
                   complexity: state.getItem('complexity'),
               };
+
         const body = document.body;
         body.innerHTML = '';
         body.insertAdjacentHTML('beforeend', templateHeader);
         body.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
         this.header.init();
         this.gameProcess(param);
+
+        console.log(this.isFromBook, param);
     }
 
     timer() {
         const countdown = <HTMLElement>document.querySelector('.timer__time');
-        let item = 59;
+        let item = 5;
         this.interval = setInterval(() => {
             countdown.innerHTML = `${item}`;
             item = item - 1;
@@ -100,12 +117,9 @@ export class Sprint {
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
-        complexity = <string>state.getItem('complexity');
-        page = <string>state.getItem('page');
-
         await this.setSortArraysWords(complexity, page);
 
-        const iterator = this.map.entries();
+        const iterator = this.mapWordPairs.entries();
         this.timer();
         this.tempWordsPair = <{ word: string; wordRandomTranslate: string }>this.iteration(iterator);
         this.listen(iterator);
@@ -120,7 +134,7 @@ export class Sprint {
     }
 
     async setSortArraysWords(group: string, page: string) {
-        let wordArray = <Array<string>>[];
+        const wordArray = <Array<string>>[];
         let wordTranslateArray = <Array<string>>[];
 
         this.arrayWords = await getChunkOfWords(group, page);
@@ -134,10 +148,9 @@ export class Sprint {
         });
 
         wordTranslateArray = shuffle(wordTranslateArray);
-        wordArray = shuffle(wordArray);
 
         for (let i = 0; i < this.arrayWords.length; i++) {
-            this.map.set(wordArray[i], wordTranslateArray[i]);
+            this.mapWordPairs.set(wordArray[i], wordTranslateArray[i]);
         }
     }
 
@@ -233,11 +246,13 @@ export class Sprint {
     handlerCorrectAnswer(word: string) {
         this.playSound('../../assets/sounds/correct1.mp3');
         this.resultOfGame.set(word, true);
+        this.numberOfTimesPressed = this.numberOfTimesPressed + 1;
     }
 
     handlerIncorrectAnswer(word: string) {
         this.playSound('../../assets/sounds/incorrect2.mp3');
         this.resultOfGame.set(word, false);
+        this.numberOfTimesPressed = this.numberOfTimesPressed + 1;
     }
 
     playSound(src: string) {
@@ -268,13 +283,87 @@ export class Sprint {
 
     getArrayLinesWithWords() {
         const table = <HTMLElement>document.body.querySelector('.statistic-sprint__table');
-        this.arrayWords.map((iword) => {
+        this.arrayTappedWords = this.arrayWords.slice(0, this.numberOfTimesPressed);
+        const isAuth = state.getItem('isAuth');
+
+        this.arrayTappedWords.map((iword) => {
             const { audio, word, transcription, wordTranslate } = iword;
             const isRight = <boolean>this.resultOfGame.get(word);
+
             table.insertAdjacentHTML(
                 'beforeend',
                 templateTableLine(audio, word, transcription, wordTranslate, isRight)
             );
+            if (isAuth) {
+                this.setStatisticWord(iword, isRight);
+            }
         });
+    }
+
+    async setStatisticWord(word: IWord, isRight: boolean) {
+        const wordId = word.id;
+        const { userId, token } = state.getItem('auth');
+        // let { optional } = word;
+
+        // const currentDate = new Date().toISOString().slice(0, 10);
+        const initOption = <IOptionalToWord>{
+            sprintCorrect: 0,
+            sprintTotal: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+            correctInLineCount: 0,
+        };
+
+        let userWord = await API.getUserWordById(userId, wordId, token);
+        if (typeof userWord === 'string') {
+            userWord = <UserWord>(
+                await API.createUserWord(userId, wordId, token, { difficulty: 'normal', optional: initOption })
+            );
+        }
+        if (isRight) {
+            userWord.optional.sprintCorrect += 1;
+            userWord.optional.correctInLineCount += 1;
+            if (
+                (userWord.difficulty === 'normal' && userWord.optional.correctInLineCount >= 3) ||
+                (userWord.difficulty === 'hard' && userWord.optional.correctInLineCount >= 5)
+            ) {
+                userWord.difficulty = 'easy';
+            }
+        } else userWord.optional.correctInLineCount = 0;
+
+        userWord.optional.sprintTotal += 1;
+        const noteToWord = <NoteToWord>{
+            difficulty: userWord.difficulty,
+            optional: JSON.parse(JSON.stringify(userWord.optional)),
+        };
+        const res = await API.updateUserWord(userId, wordId, token, noteToWord);
+        console.log(res);
+
+        // const lastCorrectDate = option[currentDate].lastCorrectDate;
+
+        // if (lastCorrectDate && lastCorrectDate !== currentDate) {
+        //     const lastOption = option[lastCorrectDate];
+        //     option = <IOptionalToWord>JSON.parse(JSON.stringify(lastOption));
+        // }
+
+        // if (isRight && option[currentDate].sprintCorrect === 2 && option[currentDate].difficulty === 'normal') {
+        //     option[currentDate].difficulty = 'easy';
+        // } else if (isRight && option[currentDate].sprintCorrect === 4 && option[currentDate].difficulty === 'hard') {
+        //     option[currentDate].difficulty = 'easy';
+        // } else if (isRight) {
+        //     option[currentDate].sprintCorrect = option[currentDate].sprintCorrect + 1;
+        // }
+
+        // API.createUserWord(userId, wordId, token, {
+        //     difficulty: 'normal',
+        //     optional: {
+        //         sprintCorrect: 1,
+        //         sprintTotal: 0,
+        //         audioCallCorrect: 0,
+        //         audioCallTotal: 0,
+        //         correctInLineCount: 0,
+        //         lastCorrectDate: '2022',
+        //     },
+        // }).then(() => API.getAllUserWords(userId, token).then((res) => console.log(res)));
     }
 }
