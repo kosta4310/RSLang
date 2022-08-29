@@ -5,7 +5,7 @@ import './card.style.scss';
 export function getCard(word: IWord, isAuth: boolean) {
     const pathImage = `${BASE}/${word.image}`;
     return `
-<div class="card" data-id=${word.id} data-audio=${word.audio} data-audioMeaning=${
+<div class="card" data-id=${word.id ?? word._id} data-audio=${word.audio} data-audioMeaning=${
         word.audioMeaning
     } data-audioExample=${word.audioExample}>
     <div class="card__image">

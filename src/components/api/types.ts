@@ -5,6 +5,7 @@ interface IUser {
 }
 
 interface IWord {
+    _id?: string; // если данные приходят через AggregatedWords, там такой id
     id: string;
     group: number;
     page: number;
