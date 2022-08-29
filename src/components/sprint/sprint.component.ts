@@ -338,32 +338,5 @@ export class Sprint {
         };
         const res = await API.updateUserWord(userId, wordId, token, noteToWord);
         console.log(res);
-
-        // const lastCorrectDate = option[currentDate].lastCorrectDate;
-
-        // if (lastCorrectDate && lastCorrectDate !== currentDate) {
-        //     const lastOption = option[lastCorrectDate];
-        //     option = <IOptionalToWord>JSON.parse(JSON.stringify(lastOption));
-        // }
-
-        // if (isRight && option[currentDate].sprintCorrect === 2 && option[currentDate].difficulty === 'normal') {
-        //     option[currentDate].difficulty = 'easy';
-        // } else if (isRight && option[currentDate].sprintCorrect === 4 && option[currentDate].difficulty === 'hard') {
-        //     option[currentDate].difficulty = 'easy';
-        // } else if (isRight) {
-        //     option[currentDate].sprintCorrect = option[currentDate].sprintCorrect + 1;
-        // }
-
-        // API.createUserWord(userId, wordId, token, {
-        //     difficulty: 'normal',
-        //     optional: {
-        //         sprintCorrect: 1,
-        //         sprintTotal: 0,
-        //         audioCallCorrect: 0,
-        //         audioCallTotal: 0,
-        //         correctInLineCount: 0,
-        //         lastCorrectDate: '2022',
-        //     },
-        // }).then(() => API.getAllUserWords(userId, token).then((res) => console.log(res)));
     }
 }
