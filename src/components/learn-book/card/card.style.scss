@@ -121,6 +121,15 @@
         .hard-word svg:hover {
             fill: #ff1d1d;
         }
+
+        .sound.selected svg,
+        .hard-word.selected svg {
+            fill: #ff1d1d;
+        }
+
+        .easy-word.sound.selected svg {
+            fill: #20df7f;
+        }
     }
 }
 .auth {

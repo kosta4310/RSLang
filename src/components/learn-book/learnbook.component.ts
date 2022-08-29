@@ -7,6 +7,7 @@ import { BASE } from '../../config';
 import { ControlPanel } from './controlPanel/controlPanel.component';
 import { Pagination } from './pagination/pagination.component';
 import { state } from '../../state';
+import { getTodayString, saveWord } from '../utils';
 
 export class Book {
     complexity: number;
@@ -87,7 +88,7 @@ export class Book {
         }
 
         const words = document.body.querySelector('#words');
-        words?.addEventListener('click', (e) => {
+        words?.addEventListener('click', async (e) => {
             const target = <HTMLElement>e.target;
             const buttonSound = target.closest('.sound');
             if (buttonSound) {
@@ -97,6 +98,17 @@ export class Book {
                 const pathAudioExample = `${BASE}/${card.getAttribute('data-audioExample')}`;
 
                 playAudioArray([pathAudio, pathAudioMeaning, pathAudioExample]);
+                return;
+            }
+            const buttonHard = target.closest('.hard-word');
+            if (buttonHard) {
+                if (!buttonHard.classList.contains('selected')) {
+                    const card = <HTMLElement>target.closest('.card');
+                    const wordId = <string>card.getAttribute('data-id');
+                    
+                    await saveWord(wordId, 'hard', { lastCorrectDate: getTodayString() });
+                    buttonHard.classList.add('selected');
+                }
             }
         });
     }
