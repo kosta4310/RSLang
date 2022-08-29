@@ -42,19 +42,8 @@ export class Router {
                 console.log('game listen');
 
             })
-            .on('/game-start', () => {
+            .on('/game-sprint', () => {
                 this.sprint.init();
-            })
-            .on('/auth', () => {
-                this.authorization.init();
-            })
-            .on('/learnbook/game-start', () => {
-                console.log('learnbookgamestart');
-
-                this.sprint.init();
-            })
-            .on('/start-game-sprint', () => {
-                this.sprint.startGame();
             })
             .resolve();
     }
