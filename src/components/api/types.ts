@@ -49,8 +49,10 @@ type OptionalWordData = {
     correctInLineCount?: number;
 };
 
+type Difficulty = 'normal' | 'hard' | 'easy'
+
 type NoteToWord = {
-    difficulty: string;
+    difficulty: Difficulty;
     optional: OptionalWordData;
 };
 
