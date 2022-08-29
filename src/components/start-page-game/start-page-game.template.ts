@@ -1,7 +1,8 @@
 import './start-page-game.scss';
 
 export const START_PAGE_GAME_TEMPLATE = (title: string, description: string) => {
-    return `<div class="container">
+    return `<div class="wrapper">
+    <div class="container">
     <div class="start-game_container">
       <h1 class="title">${title}</h1>
       <div class="description-container"><h3 class = "description">${description}</h3></div>
@@ -40,7 +41,8 @@ export const START_PAGE_GAME_TEMPLATE = (title: string, description: string) => 
                 </div>
             </div>
         </div>
-            <a href="/${title.toLowerCase()}-start" class="start-game" data-navigo>Начать</a>
+            <button class="start-game">Начать</button>
     </div>    
+    </div>
     </div>`;
 };
