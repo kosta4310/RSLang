@@ -38,7 +38,7 @@ type Auth = {
 };
 
 // Предлагаю такой объект для хранения всей дополнительной информации по словам
-type OptionalData = {
+type OptionalWordData = {
     // игра спринт - счетчики угаданных и всего
     sprintCorrect?: number;
     sprintTotal?: number;
@@ -47,16 +47,24 @@ type OptionalData = {
     audioCallTotal?: number;
     // счётчик - угадано раз подряд, если ошибка - обнуляем
     correctInLineCount?: number;
-    // дата когда был угадан последний раз, можно потом строить статистику по этому значению
-    // new Date().toISOString().slice(0, 10)
-    // '2022-08-29'
-    lastCorrectDate?: string;
 };
 
 type NoteToWord = {
     difficulty: string;
-    optional: OptionalData;
+    optional: OptionalWordData;
 };
+
+// эти данные можно помещать в Optional при запросе upsertStatistics
+// так чтобы при работе со страницей статистики разом получить всю информацию через один getStatistics запрос
+type OptionalStatData = {
+    [dayDate: string]: { // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
+        learnedWordCount: number; // кол-во выученных слов в этот день
+        sprintCorrect?: number;
+        sprintTotal?: number;
+        audioCallCorrect?: number;
+        audioCallTotal?: number;
+    }
+}
 
 type UserWord = NoteToWord & {
     id: string;
