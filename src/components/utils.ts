@@ -13,7 +13,7 @@ export const saveWord = async function(wordId: string, complexity: WordComplexit
 
   const body: NoteToWord  = {
     difficulty: complexity,
-    optional: {}
+    optional: options
   }
 
   const result = await createUserWord(userId, wordId, token, body);
