@@ -35,9 +35,25 @@ type Auth = {
     name: string;
 };
 
+// Предлагаю такой объект для хранения всей дополнительной информации по словам
+type OptionalData = {
+    // игра спринт - счетчики угаданных и всего
+    sprintCorrect?: number;
+    sprintTotal?: number;
+    // игра аудивызов - счетчики угаданных и всего
+    audioCallCorrect?: number;
+    audioCallTotal?: number;
+    // счётчик - угадано раз подряд, если ошибка - обнуляем
+    correctInLineCount?: number;
+    // дата когда был угадан последний раз, можно потом строить статистику по этому значению
+    // new Date().toISOString().slice(0, 10)
+    // '2022-08-29'
+    lastCorrectDate?: string;
+};
+
 type NoteToWord = {
     difficulty: string;
-    optional: object;
+    optional: OptionalData;
 };
 
 type UserWord = NoteToWord & {
