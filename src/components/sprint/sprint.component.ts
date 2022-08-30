@@ -47,16 +47,40 @@ export class Sprint {
 
     init() {
         this.isFromBook = state.getItem('isFromBook');
+        document.body.innerHTML = '';
+        document.body.insertAdjacentHTML('beforeend', templateHeader);
+        this.header.init();
         this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, this.isFromBook);
         state.setItem({ isFromBook: false });
+        // this.mapRightWords.clear();
+        // this.mapWordPairs.clear();
+        // this.arrayTappedWords = [];
+        // this.arrayWords = [];
+        // this.numberOfTimesPressed = 0;
+        // this.arrayTappedWords = [];
+
+        document.querySelector('.start-game')?.addEventListener('click', () => {
+            this.startGame();
+        });
+        // this.startPage.init(SPRINT_DESCRIPTION, AUDIO_CALL_DESCRIPTION, state.isFromBook);
+    }
+    flushInit() {
         this.mapRightWords.clear();
         this.mapWordPairs.clear();
         this.arrayTappedWords = [];
         this.arrayWords = [];
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
-    }
 
+        const wrapper = <HTMLElement>document.querySelector('.wrapper');
+        wrapper.parentNode?.removeChild(wrapper);
+
+        this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, this.isFromBook);
+        state.setItem({ isFromBook: false });
+        document.querySelector('.start-game')?.addEventListener('click', () => {
+            this.startGame();
+        });
+    }
     startGame() {
         // const isFromBook = state.getItem('isFromBook');
 
@@ -67,11 +91,12 @@ export class Sprint {
                   complexity: state.getItem('complexity'),
               };
 
-        const body = document.body;
-        body.innerHTML = '';
-        body.insertAdjacentHTML('beforeend', templateHeader);
-        body.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
-        this.header.init();
+        const wrapper = <HTMLElement>document.querySelector('.wrapper');
+        wrapper.innerHTML = '';
+        // body.innerHTML = '';
+        // body.insertAdjacentHTML('beforeend', templateHeader);
+        wrapper.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
+        // this.header.init();
         this.gameProcess(param);
 
         console.log(this.isFromBook, param);
@@ -85,8 +110,7 @@ export class Sprint {
             item = item - 1;
             if (item < 0) {
                 clearInterval(this.interval);
-                location.href = '/#/sprint-statistic';
-                // location.reload();
+                this.showStatistic();
             }
         }, 1000);
     }
@@ -97,6 +121,7 @@ export class Sprint {
             'click',
             () => {
                 this.stopGame();
+                this.flushInit();
             },
             true
         );
@@ -188,7 +213,7 @@ export class Sprint {
             this.showWords(word, wordRandomTranslate);
             return { word, wordRandomTranslate };
         } else {
-            location.href = '/#/sprint-statistic';
+            // location.href = '/#/sprint-statistic';
             // location.reload();
             return false;
         }
@@ -267,8 +292,16 @@ export class Sprint {
     }
 
     showStatistic() {
-        document.body.innerHTML = templateStatisticGameSprint();
+        const wrapper = <HTMLElement>document.querySelector('.wrapper');
+        wrapper.parentNode?.removeChild(wrapper);
+
+        document.body.insertAdjacentHTML('beforeend', templateStatisticGameSprint());
         this.getArrayLinesWithWords();
+
+        const btnCancel = <HTMLElement>document.querySelector('.statistic-sprint__cancel .btn-cancel');
+        btnCancel.addEventListener('click', () => {
+            this.flushInit();
+        });
 
         const table = <HTMLElement>document.querySelector('.statistic-sprint__table');
         table.addEventListener('click', (e) => {

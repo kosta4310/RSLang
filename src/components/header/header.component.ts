@@ -31,7 +31,7 @@ export class Header {
             }
         });
 
-        document.querySelector('#menu .sprint')?.addEventListener('click', () => {
+        document.querySelector('.sprint')?.addEventListener('click', () => {
             if (document.location.hash === '#/sprint') {
                 location.reload();
             }

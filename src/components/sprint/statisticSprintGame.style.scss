@@ -104,7 +104,8 @@
 }
 .btn-cancel {
     // .btn-cancel__svg
-
+    background-color: inherit;
+    
     &__svg {
         width: 3rem;
         height: 3rem;

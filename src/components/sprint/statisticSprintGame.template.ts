@@ -3,11 +3,11 @@ export function templateStatisticGameSprint() {
       <div class="container container__statistic-sprint">
          <div class="statistic-sprint">
             <div class="statistic-sprint__cancel">
-                    <a href="/sprint" class="btn-cancel" data-navigo>
+                    <button class="btn-cancel">
                         <svg class="btn-cancel__svg">
                             <use xlink:href="../../assets/svg/icons.svg#cancel"></use>
                         </svg>
-                    </a>
+                    </button>
             </div>
             <div class="statistic-sprint__main">
             <h1 class="statistic-sprint__title">
