@@ -18,18 +18,24 @@ export enum Constants {
 
 
 export class Book {
-    complexity: number;
-    page: number;
+    page = 0;
+    _complexity = 0;
 
-    constructor() {
-        this.complexity = +(state.getItem('complexity') ?? 0);
-        this.page = +(state.getItem('page') ?? 0);
+    get complexity() { return this._complexity ?? 0; }
+
+    set complexity(value: number) {
+        const container = <HTMLElement>document.querySelector('.wrapper-book')
+        container?.setAttribute('data-complexity', value.toString())
+        this._complexity = value;
     }
 
     async init() {
         document.body.innerHTML = '';
         //   document.body.style.height = '100%';
         document.body.insertAdjacentHTML('afterbegin', LEARNBOOK_PAGE_TEMPLATE);
+        this.complexity = +(state.getItem('complexity') ?? 0);
+        this.page = +(state.getItem('page') ?? 0);
+
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         new Header().init();
         const controlPanel = new ControlPanel(this);
