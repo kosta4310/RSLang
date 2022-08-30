@@ -40,7 +40,7 @@ export class Book {
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         await arrayWords.map(async (obj) => {
-            words.insertAdjacentHTML('beforeend', await getCard(obj, state.isAuth()));
+            words.insertAdjacentHTML('beforeend', await getCard(obj, state.getItem('isAuth')));
         });
     }
 
