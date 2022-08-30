@@ -4,6 +4,7 @@ import { Book, Constants } from '../learnbook.component';
 
 export class ControlPanel {
     parent: Book;
+
     constructor(parent: Book) {
         this.parent = parent;
     }
@@ -16,6 +17,23 @@ export class ControlPanel {
         const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
         elem.classList.add('learnbook__button_selected');
         this.listen();
+        this.enableGamesButtons(false);
+    }
+
+    
+
+    enableGamesButtons(isEnabled = true) {
+        const links = document.querySelectorAll('.games_buttons a');
+        console.log(links);
+        if (isEnabled) {
+            links.forEach(link => {
+                link.classList.remove('disabled');
+            });
+        } else {
+            links.forEach(link => {
+                link.classList.add('disabled');
+            });
+        }
     }
 
     listen() {

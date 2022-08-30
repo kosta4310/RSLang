@@ -125,6 +125,16 @@
     color: inherit;
 }
 
+.games_buttons .learnbook__button.disabled {
+    color: grey;
+    cursor: default;
+    pointer-events: none;
+}
+
+.games_buttons .learnbook__button.disabled svg {
+    fill: grey;
+}
+
 .animate-character {
     text-transform: uppercase;
     background-image: linear-gradient(-225deg,
