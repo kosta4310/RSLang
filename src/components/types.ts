@@ -10,4 +10,16 @@ type IndexObject = {
     [key: string]: string | boolean;
 };
 
-export { StateParam, ParamPage, IndexObject };
+// interface IOptionalToStatistic {
+//     [key: string]: IOptionalToWord;
+// }
+
+interface IOptionalToWord {
+    sprintCorrect: number;
+    sprintTotal: number;
+    audioCallCorrect: number;
+    audioCallTotal: number;
+    correctInLineCount: number;
+}
+
+export { StateParam, ParamPage, IndexObject, IOptionalToWord };
