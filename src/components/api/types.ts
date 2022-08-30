@@ -99,4 +99,4 @@ type Statistic = {
     learnedWords: string
 }
 
-export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic, AggregatedWordResponse };
+export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic, AggregatedWordResponse, Difficulty };

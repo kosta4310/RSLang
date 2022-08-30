@@ -1,13 +1,12 @@
 import { state } from "../state";
 import { createUserWord, getUserWordById, updateUserWord } from "./api/api";
-import { Auth, NoteToWord, UserWord } from "./api/types";
-import { WordComplexity } from "./types";
+import { Auth, Difficulty, NoteToWord, UserWord } from "./api/types";
 
 export const getTodayString = function() {
   return new Date().toISOString().slice(0, 10);
 }
 
-export const saveWord = async function(wordId: string, complexity: WordComplexity = "hard", options = {}) {
+export const saveWord = async function(wordId: string, complexity: Difficulty = "hard", options = {}) {
   const { token, userId } = <Auth>state.getItem('auth');
   console.log(userId, wordId, token);
 

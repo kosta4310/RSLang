@@ -1,6 +1,6 @@
 import { state } from './../../../state';
 import { getContolPanelTemplate } from './controlPanel.template';
-import { Book } from '../learnbook.component';
+import { Book, Constants } from '../learnbook.component';
 
 export class ControlPanel {
     parent: Book;
@@ -46,7 +46,8 @@ export class ControlPanel {
 
         const complexWordsBtn = document.querySelector('.hard-words');
         complexWordsBtn?.addEventListener('click', (e) => {
-            this.parent.renderWords(true);
+            this.parent.complexity = Constants.COMPLEXITY_HARDWORDS;
+            this.parent.renderWords();
             const pagination = <HTMLElement>document.querySelector('.pagination__container');
             pagination.classList.add('hidden');
             const complexityButtons = <HTMLElement>document.querySelector('.complexity__buttons');

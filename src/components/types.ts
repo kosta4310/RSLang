@@ -10,6 +10,4 @@ type IndexObject = {
     [key: string]: string | boolean;
 };
 
-type WordComplexity = "hard" | "easy";
-
-export { StateParam, ParamPage, IndexObject, WordComplexity };
+export { StateParam, ParamPage, IndexObject };

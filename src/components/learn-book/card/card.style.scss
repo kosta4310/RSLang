@@ -31,6 +31,7 @@
     }
 
     box-shadow: 0px 5px 10px darkgrey;
+    min-width: $width-container;
 
     // .card__context
 
@@ -161,4 +162,8 @@
 
 #words[data-complexity="5"] .card {
     box-shadow: 0px 5px 10px $learnbook-color-c2;
+}
+
+#words[data-complexity="6"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-hard-words;
 }

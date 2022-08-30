@@ -10,6 +10,12 @@ import { state } from '../../state';
 import { getTodayString, saveWord } from '../utils';
 import { IWord } from '../api/types';
 
+export enum Constants {
+    // 0 - это А1, ... 5 - это C2, поэтому будем считать что цифра 6 - это страница со сложными словами
+    COMPLEXITY_HARDWORDS = 6
+}
+
+
 export class Book {
     complexity: number;
     page: number;
@@ -41,11 +47,11 @@ export class Book {
     }
     
 
-    async renderWords(isHard = false) {
+    async renderWords() {
         const {userId, token } = state.getItem('auth');
         let arrayWords: IWord[];
         if (userId) {
-            if (isHard) {
+            if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                 arrayWords = await this.getArrayHardUserWords(userId, token);
             } else {
                 arrayWords = await this.getArrayUserWords(this.complexity, this.page, userId, token);
@@ -134,13 +140,16 @@ export class Book {
             }
             const buttonHard = target.closest('.hard-word');
             if (buttonHard) {
+                const card = <HTMLElement>target.closest('.card');
+                const wordId = <string>card.getAttribute('data-id');
                 if (!buttonHard.classList.contains('selected')) {
-                    const card = <HTMLElement>target.closest('.card');
-                    const wordId = <string>card.getAttribute('data-id');
-                    
-                    await saveWord(wordId, 'hard', { lastCorrectDate: getTodayString() });
+                    await saveWord(wordId, 'hard', {});
                     buttonHard.classList.add('selected');
                     card.querySelector('.easy-word')?.classList.remove('selected');
+                }
+                if (buttonHard.classList.contains('selected') && this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+                    await saveWord(wordId, 'normal', {});
+                    card.remove();
                 }
                 return;
             }
@@ -149,11 +158,14 @@ export class Book {
                 if (!easyWord.classList.contains('selected')) {
                     const card = <HTMLElement>target.closest('.card');
                     const wordId = <string>card.getAttribute('data-id');
-                    
                     console.log(`wordId: ${wordId}`)
-                    await saveWord(wordId, 'easy', { lastCorrectDate: getTodayString() });
-                    easyWord.classList.add('selected');
-                    card.querySelector('.hard-word')?.classList.remove('selected');
+                    await saveWord(wordId, 'easy', {});
+                    if(this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+                        card.remove();
+                    } else {
+                        easyWord.classList.add('selected');`
+                        card.querySelector('.hard-word')?.classList.remove('selected');`
+                    }
                 }
                 return;
             }
