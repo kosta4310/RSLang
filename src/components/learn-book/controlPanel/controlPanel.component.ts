@@ -31,6 +31,10 @@ export class ControlPanel {
                 this.parent.complexity = complexity;
                 state.setItem({ complexity: complexity.toString() });
                 this.parent.renderWords();
+                const pagination = <HTMLElement>document.querySelector('.pagination__container');
+                pagination.classList.remove('hidden');
+                const complexWordsBtn = document.querySelector('.hard-words');
+                complexWordsBtn?.classList.remove('hard-words_selected');
             }
         });
         const gameBtns = document.querySelectorAll('.pr10');
@@ -38,6 +42,17 @@ export class ControlPanel {
             el.addEventListener('click', () => {
                 state.setItem({ isFromBook: true });
             });
+        });
+
+        const complexWordsBtn = document.querySelector('.hard-words');
+        complexWordsBtn?.addEventListener('click', (e) => {
+            this.parent.renderWords(true);
+            const pagination = <HTMLElement>document.querySelector('.pagination__container');
+            pagination.classList.add('hidden');
+            const complexityButtons = <HTMLElement>document.querySelector('.complexity__buttons');
+            const buttons = complexityButtons.querySelectorAll('.learnbook__button');
+            buttons.forEach((i) => i.classList.remove('learnbook__button_selected'));
+            complexWordsBtn.classList.add('hard-words_selected');
         });
     }
 }

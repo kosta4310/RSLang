@@ -88,6 +88,10 @@
     background-color: $learnbook-color-c2;
 }
 
+.hard-words_selected.hard-words {
+    box-shadow: 0 0 5px black inset;
+}
+
 .mywords__container {
     @include font-Inter(3.6rem, 400);
     border: 2px solid black;

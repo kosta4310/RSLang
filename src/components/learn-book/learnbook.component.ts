@@ -39,12 +39,17 @@ export class Book {
         const words = <HTMLElement>document.body.querySelector('#words');
         words.innerHTML = '<div class="loader-container"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>';
     }
+    
 
-    async renderWords() {
+    async renderWords(isHard = false) {
         const {userId, token } = state.getItem('auth');
         let arrayWords: IWord[];
         if (userId) {
-            arrayWords = await this.getArrayUserWords(this.complexity, this.page, userId, token);
+            if (isHard) {
+                arrayWords = await this.getArrayHardUserWords(userId, token);
+            } else {
+                arrayWords = await this.getArrayUserWords(this.complexity, this.page, userId, token);
+            }
         } else {
             arrayWords = await this.getArrayWords(this.complexity, this.page);
         }
@@ -56,7 +61,6 @@ export class Book {
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         const isAuth = <boolean>state.getItem('isAuth');
-        console.log(isAuth);
 
         arrayWords.map((word) => {
             words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
@@ -72,6 +76,15 @@ export class Book {
             group: complexity.toString(),
             page: page.toString(),
         })
+        return response[0].paginatedResults;
+    }
+
+    async getArrayHardUserWords(userId: string, token: string) {
+        const response = await API.getAllUserAggWords(userId, token, {
+            filter: JSON.stringify({"$and":[{"userWord.difficulty":"hard"}]})
+        })
+        console.log(`getArrayHardUserWords:`);
+        console.log(response)
         return response[0].paginatedResults;
     }
 
@@ -137,6 +150,7 @@ export class Book {
                     const card = <HTMLElement>target.closest('.card');
                     const wordId = <string>card.getAttribute('data-id');
                     
+                    console.log(`wordId: ${wordId}`)
                     await saveWord(wordId, 'easy', { lastCorrectDate: getTodayString() });
                     easyWord.classList.add('selected');
                     card.querySelector('.hard-word')?.classList.remove('selected');
