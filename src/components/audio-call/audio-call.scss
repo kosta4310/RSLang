@@ -35,7 +35,6 @@
         @include font-Inter(2rem, 700);
     }
     .btn-choice,
-    .iDontKnow,
     .next {
         padding: 1rem 2rem;
         background-color: $color-white;
@@ -52,7 +51,6 @@
     .wrong-answer{
         background-color: $color-red;
     }
-    .iDontKnow,
     .next {
         margin-top: 1rem;
     }
