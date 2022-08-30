@@ -52,17 +52,11 @@ export class Sprint {
         this.header.init();
         this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, this.isFromBook);
         state.setItem({ isFromBook: false });
-        // this.mapRightWords.clear();
-        // this.mapWordPairs.clear();
-        // this.arrayTappedWords = [];
-        // this.arrayWords = [];
-        // this.numberOfTimesPressed = 0;
-        // this.arrayTappedWords = [];
+        this.flushInit();
 
         document.querySelector('.start-game')?.addEventListener('click', () => {
             this.startGame();
         });
-        // this.startPage.init(SPRINT_DESCRIPTION, AUDIO_CALL_DESCRIPTION, state.isFromBook);
     }
     flushInit() {
         this.mapRightWords.clear();
@@ -71,7 +65,9 @@ export class Sprint {
         this.arrayWords = [];
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
+    }
 
+    restart() {
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
@@ -82,8 +78,6 @@ export class Sprint {
         });
     }
     startGame() {
-        // const isFromBook = state.getItem('isFromBook');
-
         const param = this.isFromBook
             ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
             : {
@@ -93,18 +87,14 @@ export class Sprint {
 
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.innerHTML = '';
-        // body.innerHTML = '';
-        // body.insertAdjacentHTML('beforeend', templateHeader);
         wrapper.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
-        // this.header.init();
-        this.gameProcess(param);
 
-        console.log(this.isFromBook, param);
+        this.gameProcess(param);
     }
 
     timer() {
         const countdown = <HTMLElement>document.querySelector('.timer__time');
-        let item = 5;
+        let item = 59;
         this.interval = setInterval(() => {
             countdown.innerHTML = `${item}`;
             item = item - 1;
@@ -122,6 +112,7 @@ export class Sprint {
             () => {
                 this.stopGame();
                 this.flushInit();
+                this.restart();
             },
             true
         );
@@ -213,9 +204,8 @@ export class Sprint {
             this.showWords(word, wordRandomTranslate);
             return { word, wordRandomTranslate };
         } else {
-            // location.href = '/#/sprint-statistic';
-            // location.reload();
-            return false;
+            this.stopGame();
+            this.showStatistic();
         }
     }
 
@@ -301,6 +291,7 @@ export class Sprint {
         const btnCancel = <HTMLElement>document.querySelector('.statistic-sprint__cancel .btn-cancel');
         btnCancel.addEventListener('click', () => {
             this.flushInit();
+            this.restart();
         });
 
         const table = <HTMLElement>document.querySelector('.statistic-sprint__table');
@@ -327,6 +318,7 @@ export class Sprint {
                 'beforeend',
                 templateTableLine(audio, word, transcription, wordTranslate, isRight)
             );
+
             if (isAuth) {
                 this.setStatisticWord(iword, isRight);
             }
