@@ -21,6 +21,7 @@
     }
     .complexity {
         margin-top: 2rem;
+        text-align: center;
         @include font-Inter(1.7rem, 700);
 
         &__buttons {

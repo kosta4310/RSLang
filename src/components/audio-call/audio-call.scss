@@ -1,0 +1,59 @@
+@import '../../styles/variables.scss';
+
+.game-container__audio-call {
+    padding: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .audio-call__cancel {
+        align-self: end;
+    }
+}
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .audio-call__choiceBtns {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    .audio-call__sound {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.7rem;
+        width: 30rem;
+        height: 20rem;
+    }
+    .right-sound{
+        height: 10rem;
+    }
+    .right-word{
+        @include font-Inter(2rem, 700);
+    }
+    .btn-choice,
+    .iDontKnow,
+    .next {
+        padding: 1rem 2rem;
+        background-color: $color-white;
+        border: 0.2rem solid $color-black;
+        border-radius: 1rem;
+        @include font-Inter(1.4rem, 400);
+    }
+    .right-button{
+        background-color:$color-lightgreen
+    }
+    .btn-choice:disabled{
+        color:$color-black
+    }
+    .wrong-answer{
+        background-color: $color-red;
+    }
+    .iDontKnow,
+    .next {
+        margin-top: 1rem;
+    }
+}

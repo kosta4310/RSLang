@@ -18,7 +18,6 @@
     margin-top: 15px;
 }
 
-
 .learnbook__button {
     display: flex;
     background-color: $color-card;
@@ -26,6 +25,7 @@
     border-radius: 15px;
     align-items: center;
     cursor: pointer;
+    color:$color-black
 }
 
 .learnbook__icon-container {
@@ -64,27 +64,27 @@
     border: #a9a9a9 3px solid;
 }
 
-.learnbook__button_selected[data-complexity="0"] .learnbook__icon-container {
+.learnbook__button_selected[data-complexity='0'] .learnbook__icon-container {
     background-color: $learnbook-color-a1;
 }
 
-.learnbook__button_selected[data-complexity="1"] .learnbook__icon-container {
+.learnbook__button_selected[data-complexity='1'] .learnbook__icon-container {
     background-color: $learnbook-color-a2;
 }
 
-.learnbook__button_selected[data-complexity="2"] .learnbook__icon-container {
+.learnbook__button_selected[data-complexity='2'] .learnbook__icon-container {
     background-color: $learnbook-color-b1;
 }
 
-.learnbook__button_selected[data-complexity="3"] .learnbook__icon-container {
+.learnbook__button_selected[data-complexity='3'] .learnbook__icon-container {
     background-color: $learnbook-color-b2;
 }
 
-.learnbook__button_selected[data-complexity="4"] .learnbook__icon-container {
+.learnbook__button_selected[data-complexity='4'] .learnbook__icon-container {
     background-color: $learnbook-color-c1;
 }
 
-.learnbook__button_selected[data-complexity="5"] .learnbook__icon-container {
+.learnbook__button_selected[data-complexity='5'] .learnbook__icon-container {
     background-color: $learnbook-color-c2;
 }
 
@@ -115,4 +115,8 @@
 
 .hard-words {
     border: 2px solid black;
+}
+
+.games_buttons .learnbook__button {
+    color: inherit;
 }

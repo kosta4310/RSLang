@@ -1,3 +1,5 @@
+import { state } from '../../state';
+
 export class Header {
     burger: HTMLElement | undefined;
     menu: HTMLElement | undefined;
@@ -22,8 +24,19 @@ export class Header {
         });
 
         (<Array<HTMLElement>>this.links).map((link) => link.addEventListener('click', () => this.openCloseMenu()));
-    }
 
+        document.querySelector('.audio-call')?.addEventListener('click', () => {
+            if (document.location.hash === '#/audio-call') {
+                location.reload();
+            }
+        });
+
+        document.querySelector('.sprint')?.addEventListener('click', () => {
+            if (document.location.hash === '#/sprint') {
+                location.reload();
+            }
+        });
+    }
     openCloseMenu() {
         if ((<HTMLElement>this.menu).classList.contains('open')) {
             (<HTMLElement>this.burger).style.transform = 'rotate(0deg)';
@@ -35,12 +48,13 @@ export class Header {
         (<HTMLElement>this.menu).classList.toggle('open');
     }
     checkAuthorization() {
-        if (localStorage.getItem('rslang')) {
+        if (state.getItem('isAuth')) {
             const authBtn = <HTMLAnchorElement>document.querySelector('.btn-enter');
             authBtn.innerHTML = 'Выйти';
             authBtn.href = '/';
             authBtn.addEventListener('click', () => {
-                localStorage.removeItem('rslang');
+                state.delItem('auth');
+                state.delItem('isAuth');
                 authBtn.innerHTML = 'Войти';
                 setTimeout(() => {
                     authBtn.href = '/auth';

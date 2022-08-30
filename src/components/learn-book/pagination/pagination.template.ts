@@ -1,5 +1,5 @@
 import { PAGINATION_BUTTONS } from './constants';
-import './pagination.style.scss'
+import './pagination.style.scss';
 
 export const PAGINATION_TEMPLATE = `
 <div class="pagination__container">
