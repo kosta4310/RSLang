@@ -61,10 +61,10 @@ type NoteToWord = {
 type OptionalStatData = {
     [dayDate: string]: { // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
         learnedWordCount: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
-        sprintCorrect?: number;
-        sprintTotal?: number;
+        sprintCorrect?: number; // кол-во правильно угаданных
+        sprintTotal?: number; // общее кол-во слов участвовавших в игре
         // количество новых слов за день, этот счетчик увеличивается если у слова 
-        // его значения sprintTotal = 0 и audioCallTotal = 0, то есть это слово раньше не участвовало в игра
+        // его значения sprintTotal = 0 и audioCallTotal = 0, то есть это слово раньше не участвовало в играх
         sprintNewTotal?: number; 
         sprintCorrectInLineCount?: number; // серия правильных ответов
         audioCallCorrect?: number;
