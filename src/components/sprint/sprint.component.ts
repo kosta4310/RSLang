@@ -81,7 +81,7 @@ export class Sprint {
         const param = this.isFromBook
             ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
             : {
-                  page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
+                  page: Math.floor(Math.random() * quantityWordsInPage),
                   complexity: state.getItem('complexity'),
               };
 
