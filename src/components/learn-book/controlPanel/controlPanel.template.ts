@@ -66,8 +66,9 @@ export const getContolPanelTemplate = () => {
             </div>
         </div>
     </div>
-    <div class="right-block ">
+    <div class="right-block">
         ${state.getItem('isAuth') ? MY_WORDS_TEMPLATE : ''}
+        <div><p class="message animate-character" id="message">Страница изучена</p></div>
     </div>
 </div>`;
 };
