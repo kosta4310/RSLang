@@ -12,7 +12,8 @@ import { IWord } from '../api/types';
 
 export enum Constants {
     // 0 - это А1, ... 5 - это C2, поэтому будем считать что цифра 6 - это страница со сложными словами
-    COMPLEXITY_HARDWORDS = 6
+    COMPLEXITY_HARDWORDS = 6,
+    WORDS_PER_PAGE = 20
 }
 
 
@@ -81,6 +82,7 @@ export class Book {
         const response = await API.getAllUserAggWords(userId, token, {
             group: complexity.toString(),
             page: page.toString(),
+            wordsPerPage: Constants.WORDS_PER_PAGE.toString()
         })
         return response[0].paginatedResults;
     }
