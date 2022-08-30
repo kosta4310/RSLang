@@ -19,7 +19,7 @@ export const AUDIO_CALL_TEMPLATE = (audio: string) => {
         </div>
         <div class="audio-call__choiceBtns">
         </div>
-        <button class="iDontKnow">Не знаю</button>
+        <button class="next">Не знаю</button>
         </div>
     </div>    
     </div>`;
