@@ -17,7 +17,6 @@ export class ControlPanel {
         const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
         elem.classList.add('learnbook__button_selected');
         this.listen();
-        this.enableGamesButtons(false);
     }
 
     
@@ -33,6 +32,15 @@ export class ControlPanel {
             links.forEach(link => {
                 link.classList.add('disabled');
             });
+        }
+    }
+
+    enableAllLearnedText(isEnabled = false) {
+        const elem = <HTMLElement>document.querySelector('.message');
+        if (isEnabled) {
+            elem.classList.remove('message_hidden');
+        } else {
+            elem.classList.add('message_hidden');
         }
     }
 
@@ -63,7 +71,7 @@ export class ControlPanel {
         });
 
         const complexWordsBtn = document.querySelector('.hard-words');
-        complexWordsBtn?.addEventListener('click', (e) => {
+        complexWordsBtn?.addEventListener('click', () => {
             this.parent.complexity = Constants.COMPLEXITY_HARDWORDS;
             this.parent.renderWords();
             const pagination = <HTMLElement>document.querySelector('.pagination__container');

@@ -7,7 +7,7 @@ import { BASE } from '../../config';
 import { ControlPanel } from './controlPanel/controlPanel.component';
 import { Pagination } from './pagination/pagination.component';
 import { state } from '../../state';
-import { getTodayString, saveWord } from '../utils';
+import { saveWord } from '../utils';
 import { IWord } from '../api/types';
 
 export enum Constants {
@@ -20,6 +20,8 @@ export enum Constants {
 export class Book {
     page = 0;
     _complexity = 0;
+    controlPanel: ControlPanel;
+    pagination: Pagination;
 
     get complexity() { return this._complexity ?? 0; }
 
@@ -27,6 +29,11 @@ export class Book {
         const container = <HTMLElement>document.querySelector('.wrapper-book')
         container?.setAttribute('data-complexity', value.toString())
         this._complexity = value;
+    }
+
+    constructor() {
+        this.controlPanel = new ControlPanel(this);
+        this.pagination = new Pagination(this);
     }
 
     async init() {
@@ -38,10 +45,8 @@ export class Book {
 
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         new Header().init();
-        const controlPanel = new ControlPanel(this);
-        controlPanel.render();
-        const pagination = new Pagination(this);
-        pagination.render();
+        this.controlPanel.render();
+        this.pagination.render();
 
         this.renderLoading();
         await this.renderWords();
@@ -52,10 +57,25 @@ export class Book {
         const words = <HTMLElement>document.body.querySelector('#words');
         words.innerHTML = '<div class="loader-container"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>';
     }
+
+    checkForAllLearned() {
+        const learnedWords = document.querySelectorAll('.learned-word');
+        const wrapper = document.querySelector('.wrapper-book');
+        if (learnedWords.length >= Constants.WORDS_PER_PAGE) {
+            this.controlPanel.enableGamesButtons(false);
+            this.controlPanel.enableAllLearnedText(true);
+            wrapper?.classList.add('all-learned');
+        } else {
+            this.controlPanel.enableGamesButtons(true);
+            this.controlPanel.enableAllLearnedText(false);
+            wrapper?.classList.remove('all-learned');
+        }
+    }
     
 
     async renderWords() {
         const {userId, token } = state.getItem('auth');
+        
         let arrayWords: IWord[];
         if (userId) {
             if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
@@ -66,18 +86,16 @@ export class Book {
         } else {
             arrayWords = await this.getArrayWords(this.complexity, this.page);
         }
-        console.log(`arrayWords`)
-        console.log(arrayWords)
         
-
         const words = <HTMLElement>document.body.querySelector('#words');
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         const isAuth = <boolean>state.getItem('isAuth');
-
+        
         arrayWords.map((word) => {
             words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
         });
+        this.checkForAllLearned();
     }
 
     async getArrayWords(complexity: number, page: number) {
@@ -154,6 +172,8 @@ export class Book {
                     await saveWord(wordId, 'hard', {});
                     buttonHard.classList.add('selected');
                     card.querySelector('.easy-word')?.classList.remove('selected');
+                    card.classList.add('learned-word');
+                    this.checkForAllLearned();
                 }
                 if (buttonHard.classList.contains('selected') && this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                     await saveWord(wordId, 'normal', {});
@@ -168,6 +188,8 @@ export class Book {
                     const wordId = <string>card.getAttribute('data-id');
                     console.log(`wordId: ${wordId}`)
                     await saveWord(wordId, 'easy', {});
+                    card.classList.add('learned-word');
+                    this.checkForAllLearned();
                     if(this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                         card.remove();
                     } else {

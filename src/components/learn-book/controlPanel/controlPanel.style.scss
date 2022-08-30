@@ -158,3 +158,12 @@
         background-position: 200% center;
     }
 }
+
+.mywords-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.message_hidden {
+    display: none;
+}
