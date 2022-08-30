@@ -16,24 +16,24 @@ export const getContolPanelTemplate = () => {
         <div class="games__container">
             <span class="title">Игры</span>
             <div class="games_buttons">
-                <div class="learnbook__button pr10">
+                <a href="/audio-call" class="learnbook__button pr10" data-navigo>
                     <div class="learnbook__icon-container mr10">
                         <img class="learnbook__icon" src="./assets/svg/sound.svg" alt="sound" class="src">
                     </div>
                     <span>Аудио</span>
-                </div>  
-                <div class="learnbook__button pr10">
+                </a>  
+                <a href="/sprint" class="learnbook__button pr10" data-navigo>
                     <div class="learnbook__icon-container mr10">
                         <img class="learnbook__icon" src="./assets/svg/timer.svg" alt="" class="src">
                     </div>
                     <span>Спринт</span>
-                </div>
+                </a>
             </div>
         </div>
         <div class="complexity__container">
             <span class="title">Сложность</span>
             <div class="complexity__buttons">
-                <div class="learnbook__button learnbook__button_selected" data-complexity="0">
+                <div class="learnbook__button" data-complexity="0">
                     <div class="learnbook__icon-container">
                         <span>A1</span>
                     </div>
@@ -67,7 +67,7 @@ export const getContolPanelTemplate = () => {
         </div>
     </div>
     <div class="right-block ">
-        ${state.isAuth() ? MY_WORDS_TEMPLATE : ''}
+        ${state.getItem('isAuth') ? MY_WORDS_TEMPLATE : ''}
     </div>
 </div>`;
 };
