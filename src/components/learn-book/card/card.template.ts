@@ -25,6 +25,29 @@ export function getCard(word: IWord, isAuth: boolean) {
         <div class="card__example">${word.textExample}</div>
         <div class="card__translate-meaning">${word.textMeaningTranslate}</div>
         <div class="card__translate-example">${word.textExampleTranslate}</div>
+        <div class="card__statistics  ${isAuth ? '' : 'none'}">
+            <div class="card__statistics-left">
+                Правильно угадано:
+            </div>
+            <div class="card__statistics-container">
+                <div class="card__statistics-line">
+                    <div class="card__statistics-title">
+                        Аудиовызов
+                    </div>
+                    <div class="">
+                        ${word.userWord?.optional?.audioCallCorrect ?? 0} из ${word.userWord?.optional?.audioCallTotal ?? 0}
+                    </div>
+                </div>
+                <div class="card__statistics-line">
+                    <div class="card__statistics-title">
+                        Спринт
+                    </div>
+                    <div class="">
+                        ${word.userWord?.optional?.sprintCorrect ?? 0} из ${word.userWord?.optional?.sprintTotal ?? 0}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="card__button">
         <button class="sound"><svg height="62" width="62" fill="#000"><use xlink:href="../../../assets/svg/icons.svg#sound"></use></svg></button>
