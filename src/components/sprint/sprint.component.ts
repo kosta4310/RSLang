@@ -29,6 +29,8 @@ export class Sprint {
     arrayTappedWords: Array<IWord>;
     isFromBook: boolean;
     newWordInGame: number;
+    keyboardListenerState: number;
+    isGame: boolean;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -46,6 +48,8 @@ export class Sprint {
         this.arrayTappedWords = [];
         this.isFromBook = state.getItem('isFromBook');
         this.newWordInGame = 0;
+        this.keyboardListenerState = 1;
+        this.isGame = false;
     }
 
     init() {
@@ -69,6 +73,7 @@ export class Sprint {
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
         this.newWordInGame = 0;
+        this.isGame = false;
     }
 
     restart() {
@@ -105,6 +110,7 @@ export class Sprint {
             if (item < 0) {
                 clearInterval(this.interval);
                 this.showStatistic();
+                this.isGame = false;
             }
         }, 1000);
     }
@@ -126,14 +132,19 @@ export class Sprint {
         buttonsBlock.addEventListener('click', (e) => {
             this.handlerToButtons(e, iterator);
         });
+        if (this.keyboardListenerState === 1) {
+            document.addEventListener('keydown', (e) => {
+                this.keyboardListenerState = 2;
+                this.handlerKeysDown(e, iterator);
+            });
+        }
 
-        document.addEventListener('keydown', (e) => {
-            this.handlerKeysDown(e, iterator);
-        });
-
-        document.addEventListener('keyup', (e) => {
-            this.handlerKeysUp(e);
-        });
+        if (this.keyboardListenerState === 1) {
+            document.addEventListener('keyup', (e) => {
+                this.keyboardListenerState = 2;
+                this.handlerKeysUp(e);
+            });
+        }
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
@@ -142,6 +153,7 @@ export class Sprint {
         this.timer();
         this.tempWordsPair = <{ word: string; wordRandomTranslate: string }>this.iteration(iterator);
         this.listen(iterator);
+        this.isGame = true;
     }
 
     showWords(word: string, wordTranslate: string) {
@@ -207,20 +219,26 @@ export class Sprint {
     }
 
     handlerKeysDown(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
-        if (e.key === 'ArrowLeft') {
-            this.addActiveToButtonYes();
-            this.checkRightTranslate(iterator, true);
-        } else if (e.key === 'ArrowRight') {
-            this.addActiveToButtonNo();
-            this.checkRightTranslate(iterator, false);
+        this.keyboardListenerState = 2;
+        if (this.isGame) {
+            if (e.key === 'ArrowLeft') {
+                this.addActiveToButtonYes();
+                this.checkRightTranslate(iterator, true);
+            } else if (e.key === 'ArrowRight') {
+                this.addActiveToButtonNo();
+                this.checkRightTranslate(iterator, false);
+            }
         }
     }
 
     handlerKeysUp(e: KeyboardEvent) {
-        if (e.key === 'ArrowLeft') {
-            this.deleteActiveToButtonYes();
-        } else if (e.key === 'ArrowRight') {
-            this.deleteActiveToButtonNo();
+        if (this.isGame) {
+            this.keyboardListenerState = 2;
+            if (e.key === 'ArrowLeft') {
+                this.deleteActiveToButtonYes();
+            } else if (e.key === 'ArrowRight') {
+                this.deleteActiveToButtonNo();
+            }
         }
     }
 
@@ -306,10 +324,12 @@ export class Sprint {
     stopGame() {
         if (this.interval) {
             clearInterval(this.interval);
+            this.isGame = false;
         }
     }
 
     async showStatistic() {
+        this.isGame = false;
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
