@@ -194,8 +194,8 @@ export class Book {
                     if(this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                         card.remove();
                     } else {
-                        easyWord.classList.add('selected');`
-                        card.querySelector('.hard-word')?.classList.remove('selected');`
+                        easyWord.classList.add('selected');
+                        card.querySelector('.hard-word')?.classList.remove('selected');
                     }
                 }
                 return;
