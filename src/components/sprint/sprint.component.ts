@@ -10,6 +10,7 @@ import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
 import { templateStatisticGameSprint, templateTableLine } from './statisticSprintGame.template';
 import * as API from '../api/api';
+import { HomePage } from '../first-page/homepage.component';
 const quantityWordsInPage = 20;
 
 export class Sprint {
@@ -137,7 +138,6 @@ export class Sprint {
 
     async gameProcess({ page, complexity }: ParamPage) {
         await this.setSortArraysWords(complexity, page);
-
         const iterator = this.mapWordPairs.entries();
         this.timer();
         this.tempWordsPair = <{ word: string; wordRandomTranslate: string }>this.iteration(iterator);
@@ -175,9 +175,16 @@ export class Sprint {
 
     async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
         const tempArr = await getChunkOfWords(group, page);
-        let arr: IWord[] = [];
+        const arr = [];
         if (isFromBook && isAuth) {
-            arr = await tempArr.filter(await this.isWordNotEasy);
+            for (let i = 0; i < tempArr.length; i++) {
+                const iword = tempArr[i];
+                const isEasy = await this.isWordNotEasy(iword);
+                if (isEasy) {
+                    arr.push(iword);
+                }
+            }
+
             return arr;
         } else return tempArr;
     }
@@ -186,7 +193,6 @@ export class Sprint {
         const { userId, token } = state.getItem('auth');
         const word = await API.getUserWordById(userId, id, token);
         if (typeof word === 'object' && word.difficulty === 'easy') {
-            // console.log(`word ${id} = easy`);
             return false;
         }
         return true;
