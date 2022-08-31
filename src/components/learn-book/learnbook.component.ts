@@ -13,7 +13,8 @@ import { IWord } from '../api/types';
 export enum Constants {
     // 0 - это А1, ... 5 - это C2, поэтому будем считать что цифра 6 - это страница со сложными словами
     COMPLEXITY_HARDWORDS = 6,
-    WORDS_PER_PAGE = 20
+    WORDS_PER_PAGE = 20,
+    HUGE_NUMBER = 10000
 }
 
 
@@ -114,6 +115,7 @@ export class Book {
 
     async getArrayHardUserWords(userId: string, token: string) {
         const response = await API.getAllUserAggWords(userId, token, {
+            wordsPerPage: Constants.HUGE_NUMBER.toString(),
             filter: JSON.stringify({"$and":[{"userWord.difficulty":"hard"}]})
         })
         console.log(`getArrayHardUserWords:`);
