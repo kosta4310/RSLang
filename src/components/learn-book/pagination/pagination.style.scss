@@ -33,3 +33,27 @@
 .hidden {
   display: none;
 }
+
+.wrapper-book.all-learned[data-complexity="0"] .pagination_selected {
+  background-color: $learnbook-color-a1;
+}
+
+.wrapper-book.all-learned[data-complexity="1"] .pagination_selected {
+  background-color: $learnbook-color-a2;
+}
+
+.wrapper-book.all-learned[data-complexity="2"] .pagination_selected {
+  background-color: $learnbook-color-b1;
+}
+
+.wrapper-book.all-learned[data-complexity="3"] .pagination_selected {
+  background-color: $learnbook-color-b2;
+}
+
+.wrapper-book.all-learned[data-complexity="4"] .pagination_selected {
+  background-color: $learnbook-color-c1;
+}
+
+.wrapper-book.all-learned[data-complexity="5"] .pagination_selected {
+  background-color: $learnbook-color-c2;
+}
