@@ -1,3 +1,5 @@
+import { IOptionalToWord } from '../types';
+
 interface IUser {
     name: string;
     email: string;
@@ -21,6 +23,7 @@ interface IWord {
     textMeaningTranslate: string;
     textExampleTranslate: string;
     userWord?: NoteToWord;
+    option?: IOptionalToWord;
 }
 
 type CreatedUser = {
@@ -95,8 +98,8 @@ type AggregatedWordItem = {
 type AggregatedWordResponse = AggregatedWordItem[]
 
 type Statistic = {
-    optional: object,
-    learnedWords: string
-}
+    optional: object;
+    learnedWords: string;
+};
 
 export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic, AggregatedWordResponse, Difficulty };

@@ -1,4 +1,4 @@
-import { IndexObject, StateParam } from './components/types';
+import { IndexObject } from './components/types';
 
 export const state = {
     // isAuth() {
@@ -12,6 +12,7 @@ export const state = {
     // page: 0,
     // complexity: 0,
     isFromBook: false,
+    complexityMainGame: 0,
 
     setItem(data: IndexObject) {
         const rsLangString = localStorage.getItem('rsLang');
@@ -31,7 +32,6 @@ export const state = {
 
     getItem(key: string) {
         const rsLangString = localStorage.getItem('rsLang');
-        console.log(`storage ${key} - ${rsLangString}`);
 
         if (rsLangString) {
             const rsLang = JSON.parse(rsLangString);
@@ -48,6 +48,4 @@ export const state = {
             localStorage.setItem('rsLang', JSON.stringify(rsLangObject));
         }
     },
-    // learnBookGame: false,
-    // complexityMainGame: 0,
 };

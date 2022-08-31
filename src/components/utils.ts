@@ -75,3 +75,7 @@ export const saveWord = async function(wordId: string, complexity: Difficulty = 
 // //   const res = await API.updateUserWord(userId, wordId, token, noteToWord);
 // //   console.log(res);
 // // }
+
+export function shuffle <T>(array: Array<T>): Array<T> {
+    return array.sort(() => Math.random() - 0.5);
+}

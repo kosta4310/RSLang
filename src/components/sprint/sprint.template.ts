@@ -1,13 +1,13 @@
 export const SPRINT_TEMPLATE = `
-<div class="wrapper">
-        <div class="container">
+
+        <div class="container__sprint container">
             <div class="sprint">
                 <div class="sprint__cancel">
-                    <a href="/sprint" class="btn-cancel" data-navigo>
-                        <svg class="btn-cancel__svg" width="55" height="55">
+                    <button class="btn-cancel">
+                        <svg class="btn-cancel__svg" width="30" height="30">
                             <use xlink:href="../../assets/svg/icons.svg#cancel"></use>
                         </svg>
-                    </a>
+                    </button>
                 </div>
                 <div class="watch">
                     <svg class="watch__svg">
@@ -19,16 +19,21 @@ export const SPRINT_TEMPLATE = `
                     <span>сек</span>
                 </div>
                 <div class="words">
-                    <div class="words__en">immigrant</div>
-                    <span>это</span>
-                    <div class="words__ru">иммигрант</div>
+                    <div class="words__en"></div>
+                    <div class="words__ru"></div>
                 </div>
                 <div class="sprint__buttons">
-                    <button class="btn-yes">да</button>
-                    <button class="btn-no">нет</button>
+                    <button class="btn-yes">
+                    <span>&#8592</span>
+                    <span>да</span>
+                    </button>
+                    <button class="btn-no"
+                    <span>нет</span>
+                    <span>&#8594</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>`;
+    `;
 export const SPRINT_TITLE = `Sprint`;
 export const SPRINT_DESCRIPTION = `This game for the real men`;

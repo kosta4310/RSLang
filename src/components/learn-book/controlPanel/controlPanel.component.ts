@@ -67,6 +67,7 @@ export class ControlPanel {
         gameBtns.forEach((el) => {
             el.addEventListener('click', () => {
                 state.setItem({ isFromBook: true });
+                state.isFromBook = true;
             });
         });
 
