@@ -9,14 +9,7 @@ import { Pagination } from './pagination/pagination.component';
 import { state } from '../../state';
 import { saveWord } from '../utils';
 import { IWord } from '../api/types';
-
-export enum Constants {
-    // 0 - это А1, ... 5 - это C2, поэтому будем считать что цифра 6 - это страница со сложными словами
-    COMPLEXITY_HARDWORDS = 6,
-    WORDS_PER_PAGE = 20,
-    HUGE_NUMBER = 10000
-}
-
+import { Constants } from '../types';
 
 export class Book {
     page = 0;
