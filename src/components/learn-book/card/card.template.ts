@@ -28,12 +28,12 @@ export function getCard(word: IWord, isAuth: boolean) {
     </div>
     <div class="card__button">
         <button class="sound"><svg height="62" width="62" fill="#000"><use xlink:href="../../../assets/svg/icons.svg#sound"></use></svg></button>
-        <button class="easy-word ${isAuth ? 'auth' : ''} ${(word.userWord?.difficulty === 'easy') ? 'selected': ''}">
+        <button class="easy-word ${isAuth ? 'auth' : 'none'} ${(word.userWord?.difficulty === 'easy') ? 'selected': ''}">
             <svg height="62" width="62" fill="#CBCBCB">
                 <use xlink:href="../../../assets/svg/icons.svg#easy"></use>
             </svg>
         </button>
-        <button class="hard-word ${isAuth ? 'auth' : ''} ${(word.userWord?.difficulty === 'hard') ? 'selected': ''}">
+        <button class="hard-word ${isAuth ? 'auth' : 'none'} ${(word.userWord?.difficulty === 'hard') ? 'selected': ''}">
             <svg  height="62" width="62" fill="#CBCBCB">
                 <use xlink:href="../../../assets/svg/icons.svg#hard"></use>
             </svg>

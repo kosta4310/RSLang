@@ -76,7 +76,7 @@ export class Book {
     
 
     async renderWords() {
-        const {userId, token } = state.getItem('auth');
+        const { userId, token } = state.getItem('auth') ?? {};
         
         let arrayWords: IWord[];
         if (userId) {
