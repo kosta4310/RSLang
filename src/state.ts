@@ -13,6 +13,7 @@ export const state = {
     // complexity: 0,
     isFromBook: false,
     complexityMainGame: 0,
+    isGame:false,
 
     setItem(data: IndexObject) {
         const rsLangString = localStorage.getItem('rsLang');

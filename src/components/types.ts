@@ -2,6 +2,7 @@ type StateParam = {
     page: string;
     complexity: string;
     isFromBook: boolean;
+    isGame: boolean;
 };
 
 type ParamPage = Pick<StateParam, 'page' | 'complexity'>;
