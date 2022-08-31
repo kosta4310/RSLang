@@ -4,6 +4,7 @@ import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
 import { Book } from '../learn-book/learnbook.component';
 import { Sprint } from '../sprint/sprint.component';
+import { state } from '../../state';
 
 export class Router {
     router: Navigo;
@@ -25,23 +26,29 @@ export class Router {
         this.router
             .on('/', () => {
                 console.log('start page');
+                state.isGame = false;
                 this.homePage.init();
             })
             .on('/learnbook', () => {
                 console.log('learn book');
+                state.isGame = false;
                 this.book.init();
             })
             .on('/statistic', () => {
                 console.log('statistic');
+                state.isGame = false;
             })
             .on('/audio-call', () => {
+                state.isGame = false;
                 this.audioCall.init();
                 console.log('game listen');
             })
             .on('/sprint', () => {
+                state.isGame = false;
                 this.sprint.init();
             })
             .on('/auth', () => {
+                state.isGame = false;
                 this.authorization.init();
             })
             .resolve();

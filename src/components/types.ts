@@ -2,6 +2,7 @@ type StateParam = {
     page: string;
     complexity: string;
     isFromBook: boolean;
+    isGame: boolean;
 };
 
 type ParamPage = Pick<StateParam, 'page' | 'complexity'>;
@@ -37,8 +38,7 @@ interface IOptionalToWord {
 enum Constants {
     COMPLEXITY_HARDWORDS = 6,
     WORDS_PER_PAGE = 20,
-    HUGE_NUMBER = 10000
+    HUGE_NUMBER = 10000,
 }
 
 export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants };
-
