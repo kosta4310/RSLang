@@ -44,7 +44,7 @@ export const templateOurTeam = `
                                     <h3>Максим</h3>
                                     <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-32px.png" alt="logo github">
                                 </a>
-                                <div class="team-item__content-right">develop</div>
+                                <div class="team-item__content-right">developer</div>
                             </div>
                             <p class="team-item__text">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore facilis maiores
@@ -72,7 +72,7 @@ export const templateOurTeam = `
                                     <h3>Артем</h3>
                                     <img src="./assets/images/GitHub-Mark/PNG/GitHub-Mark-32px.png" alt="logo github">
                                 </a>
-                                <div class="team-item__content-right">develop</div>
+                                <div class="team-item__content-right">developer</div>
                             </div>
                             <p class="team-item__text">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore facilis maiores

@@ -34,4 +34,11 @@ interface IOptionalToWord {
     correctInLineCount: number;
 }
 
-export { StateParam, ParamPage, IndexObject, IOptionalToWord, IOptionalToStatistic, IStatistic };
+enum Constants {
+    COMPLEXITY_HARDWORDS = 6,
+    WORDS_PER_PAGE = 20,
+    HUGE_NUMBER = 10000
+}
+
+export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants };
+

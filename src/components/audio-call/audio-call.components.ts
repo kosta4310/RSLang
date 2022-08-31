@@ -22,6 +22,7 @@ export class AudioCall {
     page: number;
     learnBookGame: boolean;
     indexWord: number;
+    isRightAnswer: boolean;
 
     constructor() {
         this.header = new Header();
@@ -30,6 +31,7 @@ export class AudioCall {
         this.page = 0;
         this.learnBookGame = false;
         this.indexWord = 0;
+        this.isRightAnswer = false;
     }
 
     init() {
@@ -38,15 +40,19 @@ export class AudioCall {
         this.header.init();
         this.startGame();
     }
+
     startGame() {
         this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.isFromBook);
         this.learnBookGame = state.isFromBook;
         state.isFromBook = false;
-        
-         document.querySelector('.start-game')?.addEventListener('click', () => {
+
+        document.querySelector('.start-game')?.addEventListener('click', () => {
             if (!this.learnBookGame) {
-                this.complexity = state.getItem('complexity');
+                this.complexity = state.complexityMainGame;
                 this.page = Math.floor(Math.random() * 20);
+            } else {
+                this.complexity = state.getItem('complexity');
+                this.page = state.getItem('page');
             }
             this.game();
             this.learnBookGame = false;
@@ -54,20 +60,95 @@ export class AudioCall {
     }
 
     async game() {
-
         const arrayWords = await this.getArrayWords(this.complexity, this.page);
-        const searchWord = arrayWords[this.indexWord];
-        const pathImage = `${BASE}/${searchWord.image}`;
         this.renderWord(arrayWords, this.indexWord);
-        this.choiceWord(pathImage, searchWord);
+        this.mouseGame(arrayWords);
+        this.keyboardGame(arrayWords);
+    }
+
+    mouseGame(arrayWords: IWord[]) {
         document.querySelector('.wrapper')?.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;
-            if (target.classList.contains('next') && target.classList.contains('iDontKnow')) {
-                this.indexWord++;
-                console.log(searchWord);
+            const searchWord = arrayWords[this.indexWord];
+            const pathImage = `${BASE}/${searchWord.image}`;
+            if (target.classList.contains('btn-choice')) {
+                if (target.innerHTML === searchWord.wordTranslate) {
+                    this.rightAnswer(pathImage, searchWord);
+                    this.playAnswerSound('../../assets/sounds/correct2.mp3');
+                } else {
+                    this.playAnswerSound('../../assets/sounds/incorrect2.mp3');
+                    target.classList.add('wrong-answer');
+                    this.rightAnswer(pathImage, searchWord);
+                }
+                this.isRightAnswer = true;
+            }
+            if (target.classList.contains('next')) {
+                if (!this.isRightAnswer) {
+                    this.playAnswerSound('../../assets/sounds/incorrect2.mp3');
+                    this.rightAnswer(pathImage, searchWord);
+                    this.isRightAnswer = true;
+                } else {
+                    this.indexWord++;
+                    this.renderWord(arrayWords, this.indexWord);
+                    this.isRightAnswer = false;
+                }
+            }
+        });
+    }
 
-                this.renderWord(arrayWords, this.indexWord);
-                this.choiceWord(pathImage, searchWord);
+    keyboardGame(arrayWords: IWord[]) {
+        document.addEventListener('keydown', (event) => {
+            const searchWord = arrayWords[this.indexWord];
+            const pathImage = `${BASE}/${searchWord.image}`;
+            const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
+            const keyboardButton = (index: number) => {
+                if (buttons[index].innerHTML === searchWord.wordTranslate) {
+                    this.playAnswerSound('../../assets/sounds/correct2.mp3');
+                    this.rightAnswer(pathImage, searchWord);
+                } else {
+                    this.playAnswerSound('../../assets/sounds/incorrect2.mp3');
+                    this.rightAnswer(pathImage, searchWord);
+                    buttons[index].classList.add('wrong-answer');
+                }
+                this.isRightAnswer = true;
+            };
+            switch (event.code) {
+                case 'Space':
+                    if (!this.isRightAnswer) {
+                        if (this.indexWord === 19) {
+                            this.rightAnswer(pathImage, searchWord);
+                            (<HTMLButtonElement>document.querySelector('.next')).innerHTML = 'Статистика';
+                            this.isRightAnswer = true;
+                        } else {
+                            this.playAnswerSound('../../assets/sounds/incorrect2.mp3');
+                            this.rightAnswer(pathImage, searchWord);
+                            this.isRightAnswer = true;
+                        }
+                    } else {
+                        if (this.indexWord === 19) {
+                            console.log(1);
+                        } else {
+                            this.indexWord++;
+                            this.renderWord(arrayWords, this.indexWord);
+                            this.isRightAnswer = false;
+                        }
+                    }
+                    break;
+                case 'Digit1':
+                    keyboardButton(0);
+                    break;
+                case 'Digit2':
+                    keyboardButton(1);
+                    break;
+                case 'Digit3':
+                    keyboardButton(2);
+                    break;
+                case 'Digit4':
+                    keyboardButton(3);
+                    break;
+                case 'Digit5':
+                    keyboardButton(4);
+                    break;
             }
         });
     }
@@ -84,7 +165,7 @@ export class AudioCall {
         });
         this.closeGame();
         const pathAudio = `${BASE}/${(<HTMLElement>document.querySelector('.sound-btn')).getAttribute('data-audio')}`;
-        this.playAudio(pathAudio);
+        this.playWord(pathAudio);
     }
 
     async getArrayWords(complexity: number, page: number) {
@@ -101,31 +182,13 @@ export class AudioCall {
             .sort(() => Math.random() - 0.5);
     }
 
-    choiceWord(pathImage: string, word: IWord) {
-        document.querySelector('.wrapper')?.addEventListener('click', (event) => {
-            const target = event.target as HTMLElement;
-            if (target.classList.contains('btn-choice')) {
-                if (target.getAttribute('data-word') === word.wordTranslate) {
-                    this.rightAnswer(pathImage, word);
-                } else {
-                    target.classList.add('wrong-answer');
-                    this.rightAnswer(pathImage, word);
-                }
-            }
-            if (target.classList.contains('iDontKnow')) {
-                this.rightAnswer(pathImage, word);
-            }
-        });
-    }
-
     rightAnswer(pathImage: string, word: IWord) {
         document.querySelector('.audio-call__sound')?.insertAdjacentHTML('beforebegin', RIGHT_ANSWER_IMAGE(pathImage));
         document.querySelector('.audio-call__sound')?.insertAdjacentHTML('beforeend', RIGHT_ANSWER_WORD(word.word));
         (<HTMLElement>document.querySelector('.sound-btn')).innerHTML = '';
         (<HTMLElement>document.querySelector('.sound-btn')).insertAdjacentHTML('beforeend', SOUND_SVG(30));
         (<HTMLElement>document.querySelector('.audio-call__sound')).classList.add('right-sound');
-        (<HTMLButtonElement>document.querySelector('.iDontKnow')).classList.add('next');
-        // (<HTMLButtonElement>document.querySelector('.next')).classList.remove('iDontKnow');
+        (<HTMLButtonElement>document.querySelector('.next')).innerHTML = 'Дальше';
         const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
         buttons.forEach((el) => {
             el.disabled = true;
@@ -143,10 +206,11 @@ export class AudioCall {
                 elem.parentNode?.removeChild(elem);
                 this.startGame();
                 this.indexWord = 0;
+                state.complexityMainGame = 0;
             }
         });
     }
-    playAudio(pathAudio: string) {
+    playWord(pathAudio: string) {
         const audio = new Audio(pathAudio);
         audio.play();
         document.querySelector('.sound-btn')?.addEventListener('click', (event) => {
@@ -156,6 +220,9 @@ export class AudioCall {
                 audio.play();
             }
         });
-
+    }
+    playAnswerSound(pathAudio: string) {
+        const audio = new Audio(pathAudio);
+        audio.play();
     }
 }

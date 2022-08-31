@@ -1,4 +1,4 @@
-import { Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
+import { AggregatedWordResponse, Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
 import { StatusCodes } from 'http-status-codes';
 import { BASE } from '../../config';
 
@@ -162,9 +162,10 @@ async function deleteUserWord(userId: string, wordId: string, token: string): Pr
 
 // Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
 // иметь поле userWord со своими полями
-async function getAllUserAggWords(userId: string, token: string, param: InputAllUserAggWords) {
+async function getAllUserAggWords(userId: string, token: string, param: InputAllUserAggWords): Promise<AggregatedWordResponse> {
     const urlSearchParams = new URLSearchParams(param);
 
+    console.log(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`);
     const response = await fetch(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`, {
         method: 'GET',
         credentials: 'same-origin',

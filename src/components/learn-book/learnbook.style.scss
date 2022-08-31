@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 html,
 body {
   height: 100%;
@@ -16,6 +18,27 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.all-learned[data-complexity="0"] {
+  background-color: $learnbook-color-a1-all-learned-background;
+}
+.all-learned[data-complexity="1"] {
+  background-color: $learnbook-color-a2-all-learned-background;
+}
+.all-learned[data-complexity="2"] {
+  background-color: $learnbook-color-b1-all-learned-background;
+}
+.all-learned[data-complexity="3"] {
+  background-color: $learnbook-color-b2-all-learned-background;
+}
+.all-learned[data-complexity="4"] {
+  background-color: $learnbook-color-c1-all-learned-background;
+}
+.all-learned[data-complexity="5"] {
+  background-color: $learnbook-color-c2-all-learned-background;
+}
+
+
 
 .card-words {
   flex-grow: 1;
