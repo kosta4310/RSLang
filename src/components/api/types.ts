@@ -40,28 +40,16 @@ type Auth = {
     name: string;
 };
 
-// Предлагаю такой объект для хранения всей дополнительной информации по словам
-type OptionalWordData = {
-    // игра спринт - счетчики угаданных и всего
-    sprintCorrect?: number;
-    sprintTotal?: number;
-    // игра аудивызов - счетчики угаданных и всего
-    audioCallCorrect?: number;
-    audioCallTotal?: number;
-    // счётчик - угадано раз подряд, если ошибка - обнуляем
-    correctInLineCount?: number;
-};
-
 type Difficulty = 'normal' | 'hard' | 'easy'
 
 type NoteToWord = {
     difficulty: Difficulty;
-    optional: OptionalWordData;
+    optional: IOptionalToWord;
 };
 
 // эти данные можно помещать в Optional при запросе upsertStatistics
 // так чтобы при работе со страницей статистики разом получить всю информацию через один getStatistics запрос
-type OptionalStatData = {
+type IOptionalToStat = {
     [dayDate: string]: { // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
         learnedWordCount: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
         sprintCorrect?: number; // кол-во правильно угаданных
