@@ -25,7 +25,7 @@ export const templateCapabilities = `
                         </div>
                         <div class="ca-item__content">
                             <h3 class="ca-item__title">
-                                <span>Игра</span><span>“Аудиовызов”</span>
+                                <span>Аудиовызов</span>
                             </h3>
                             <p class="ca-item__text">
                                 Попробуй понять какое слово было произнесено.
@@ -39,7 +39,7 @@ export const templateCapabilities = `
                         </div>
                         <div class="ca-item__content">
                             <h3 class="ca-item__title">
-                                <span>Игра</span><span>“Спринт”</span>
+                                <span>Спринт</span>
                             </h3>
                             <p class="ca-item__text">
                                 Определи верный перевод или нет.
