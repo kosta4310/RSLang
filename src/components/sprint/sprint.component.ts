@@ -27,6 +27,7 @@ export class Sprint {
     numberOfTimesPressed: number;
     arrayTappedWords: Array<IWord>;
     isFromBook: boolean;
+    newWordInGame: number;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -43,6 +44,7 @@ export class Sprint {
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
         this.isFromBook = state.getItem('isFromBook');
+        this.newWordInGame = 0;
     }
 
     init() {
@@ -52,17 +54,11 @@ export class Sprint {
         this.header.init();
         this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, this.isFromBook);
         state.setItem({ isFromBook: false });
-        // this.mapRightWords.clear();
-        // this.mapWordPairs.clear();
-        // this.arrayTappedWords = [];
-        // this.arrayWords = [];
-        // this.numberOfTimesPressed = 0;
-        // this.arrayTappedWords = [];
+        this.flushInit();
 
         document.querySelector('.start-game')?.addEventListener('click', () => {
             this.startGame();
         });
-        // this.startPage.init(SPRINT_DESCRIPTION, AUDIO_CALL_DESCRIPTION, state.isFromBook);
     }
     flushInit() {
         this.mapRightWords.clear();
@@ -71,7 +67,10 @@ export class Sprint {
         this.arrayWords = [];
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
+        this.newWordInGame = 0;
+    }
 
+    restart() {
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
@@ -82,24 +81,18 @@ export class Sprint {
         });
     }
     startGame() {
-        // const isFromBook = state.getItem('isFromBook');
-
         const param = this.isFromBook
             ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
             : {
-                  page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
+                  page: Math.floor(Math.random() * quantityWordsInPage),
                   complexity: state.getItem('complexity'),
               };
 
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.innerHTML = '';
-        // body.innerHTML = '';
-        // body.insertAdjacentHTML('beforeend', templateHeader);
         wrapper.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
-        // this.header.init();
-        this.gameProcess(param);
 
-        console.log(this.isFromBook, param);
+        this.gameProcess(param);
     }
 
     timer() {
@@ -122,6 +115,7 @@ export class Sprint {
             () => {
                 this.stopGame();
                 this.flushInit();
+                this.restart();
             },
             true
         );
@@ -162,7 +156,7 @@ export class Sprint {
         const wordArray = <Array<string>>[];
         let wordTranslateArray = <Array<string>>[];
 
-        this.arrayWords = await getChunkOfWords(group, page);
+        this.arrayWords = await this.getArrayForGame(group, page, this.isFromBook, state.getItem('isAuth'));
 
         this.arrayWords.map((words) => {
             const { word, wordTranslate } = words;
@@ -177,6 +171,25 @@ export class Sprint {
         for (let i = 0; i < this.arrayWords.length; i++) {
             this.mapWordPairs.set(wordArray[i], wordTranslateArray[i]);
         }
+    }
+
+    async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
+        const tempArr = await getChunkOfWords(group, page);
+        let arr: IWord[] = [];
+        if (isFromBook && isAuth) {
+            arr = await tempArr.filter(await this.isWordNotEasy);
+            return arr;
+        } else return tempArr;
+    }
+
+    async isWordNotEasy({ id }: IWord) {
+        const { userId, token } = state.getItem('auth');
+        const word = await API.getUserWordById(userId, id, token);
+        if (typeof word === 'object' && word.difficulty === 'easy') {
+            // console.log(`word ${id} = easy`);
+            return false;
+        }
+        return true;
     }
 
     handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
@@ -213,9 +226,8 @@ export class Sprint {
             this.showWords(word, wordRandomTranslate);
             return { word, wordRandomTranslate };
         } else {
-            // location.href = '/#/sprint-statistic';
-            // location.reload();
-            return false;
+            this.stopGame();
+            this.showStatistic();
         }
     }
 
@@ -291,16 +303,17 @@ export class Sprint {
         }
     }
 
-    showStatistic() {
+    async showStatistic() {
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
         document.body.insertAdjacentHTML('beforeend', templateStatisticGameSprint());
-        this.getArrayLinesWithWords();
+        this.setArrayLinesWithWords();
 
         const btnCancel = <HTMLElement>document.querySelector('.statistic-sprint__cancel .btn-cancel');
         btnCancel.addEventListener('click', () => {
             this.flushInit();
+            this.restart();
         });
 
         const table = <HTMLElement>document.querySelector('.statistic-sprint__table');
@@ -314,10 +327,9 @@ export class Sprint {
         });
     }
 
-    getArrayLinesWithWords() {
+    setArrayLinesWithWords() {
         const table = <HTMLElement>document.body.querySelector('.statistic-sprint__table');
         this.arrayTappedWords = this.arrayWords.slice(0, this.numberOfTimesPressed);
-        const isAuth = state.getItem('isAuth');
 
         this.arrayTappedWords.map((iword) => {
             const { audio, word, transcription, wordTranslate } = iword;
@@ -327,18 +339,24 @@ export class Sprint {
                 'beforeend',
                 templateTableLine(audio, word, transcription, wordTranslate, isRight)
             );
-            if (isAuth) {
-                this.setStatisticWord(iword, isRight);
-            }
         });
+        const isAuth = <boolean>state.getItem('isAuth');
+        if (isAuth) {
+            this.writeStatisticWords().then(() => console.log(`new word: ${this.newWordInGame}`));
+        }
     }
 
-    async setStatisticWord(word: IWord, isRight: boolean) {
-        const wordId = word.id;
-        const { userId, token } = state.getItem('auth');
-        // let { optional } = word;
+    async writeStatisticWords() {
+        const promises = this.arrayTappedWords.map(async (iword) => {
+            const { id, word } = iword;
+            const isRight = <boolean>this.resultOfGame.get(word);
+            await this.setStatisticWord(id, isRight);
+        });
+        return Promise.all(promises);
+    }
 
-        // const currentDate = new Date().toISOString().slice(0, 10);
+    async setStatisticWord(wordId: string, isRight: boolean) {
+        const { userId, token } = state.getItem('auth');
         const initOption = <IOptionalToWord>{
             sprintCorrect: 0,
             sprintTotal: 0,
@@ -349,10 +367,12 @@ export class Sprint {
 
         let userWord = await API.getUserWordById(userId, wordId, token);
         if (typeof userWord === 'string') {
+            this.newWordInGame += 1;
             userWord = <UserWord>(
                 await API.createUserWord(userId, wordId, token, { difficulty: 'normal', optional: initOption })
             );
         }
+
         if (isRight) {
             userWord.optional.sprintCorrect += 1;
             userWord.optional.correctInLineCount += 1;
@@ -362,7 +382,10 @@ export class Sprint {
             ) {
                 userWord.difficulty = 'easy';
             }
-        } else userWord.optional.correctInLineCount = 0;
+        } else {
+            userWord.optional.correctInLineCount = 0;
+            if (userWord.difficulty === 'easy') userWord.difficulty = 'normal';
+        }
 
         userWord.optional.sprintTotal += 1;
         const noteToWord = <NoteToWord>{
