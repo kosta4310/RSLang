@@ -1,3 +1,4 @@
+import { state } from './../../state';
 import { AudioCall } from './../audio-call/audio-call.components';
 import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
