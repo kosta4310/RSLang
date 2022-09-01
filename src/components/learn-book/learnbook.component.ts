@@ -99,10 +99,8 @@ export class Book {
 
     async getArrayUserWords(complexity: number, page: number, userId: string, token: string) {
         const response = await API.getAllUserAggWords(userId, token, {
-            group: complexity.toString(),
-            page: page.toString(),
-            wordsPerPage: Constants.WORDS_PER_PAGE.toString()
-        })
+            filter: JSON.stringify({ $and: [{ group: complexity }, { page: page }] }),
+        });
         return response[0].paginatedResults;
     }
 
