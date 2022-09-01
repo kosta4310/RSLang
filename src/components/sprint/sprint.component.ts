@@ -1,17 +1,17 @@
 import { BASE } from '../../config';
 import { state } from '../../state';
 import { getChunkOfWords } from '../api/api';
-import { IWord, NoteToWord, UserWord } from '../api/types';
+import { IWord, NoteToWord, Statistic, UserWord } from '../api/types';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
-import { IOptionalToWord, ParamPage } from '../types';
+import { Constants, IOptionalToWord, IStatisticDay, ParamPage } from '../types';
 import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
 import { templateStatisticGameSprint, templateTableLine } from './statisticSprintGame.template';
 import * as API from '../api/api';
-import { HomePage } from '../first-page/homepage.component';
-const quantityWordsInPage = 20;
+
+const quantityWordsInPage = Constants.WORDS_PER_PAGE;
 
 export class Sprint {
     complexity: number;
@@ -31,6 +31,8 @@ export class Sprint {
     newWordInGame: number;
     keyboardListenerState: number;
     iterator: null | IterableIterator<[string, string]>;
+    statisticGame: Statistic | null;
+    statisticDay: IStatisticDay;
     // isGame: boolean;
 
     constructor() {
@@ -53,6 +55,11 @@ export class Sprint {
         // this.isGame = false;
         state.isGame = false;
         this.iterator = null;
+        this.statisticDay = {
+            newWordInGame: 0,
+            longestSequenceCorrectAnswers: 0,
+        };
+        this.statisticGame = null;
     }
 
     init() {
@@ -77,6 +84,10 @@ export class Sprint {
         this.arrayTappedWords = [];
         this.newWordInGame = 0;
         state.isGame = false;
+        this.statisticDay = {
+            newWordInGame: 0,
+            longestSequenceCorrectAnswers: 0,
+        };
     }
 
     restart() {
@@ -137,7 +148,6 @@ export class Sprint {
 
         buttonsBlock.addEventListener('click', (e) => {
             this.handlerToButtons(e, iterator);
-            console.log(iterator);
         });
 
         if (this.keyboardListenerState === 1) {
@@ -374,7 +384,12 @@ export class Sprint {
         });
         const isAuth = <boolean>state.getItem('isAuth');
         if (isAuth) {
-            this.writeStatisticWords().then(() => console.log(`new word: ${this.newWordInGame}`));
+            this.writeStatisticWords().then(() => {
+                // console.log(`new word: ${this.newWordInGame}`);
+                this.statisticDay.longestSequenceCorrectAnswers = this.getLongestSequenceCorrectAnswers();
+                console.log(this.statisticDay);
+                this.getStatisticDay();
+            });
         }
     }
 
@@ -399,6 +414,7 @@ export class Sprint {
 
         let userWord = await API.getUserWordById(userId, wordId, token);
         if (typeof userWord === 'string') {
+            this.statisticDay.newWordInGame += 1;
             this.newWordInGame += 1;
             userWord = <UserWord>(
                 await API.createUserWord(userId, wordId, token, { difficulty: 'normal', optional: initOption })
@@ -426,5 +442,67 @@ export class Sprint {
         };
         const res = await API.updateUserWord(userId, wordId, token, noteToWord);
         console.log(res);
+    }
+
+    getLongestSequenceCorrectAnswers() {
+        const arrayAnswers = [...this.resultOfGame.values()];
+        const stringArr = arrayAnswers
+            .map((item) => (item === true ? '1' : '0'))
+            .join('')
+            .split('0');
+        return Math.max(...stringArr.map((item) => item.length));
+    }
+
+    // writeStatisticGame() {}
+
+    async getStatisticDay() {
+        const { userId, token } = state.getItem('auth');
+        const currentDay = new Date().toISOString().slice(0, 10);
+        let currenDayObject = {
+            sprintCorrect: 0,
+            sprintTotal: 0,
+            sprintNewWords: 0,
+            audioCallNewWords: 0,
+            sprintCorrectInLineCount: 0,
+            audioCallCorrectInLineCount: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+        };
+        const initStat = <Statistic>{
+            learnedWords: 0,
+            optional: {
+                [currentDay]: currenDayObject,
+            },
+        };
+        const response = await API.getStatistics(userId, token);
+
+        if (typeof response !== 'string') {
+            const { learnedWords, optional } = response;
+            initStat.learnedWords = learnedWords;
+            initStat.optional = JSON.parse(JSON.stringify(optional));
+        }
+
+        const optional = initStat.optional;
+
+        // eslint-disable-next-line no-prototype-builtins
+        if (optional.hasOwnProperty(currentDay)) {
+            currenDayObject = JSON.parse(JSON.stringify(optional[currentDay]));
+        } else optional[currentDay] = currenDayObject;
+
+        const sprintCorrectInLineCount = this.getLongestSequenceCorrectAnswers();
+
+        currenDayObject.sprintCorrectInLineCount = sprintCorrectInLineCount;
+        currenDayObject.sprintNewWords = currenDayObject.sprintNewWords + this.newWordInGame;
+
+        optional[currentDay] = currenDayObject;
+        initStat.optional = optional;
+        console.log(initStat);
+
+        API.upsertStatistics(userId, token, initStat);
+
+        // stat.optional[currentDay].sprintCorrectInLineCount =
+        //     stat.optional.sprintCorrectInLineCount > sprintCorrectInLineCount
+        //         ? stat.optional.sprintCorrectInLineCount
+        //         : sprintCorrectInLineCount;
     }
 }

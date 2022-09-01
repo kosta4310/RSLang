@@ -1,4 +1,4 @@
-import { IOptionalToWord } from '../types';
+import { IOptionalToStatistic, IOptionalToWord } from '../types';
 
 interface IUser {
     name: string;
@@ -40,30 +40,12 @@ type Auth = {
     name: string;
 };
 
-type Difficulty = 'normal' | 'hard' | 'easy'
+type Difficulty = 'normal' | 'hard' | 'easy';
 
 type NoteToWord = {
     difficulty: Difficulty;
     optional: IOptionalToWord;
 };
-
-// эти данные можно помещать в Optional при запросе upsertStatistics
-// так чтобы при работе со страницей статистики разом получить всю информацию через один getStatistics запрос
-type IOptionalToStat = {
-    [dayDate: string]: { // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
-        learnedWordCount: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
-        sprintCorrect?: number; // кол-во правильно угаданных
-        sprintTotal?: number; // общее кол-во слов участвовавших в игре
-        // количество новых слов за день, этот счетчик увеличивается если у слова 
-        // его значения sprintTotal = 0 и audioCallTotal = 0, то есть это слово раньше не участвовало в играх
-        sprintNewTotal?: number; 
-        sprintCorrectInLineCount?: number; // серия правильных ответов
-        audioCallCorrect?: number;
-        audioCallTotal?: number;
-        audioCallNewTotal?: number;
-        audioCallCorrectInLineCount?: number;
-    }
-}
 
 type UserWord = NoteToWord & {
     id: string;
@@ -77,17 +59,28 @@ type InputAllUserAggWords = {
     filter?: string;
 };
 
-type AggregatedWordCount = { count: number; }
+type AggregatedWordCount = { count: number };
 type AggregatedWordItem = {
-    paginatedResults: IWord[],
-    totalCount: AggregatedWordCount[]
-}
-
-type AggregatedWordResponse = AggregatedWordItem[]
-
-type Statistic = {
-    optional: object;
-    learnedWords: string;
+    paginatedResults: IWord[];
+    totalCount: AggregatedWordCount[];
 };
 
-export { CreatedUser, IUser, Auth, IWord, NoteToWord, UserWord, InputAllUserAggWords, Statistic, AggregatedWordResponse, Difficulty };
+type AggregatedWordResponse = AggregatedWordItem[];
+
+type Statistic = {
+    optional: IOptionalToStatistic;
+    learnedWords: number;
+};
+
+export {
+    CreatedUser,
+    IUser,
+    Auth,
+    IWord,
+    NoteToWord,
+    UserWord,
+    InputAllUserAggWords,
+    Statistic,
+    AggregatedWordResponse,
+    Difficulty,
+};
