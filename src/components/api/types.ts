@@ -7,8 +7,8 @@ interface IUser {
 }
 
 interface IWord {
-    _id?: string; // если данные приходят через AggregatedWords, там такой id
-    id: string;
+    _id?: string;
+    id?: string;
     group: number;
     page: number;
     word: string;
@@ -59,9 +59,12 @@ type InputAllUserAggWords = {
     filter?: string;
 };
 
+type OmitWord = Omit<IWord, 'id'>;
+type AggregatedWord = OmitWord & { _id: string };
+
 type AggregatedWordCount = { count: number };
 type AggregatedWordItem = {
-    paginatedResults: IWord[];
+    paginatedResults: Array<IWord>;
     totalCount: AggregatedWordCount[];
 };
 
@@ -83,4 +86,5 @@ export {
     Statistic,
     AggregatedWordResponse,
     Difficulty,
+    AggregatedWord,
 };
