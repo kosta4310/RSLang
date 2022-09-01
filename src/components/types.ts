@@ -11,20 +11,23 @@ type IndexObject = {
     [key: string]: string | boolean;
 };
 
-interface IStatistic {
-    // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
-    learnedWordCount: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
-    sprintCorrect: number; // кол-во правильно угаданных
-    sprintTotal: number;
-    sprintNewWords: number;
-    audioCallNewWords: number;
-    sprintCorrectInLineCount: number; // серия правильных ответов
-    sprintAudioCallCorrect: number;
-    audioCallTotal: number;
-}
+// interface IStatistic {
+//     // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
+//     learnedWords: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
+//     optional: IOptionalToStatistic;
+// }
 
 interface IOptionalToStatistic {
-    [date: string]: IStatistic;
+    [currentDay: string]: {
+        sprintCorrect: number; // кол-во правильно угаданных
+        sprintTotal: number;
+        sprintNewWords: number;
+        audioCallNewWords: number;
+        sprintCorrectInLineCount: number; // серия правильных ответов
+        audioCallCorrectInLineCount: number; // серия правильных ответов
+        audioCallCorrect: number;
+        audioCallTotal: number;
+    };
 }
 
 interface IOptionalToWord {
@@ -41,4 +44,9 @@ enum Constants {
     HUGE_NUMBER = 10000,
 }
 
-export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants };
+interface IStatisticDay {
+    newWordInGame: number;
+    longestSequenceCorrectAnswers: number;
+}
+
+export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants, IOptionalToStatistic, IStatisticDay };
