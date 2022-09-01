@@ -51,9 +51,8 @@ export class AudioCall {
     startGame() {
         this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.isFromBook);
         this.learnBookGame = state.isFromBook;
+        this.resetParam();
         state.isFromBook = false;
-        state.isGame = false;
-        this.isRightAnswer = false;
         this.imitationKeydown();
 
         document.querySelector('.start-game')?.addEventListener('click', () => {
@@ -67,7 +66,6 @@ export class AudioCall {
             this.learnBookGame = false;
             state.isGame = true;
             this.game();
-            console.log(state.isGame);
         });
     }
 
@@ -77,6 +75,7 @@ export class AudioCall {
         this.mouseGame(arrayWords);
         this.keyboardGame(arrayWords);
     }
+    
     mouseGame(arrayWords: IWord[]) {
         document.querySelector('.wrapper')?.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;
@@ -99,35 +98,14 @@ export class AudioCall {
                 this.isRightAnswer = true;
             }
             if (target.classList.contains('next')) {
-                if (!this.isRightAnswer) {
-                    this.rightAnswer(pathImage, searchWord);
-                    this.isRightAnswer = true;
-                    this.answers.wrong.push(searchWord);
-                    this.playSound('../../assets/sounds/incorrect2.mp3');
-                    this.checkLastWord(arrayWords);
-                } else {
-                    if (this.indexWord === arrayWords.length - 1) {
-                        this.showStatistic(this.answers.right, this.answers.wrong);
-                    } else {
-                        this.indexWord++;
-                        this.renderWord(arrayWords, this.indexWord);
-                        this.isRightAnswer = false;
-                    }
-                }
+                this.nextButton(arrayWords, searchWord, pathImage);
             }
         });
-    }
-
-    checkLastWord(arrayWords: IWord[]) {
-        if (this.indexWord === arrayWords.length - 1) {
-            (<HTMLButtonElement>document.querySelector('.next')).innerHTML = 'Статистика';
-        }
     }
 
     keyboardGame(arrayWords: IWord[]) {
         const keyboard = (event: KeyboardEvent) => {
             if (state.isGame) {
-                console.log(state.isGame, this.isRightAnswer);
                 const searchWord = arrayWords[this.indexWord];
                 const pathImage = `${BASE}/${searchWord.image}`;
                 const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
@@ -148,21 +126,7 @@ export class AudioCall {
                 };
                 switch (event.code) {
                     case 'Space':
-                        if (!this.isRightAnswer) {
-                            this.rightAnswer(pathImage, searchWord);
-                            this.isRightAnswer = true;
-                            this.answers.wrong.push(searchWord);
-                            this.playSound('../../assets/sounds/incorrect2.mp3');
-                            this.checkLastWord(arrayWords);
-                        } else {
-                            if (this.indexWord === arrayWords.length - 1) {
-                                this.showStatistic(this.answers.right, this.answers.wrong);
-                            } else {
-                                this.indexWord++;
-                                this.renderWord(arrayWords, this.indexWord);
-                                this.isRightAnswer = false;
-                            }
-                        }
+                        this.nextButton(arrayWords, searchWord, pathImage);
                         break;
                     case 'Digit1':
                         keyboardButton(0);
@@ -186,10 +150,35 @@ export class AudioCall {
         };
         document.addEventListener('keydown', keyboard);
     }
+    nextButton(arrayWords: IWord[], searchWord: IWord, pathImage: string) {
+        if (!this.isRightAnswer) {
+            this.rightAnswer(pathImage, searchWord);
+            this.isRightAnswer = true;
+            this.answers.wrong.push(searchWord);
+            this.playSound('../../assets/sounds/incorrect2.mp3');
+            this.checkLastWord(arrayWords);
+        } else {
+            if (this.indexWord === arrayWords.length - 1) {
+                this.showStatistic(this.answers.right, this.answers.wrong);
+            } else {
+                this.indexWord++;
+                this.renderWord(arrayWords, this.indexWord);
+                this.isRightAnswer = false;
+            }
+        }
+    }
+
+    checkLastWord(arrayWords: IWord[]) {
+        if (this.indexWord === arrayWords.length - 1) {
+            (<HTMLButtonElement>document.querySelector('.next')).innerHTML = 'Статистика';
+        }
+    }
+
     imitationKeydown() {
         const event = new Event('keydown');
         document.dispatchEvent(event);
     }
+
     renderWord(arrayWords: IWord[], index: number) {
         const searchWord = arrayWords.slice(index, index + 1)[0];
         const arrForButtons = this.wordForButtons(arrayWords, index);
@@ -243,17 +232,22 @@ export class AudioCall {
                 const elem = <HTMLElement>document.querySelector('.wrapper');
                 elem.parentNode?.removeChild(elem);
                 this.startGame();
-                this.indexWord = 0;
-                state.complexityMainGame = 0;
-                this.isRightAnswer = false;
-                state.isGame = false;
-                this.answers = {
-                    right: [],
-                    wrong: [],
-                };
+                this.resetParam();
             }
         });
     }
+
+    resetParam() {
+        this.indexWord = 0;
+        state.complexityMainGame = 0;
+        this.isRightAnswer = false;
+        state.isGame = false;
+        this.answers = {
+            right: [],
+            wrong: [],
+        };
+    }
+
     playWordOnClick(element: HTMLElement, pathAudio: string) {
         const audio = new Audio(pathAudio);
         element?.addEventListener('click', (event) => {
@@ -276,15 +270,15 @@ export class AudioCall {
         document
             .querySelector('.game-container__audio-call')
             ?.insertAdjacentHTML('beforeend', STATISTIC_TEMPLATE(rightWords.length, wrongWords.length));
-        const renderWordStatistic = (arr: IWord[],className:string) => {
+        const renderWordStatistic = (arr: IWord[], className: string) => {
             arr.forEach((el) => {
                 document
                     .querySelector(className)
                     ?.insertAdjacentHTML('beforeend', STATISTIC_WORD(el.audio, el.word, el.wordTranslate));
             });
         };
-        renderWordStatistic(rightWords,'.right-word');
-        renderWordStatistic(wrongWords,'.wrong-word');
+        renderWordStatistic(rightWords, '.right-word');
+        renderWordStatistic(wrongWords, '.wrong-word');
         const soundBtns = document.querySelectorAll<HTMLElement>('.sound-btn');
         soundBtns.forEach((el) => {
             const pathAudio = `${BASE}/${el.getAttribute('data-audio')}`;
