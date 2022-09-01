@@ -171,6 +171,8 @@ export class Sprint {
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
+        console.log(`page ${page}, group: ${complexity}`);
+
         await this.setSortArraysWords(complexity, page);
         const iterator = this.mapWordPairs.entries();
         this.iterator = iterator;
@@ -521,6 +523,5 @@ export class Sprint {
         console.log(initStat);
 
         API.upsertStatistics(userId, token, initStat);
-
     }
 }
