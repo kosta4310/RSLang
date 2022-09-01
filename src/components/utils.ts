@@ -35,6 +35,7 @@ export const saveWord = async function(wordId: string, complexity: Difficulty = 
     result = await API.createUserWord(userId, wordId, token, body);
   } else {
     console.log('PUT');
+    Object.assign(body.optional, userWord.optional);
     result = await API.updateUserWord(userId, wordId, token, body);
   }
   console.log(result);
