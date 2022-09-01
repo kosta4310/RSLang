@@ -33,6 +33,7 @@ export class Sprint {
     iterator: null | IterableIterator<[string, string]>;
     statisticGame: Statistic | null;
     statisticDay: IStatisticDay;
+    learnedWords: number;
     // isGame: boolean;
 
     constructor() {
@@ -58,8 +59,11 @@ export class Sprint {
         this.statisticDay = {
             newWordInGame: 0,
             longestSequenceCorrectAnswers: 0,
+            sprintCorrect: 0,
+            sprintTotal: 0,
         };
         this.statisticGame = null;
+        this.learnedWords = 0;
     }
 
     init() {
@@ -83,10 +87,13 @@ export class Sprint {
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
         this.newWordInGame = 0;
+        this.learnedWords = 0;
         state.isGame = false;
         this.statisticDay = {
             newWordInGame: 0,
             longestSequenceCorrectAnswers: 0,
+            sprintCorrect: 0,
+            sprintTotal: 0,
         };
     }
 
@@ -386,9 +393,10 @@ export class Sprint {
         if (isAuth) {
             this.writeStatisticWords().then(() => {
                 // console.log(`new word: ${this.newWordInGame}`);
-                this.statisticDay.longestSequenceCorrectAnswers = this.getLongestSequenceCorrectAnswers();
-                console.log(this.statisticDay);
-                this.getStatisticDay();
+                // this.statisticDay.longestSequenceCorrectAnswers = this.getLongestSequenceCorrectAnswers();
+                // console.log(this.statisticDay);
+                this.getStatistic();
+                this.setStatisticDay();
             });
         }
     }
@@ -429,6 +437,7 @@ export class Sprint {
                 (userWord.difficulty === 'hard' && userWord.optional.correctInLineCount >= 5)
             ) {
                 userWord.difficulty = 'easy';
+                this.learnedWords += 1;
             }
         } else {
             userWord.optional.correctInLineCount = 0;
@@ -444,18 +453,25 @@ export class Sprint {
         console.log(res);
     }
 
-    getLongestSequenceCorrectAnswers() {
+    getStatistic() {
         const arrayAnswers = [...this.resultOfGame.values()];
+        const sprintTotal = arrayAnswers.length;
         const stringArr = arrayAnswers
             .map((item) => (item === true ? '1' : '0'))
             .join('')
             .split('0');
-        return Math.max(...stringArr.map((item) => item.length));
+        const sprintCorrect = stringArr.reduce((acc, item) => acc + item.length, 0);
+
+        const longestSequenceCorrectAnswers = Math.max(...stringArr.map((item) => item.length));
+
+        this.statisticDay.longestSequenceCorrectAnswers = longestSequenceCorrectAnswers;
+        this.statisticDay.sprintCorrect = sprintCorrect;
+        this.statisticDay.sprintTotal = sprintTotal;
+
+        return this.statisticGame;
     }
 
-    // writeStatisticGame() {}
-
-    async getStatisticDay() {
+    async setStatisticDay() {
         const { userId, token } = state.getItem('auth');
         const currentDay = new Date().toISOString().slice(0, 10);
         let currenDayObject = {
@@ -489,20 +505,22 @@ export class Sprint {
             currenDayObject = JSON.parse(JSON.stringify(optional[currentDay]));
         } else optional[currentDay] = currenDayObject;
 
-        const sprintCorrectInLineCount = this.getLongestSequenceCorrectAnswers();
+        const { sprintCorrect, sprintTotal, longestSequenceCorrectAnswers, newWordInGame } = this.statisticDay;
 
-        currenDayObject.sprintCorrectInLineCount = sprintCorrectInLineCount;
-        currenDayObject.sprintNewWords = currenDayObject.sprintNewWords + this.newWordInGame;
+        currenDayObject.sprintCorrectInLineCount =
+            currenDayObject.sprintCorrectInLineCount > longestSequenceCorrectAnswers
+                ? currenDayObject.sprintCorrectInLineCount
+                : longestSequenceCorrectAnswers;
+        currenDayObject.sprintNewWords += newWordInGame;
+        currenDayObject.sprintCorrect += sprintCorrect;
+        currenDayObject.sprintTotal += sprintTotal;
 
         optional[currentDay] = currenDayObject;
         initStat.optional = optional;
+        initStat.learnedWords += this.learnedWords;
         console.log(initStat);
 
         API.upsertStatistics(userId, token, initStat);
 
-        // stat.optional[currentDay].sprintCorrectInLineCount =
-        //     stat.optional.sprintCorrectInLineCount > sprintCorrectInLineCount
-        //         ? stat.optional.sprintCorrectInLineCount
-        //         : sprintCorrectInLineCount;
     }
 }

@@ -47,6 +47,8 @@ enum Constants {
 interface IStatisticDay {
     newWordInGame: number;
     longestSequenceCorrectAnswers: number;
+    sprintCorrect: number;
+    sprintTotal: number;
 }
 
 export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants, IOptionalToStatistic, IStatisticDay };
