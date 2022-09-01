@@ -17,9 +17,11 @@ async function getNewUserToken(userId: string, refreshToken: string): Promise<Au
         },
     });
 
-    if (response.status === StatusCodes.FORBIDDEN) {
+    if (response.status === StatusCodes.FORBIDDEN || response.status === StatusCodes.UNAUTHORIZED) {
         state.setItem({ isAuth: false });
         state.delItem('auth');
+        // перейти на главную страницу
+        // window.location.href = '/';
     }
 
     return response.status === StatusCodes.OK ? response.json() : response.text();
@@ -32,6 +34,7 @@ async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
     // 402 для /users/{id}/words
     // 401 для других эндпоинтов
     if (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.PAYMENT_REQUIRED) {
+        console.log(`TOKEN HAS EXPIRED, TRY TO GET NEW TOKEN`);
         const { userId, refreshToken } = state.getItem('auth');
         if (refreshToken) {
             const authResponse = await getNewUserToken(userId, refreshToken);
