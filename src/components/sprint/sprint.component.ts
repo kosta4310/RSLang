@@ -149,11 +149,7 @@ export class Sprint {
                 }
             });
 
-            document.addEventListener('keyup', (e) => {
-                if (this.iterator) {
-                    this.handlerKeysUp(e);
-                }
-            });
+            document.addEventListener('keyup', this.handlerKeysUp);
         }
     }
 
@@ -230,7 +226,6 @@ export class Sprint {
     }
 
     handlerKeysDown(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
-        // this.keyboardListenerState = 2;
         if (state.isGame) {
             if (e.key === 'ArrowLeft') {
                 this.addActiveToButtonYes();
@@ -242,7 +237,7 @@ export class Sprint {
         }
     }
 
-    handlerKeysUp(e: KeyboardEvent) {
+    handlerKeysUp = (e: KeyboardEvent) => {
         if (state.isGame) {
             this.keyboardListenerState = 2;
             if (e.key === 'ArrowLeft') {
@@ -251,7 +246,7 @@ export class Sprint {
                 this.deleteActiveToButtonNo();
             }
         }
-    }
+    };
 
     iteration(iterator: IterableIterator<[string, string]>) {
         const nextElement = iterator.next();
