@@ -7,26 +7,40 @@ import { BASE } from '../../config';
 import { ControlPanel } from './controlPanel/controlPanel.component';
 import { Pagination } from './pagination/pagination.component';
 import { state } from '../../state';
+import { saveWord } from '../utils';
+import { IWord } from '../api/types';
+import { Constants } from '../types';
 
 export class Book {
-    complexity: number;
-    page: number;
+    page = 0;
+    _complexity = 0;
+    controlPanel: ControlPanel;
+    pagination: Pagination;
+
+    get complexity() { return this._complexity ?? 0; }
+
+    set complexity(value: number) {
+        const container = <HTMLElement>document.querySelector('.wrapper-book')
+        container?.setAttribute('data-complexity', value.toString())
+        this._complexity = value;
+    }
 
     constructor() {
-        this.complexity = +(state.getItem('complexity') ?? 0);
-        this.page = +(state.getItem('page') ?? 0);
+        this.controlPanel = new ControlPanel(this);
+        this.pagination = new Pagination(this);
     }
 
     async init() {
         document.body.innerHTML = '';
         //   document.body.style.height = '100%';
         document.body.insertAdjacentHTML('afterbegin', LEARNBOOK_PAGE_TEMPLATE);
+        this.complexity = +(state.getItem('complexity') ?? 0);
+        this.page = +(state.getItem('page') ?? 0);
+
         document.body.insertAdjacentHTML('afterbegin', templateHeader);
         new Header().init();
-        const controlPanel = new ControlPanel(this);
-        controlPanel.render();
-        const pagination = new Pagination(this);
-        pagination.render();
+        this.controlPanel.render();
+        this.pagination.render();
 
         this.renderLoading();
         await this.renderWords();
@@ -39,20 +53,67 @@ export class Book {
             '<div class="loader-container"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>';
     }
 
+    checkForAllLearned() {
+        const learnedWords = document.querySelectorAll('.learned-word');
+        const wrapper = document.querySelector('.wrapper-book');
+        if (learnedWords.length >= Constants.WORDS_PER_PAGE) {
+            this.controlPanel.enableGamesButtons(false);
+            this.controlPanel.enableAllLearnedText(true);
+            wrapper?.classList.add('all-learned');
+        } else {
+            this.controlPanel.enableGamesButtons(true);
+            this.controlPanel.enableAllLearnedText(false);
+            wrapper?.classList.remove('all-learned');
+        }
+    }
+    
+
     async renderWords() {
-        const arrayWords = await this.getArrayWords(this.complexity, this.page);
+        const { userId, token } = state.getItem('auth') ?? {};
+        
+        let arrayWords: IWord[];
+        if (userId) {
+            if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+                arrayWords = await this.getArrayHardUserWords(userId, token);
+            } else {
+                arrayWords = await this.getArrayUserWords(this.complexity, this.page, userId, token);
+            }
+        } else {
+            arrayWords = await this.getArrayWords(this.complexity, this.page);
+        }
+        
         const words = <HTMLElement>document.body.querySelector('#words');
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         const isAuth = <boolean>state.getItem('isAuth');
-
-        await arrayWords.map(async (obj) => {
-            words.insertAdjacentHTML('beforeend', await getCard(obj, isAuth));
+        
+        arrayWords.map((word) => {
+            words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
         });
+        this.checkForAllLearned();
     }
 
     async getArrayWords(complexity: number, page: number) {
         return API.getChunkOfWords(complexity.toString(), page.toString());
+    }
+
+    async getArrayUserWords(complexity: number, page: number, userId: string, token: string) {
+        const response = await API.getAllUserAggWords(userId, token, {
+            group: complexity.toString(),
+            page: page.toString(),
+            wordsPerPage: Constants.WORDS_PER_PAGE.toString()
+        })
+        return response[0].paginatedResults;
+    }
+
+    async getArrayHardUserWords(userId: string, token: string) {
+        const response = await API.getAllUserAggWords(userId, token, {
+            wordsPerPage: Constants.HUGE_NUMBER.toString(),
+            filter: JSON.stringify({"$and":[{"userWord.difficulty":"hard"}]})
+        })
+        console.log(`getArrayHardUserWords:`);
+        console.log(response)
+        return response[0].paginatedResults;
     }
 
     listen() {
@@ -87,7 +148,7 @@ export class Book {
         }
 
         const words = document.body.querySelector('#words');
-        words?.addEventListener('click', (e) => {
+        words?.addEventListener('click', async (e) => {
             const target = <HTMLElement>e.target;
             const buttonSound = target.closest('.sound');
             if (buttonSound) {
@@ -97,6 +158,42 @@ export class Book {
                 const pathAudioExample = `${BASE}/${card.getAttribute('data-audioExample')}`;
 
                 playAudioArray([pathAudio, pathAudioMeaning, pathAudioExample]);
+                return;
+            }
+            const buttonHard = target.closest('.hard-word');
+            if (buttonHard) {
+                const card = <HTMLElement>target.closest('.card');
+                const wordId = <string>card.getAttribute('data-id');
+                if (!buttonHard.classList.contains('selected')) {
+                    await saveWord(wordId, 'hard', {});
+                    buttonHard.classList.add('selected');
+                    card.querySelector('.easy-word')?.classList.remove('selected');
+                    card.classList.add('learned-word');
+                    this.checkForAllLearned();
+                }
+                if (buttonHard.classList.contains('selected') && this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+                    await saveWord(wordId, 'normal', {});
+                    card.remove();
+                }
+                return;
+            }
+            const easyWord = target.closest('.easy-word');
+            if (easyWord) {
+                if (!easyWord.classList.contains('selected')) {
+                    const card = <HTMLElement>target.closest('.card');
+                    const wordId = <string>card.getAttribute('data-id');
+                    console.log(`wordId: ${wordId}`)
+                    await saveWord(wordId, 'easy', {});
+                    card.classList.add('learned-word');
+                    this.checkForAllLearned();
+                    if(this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+                        card.remove();
+                    } else {
+                        easyWord.classList.add('selected');
+                        card.querySelector('.hard-word')?.classList.remove('selected');
+                    }
+                }
+                return;
             }
         });
     }

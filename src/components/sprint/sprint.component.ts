@@ -10,6 +10,7 @@ import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
 import { templateStatisticGameSprint, templateTableLine } from './statisticSprintGame.template';
 import * as API from '../api/api';
+import { HomePage } from '../first-page/homepage.component';
 const quantityWordsInPage = 20;
 
 export class Sprint {
@@ -27,6 +28,10 @@ export class Sprint {
     numberOfTimesPressed: number;
     arrayTappedWords: Array<IWord>;
     isFromBook: boolean;
+    newWordInGame: number;
+    keyboardListenerState: number;
+    iterator: null | IterableIterator<[string, string]>;
+    // isGame: boolean;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -43,6 +48,11 @@ export class Sprint {
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
         this.isFromBook = state.getItem('isFromBook');
+        this.newWordInGame = 0;
+        this.keyboardListenerState = 1;
+        // this.isGame = false;
+        state.isGame = false;
+        this.iterator = null;
     }
 
     init() {
@@ -52,17 +62,11 @@ export class Sprint {
         this.header.init();
         this.startPage.init(SPRINT_TITLE, SPRINT_DESCRIPTION, this.isFromBook);
         state.setItem({ isFromBook: false });
-        // this.mapRightWords.clear();
-        // this.mapWordPairs.clear();
-        // this.arrayTappedWords = [];
-        // this.arrayWords = [];
-        // this.numberOfTimesPressed = 0;
-        // this.arrayTappedWords = [];
+        this.flushInit();
 
         document.querySelector('.start-game')?.addEventListener('click', () => {
             this.startGame();
         });
-        // this.startPage.init(SPRINT_DESCRIPTION, AUDIO_CALL_DESCRIPTION, state.isFromBook);
     }
     flushInit() {
         this.mapRightWords.clear();
@@ -71,7 +75,11 @@ export class Sprint {
         this.arrayWords = [];
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
+        this.newWordInGame = 0;
+        state.isGame = false;
+    }
 
+    restart() {
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
@@ -82,24 +90,18 @@ export class Sprint {
         });
     }
     startGame() {
-        // const isFromBook = state.getItem('isFromBook');
-
         const param = this.isFromBook
             ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
             : {
-                  page: Math.floor(Math.random() * (quantityWordsInPage + 1)),
+                  page: Math.floor(Math.random() * quantityWordsInPage),
                   complexity: state.getItem('complexity'),
               };
 
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.innerHTML = '';
-        // body.innerHTML = '';
-        // body.insertAdjacentHTML('beforeend', templateHeader);
         wrapper.insertAdjacentHTML('beforeend', SPRINT_TEMPLATE);
-        // this.header.init();
-        this.gameProcess(param);
 
-        console.log(this.isFromBook, param);
+        this.gameProcess(param);
     }
 
     timer() {
@@ -110,18 +112,23 @@ export class Sprint {
             item = item - 1;
             if (item < 0) {
                 clearInterval(this.interval);
-                this.showStatistic();
+                if (state.isGame) {
+                    this.showStatistic();
+                    state.isGame = false;
+                }
             }
         }, 1000);
     }
 
     listen(iterator: IterableIterator<[string, string]>) {
+        this.iterator = iterator;
         const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
         btnCancel.addEventListener(
             'click',
             () => {
                 this.stopGame();
                 this.flushInit();
+                this.restart();
             },
             true
         );
@@ -130,24 +137,30 @@ export class Sprint {
 
         buttonsBlock.addEventListener('click', (e) => {
             this.handlerToButtons(e, iterator);
+            console.log(iterator);
         });
 
-        document.addEventListener('keydown', (e) => {
-            this.handlerKeysDown(e, iterator);
-        });
+        if (this.keyboardListenerState === 1) {
+            this.keyboardListenerState = 2;
 
-        document.addEventListener('keyup', (e) => {
-            this.handlerKeysUp(e);
-        });
+            document.addEventListener('keydown', (e) => {
+                if (this.iterator) {
+                    this.handlerKeysDown(e, this.iterator);
+                }
+            });
+
+            document.addEventListener('keyup', this.handlerKeysUp);
+        }
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
         await this.setSortArraysWords(complexity, page);
-
         const iterator = this.mapWordPairs.entries();
+        this.iterator = iterator;
         this.timer();
         this.tempWordsPair = <{ word: string; wordRandomTranslate: string }>this.iteration(iterator);
         this.listen(iterator);
+        state.isGame = true;
     }
 
     showWords(word: string, wordTranslate: string) {
@@ -162,7 +175,7 @@ export class Sprint {
         const wordArray = <Array<string>>[];
         let wordTranslateArray = <Array<string>>[];
 
-        this.arrayWords = await getChunkOfWords(group, page);
+        this.arrayWords = await this.getArrayForGame(group, page, this.isFromBook, state.getItem('isAuth'));
 
         this.arrayWords.map((words) => {
             const { word, wordTranslate } = words;
@@ -179,6 +192,31 @@ export class Sprint {
         }
     }
 
+    async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
+        const tempArr = await getChunkOfWords(group, page);
+        const arr = [];
+        if (isFromBook && isAuth) {
+            for (let i = 0; i < tempArr.length; i++) {
+                const iword = tempArr[i];
+                const isEasy = await this.isWordNotEasy(iword);
+                if (isEasy) {
+                    arr.push(iword);
+                }
+            }
+
+            return arr;
+        } else return tempArr;
+    }
+
+    async isWordNotEasy({ id }: IWord) {
+        const { userId, token } = state.getItem('auth');
+        const word = await API.getUserWordById(userId, id, token);
+        if (typeof word === 'object' && word.difficulty === 'easy') {
+            return false;
+        }
+        return true;
+    }
+
     handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
         if ((<HTMLElement>e.target).closest('.btn-yes')) {
             this.checkRightTranslate(iterator, true);
@@ -188,22 +226,27 @@ export class Sprint {
     }
 
     handlerKeysDown(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
-        if (e.key === 'ArrowLeft') {
-            this.addActiveToButtonYes();
-            this.checkRightTranslate(iterator, true);
-        } else if (e.key === 'ArrowRight') {
-            this.addActiveToButtonNo();
-            this.checkRightTranslate(iterator, false);
+        if (state.isGame) {
+            if (e.key === 'ArrowLeft') {
+                this.addActiveToButtonYes();
+                this.checkRightTranslate(iterator, true);
+            } else if (e.key === 'ArrowRight') {
+                this.addActiveToButtonNo();
+                this.checkRightTranslate(iterator, false);
+            }
         }
     }
 
-    handlerKeysUp(e: KeyboardEvent) {
-        if (e.key === 'ArrowLeft') {
-            this.deleteActiveToButtonYes();
-        } else if (e.key === 'ArrowRight') {
-            this.deleteActiveToButtonNo();
+    handlerKeysUp = (e: KeyboardEvent) => {
+        if (state.isGame) {
+            this.keyboardListenerState = 2;
+            if (e.key === 'ArrowLeft') {
+                this.deleteActiveToButtonYes();
+            } else if (e.key === 'ArrowRight') {
+                this.deleteActiveToButtonNo();
+            }
         }
-    }
+    };
 
     iteration(iterator: IterableIterator<[string, string]>) {
         const nextElement = iterator.next();
@@ -213,9 +256,8 @@ export class Sprint {
             this.showWords(word, wordRandomTranslate);
             return { word, wordRandomTranslate };
         } else {
-            // location.href = '/#/sprint-statistic';
-            // location.reload();
-            return false;
+            this.stopGame();
+            this.showStatistic();
         }
     }
 
@@ -288,19 +330,22 @@ export class Sprint {
     stopGame() {
         if (this.interval) {
             clearInterval(this.interval);
+            state.isGame = false;
         }
     }
 
-    showStatistic() {
+    async showStatistic() {
+        state.isGame = false;
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
         document.body.insertAdjacentHTML('beforeend', templateStatisticGameSprint());
-        this.getArrayLinesWithWords();
+        this.setArrayLinesWithWords();
 
         const btnCancel = <HTMLElement>document.querySelector('.statistic-sprint__cancel .btn-cancel');
         btnCancel.addEventListener('click', () => {
             this.flushInit();
+            this.restart();
         });
 
         const table = <HTMLElement>document.querySelector('.statistic-sprint__table');
@@ -314,10 +359,9 @@ export class Sprint {
         });
     }
 
-    getArrayLinesWithWords() {
+    setArrayLinesWithWords() {
         const table = <HTMLElement>document.body.querySelector('.statistic-sprint__table');
         this.arrayTappedWords = this.arrayWords.slice(0, this.numberOfTimesPressed);
-        const isAuth = state.getItem('isAuth');
 
         this.arrayTappedWords.map((iword) => {
             const { audio, word, transcription, wordTranslate } = iword;
@@ -327,18 +371,24 @@ export class Sprint {
                 'beforeend',
                 templateTableLine(audio, word, transcription, wordTranslate, isRight)
             );
-            if (isAuth) {
-                this.setStatisticWord(iword, isRight);
-            }
         });
+        const isAuth = <boolean>state.getItem('isAuth');
+        if (isAuth) {
+            this.writeStatisticWords().then(() => console.log(`new word: ${this.newWordInGame}`));
+        }
     }
 
-    async setStatisticWord(word: IWord, isRight: boolean) {
-        const wordId = word.id;
-        const { userId, token } = state.getItem('auth');
-        // let { optional } = word;
+    async writeStatisticWords() {
+        const promises = this.arrayTappedWords.map(async (iword) => {
+            const { id, word } = iword;
+            const isRight = <boolean>this.resultOfGame.get(word);
+            await this.setStatisticWord(id, isRight);
+        });
+        return Promise.all(promises);
+    }
 
-        // const currentDate = new Date().toISOString().slice(0, 10);
+    async setStatisticWord(wordId: string, isRight: boolean) {
+        const { userId, token } = state.getItem('auth');
         const initOption = <IOptionalToWord>{
             sprintCorrect: 0,
             sprintTotal: 0,
@@ -349,10 +399,12 @@ export class Sprint {
 
         let userWord = await API.getUserWordById(userId, wordId, token);
         if (typeof userWord === 'string') {
+            this.newWordInGame += 1;
             userWord = <UserWord>(
                 await API.createUserWord(userId, wordId, token, { difficulty: 'normal', optional: initOption })
             );
         }
+
         if (isRight) {
             userWord.optional.sprintCorrect += 1;
             userWord.optional.correctInLineCount += 1;
@@ -362,7 +414,10 @@ export class Sprint {
             ) {
                 userWord.difficulty = 'easy';
             }
-        } else userWord.optional.correctInLineCount = 0;
+        } else {
+            userWord.optional.correctInLineCount = 0;
+            if (userWord.difficulty === 'easy') userWord.difficulty = 'normal';
+        }
 
         userWord.optional.sprintTotal += 1;
         const noteToWord = <NoteToWord>{

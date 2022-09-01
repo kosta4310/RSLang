@@ -37,6 +37,19 @@
             box-shadow: 0 0.5rem $color-shadow-dark;
             transform: translateY(0.4rem);
         }
+
+        .btn-yes__active {
+            background-color: darken($color: $color-lightgreen, $amount: 10);
+            box-shadow: 0 0.5rem $color-shadow-dark;
+            // box-shadow: none;
+            transform: translateY(0.4rem);
+        }
+        
+        .btn-no__active {
+            background-color: darken($color: $color-red, $amount: 10);
+            box-shadow: 0 0.5rem $color-shadow-dark;
+            transform: translateY(0.4rem);
+        }
     }
 }
 .btn-cancel {
@@ -96,16 +109,4 @@
     }
 }
 
-.btn-yes__active {
-    background-color: darken($color: $color-lightgreen, $amount: 10);
-    box-shadow: 0 0.5rem $color-shadow-dark;
-    // box-shadow: none;
-    transform: translateY(0.4rem);
-}
 
-.btn-no__active {
-    background-color: darken($color: $color-red, $amount: 10);
-    box-shadow: 0 0.5rem $color-shadow-dark;
-    // box-shadow: none;
-    transform: translateY(0.4rem);
-}

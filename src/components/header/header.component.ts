@@ -40,7 +40,7 @@ export class Header {
     openCloseMenu() {
         if ((<HTMLElement>this.menu).classList.contains('open')) {
             (<HTMLElement>this.burger).style.transform = 'rotate(0deg)';
-            (<HTMLElement>this.menu).style.left = '-320px';
+            (<HTMLElement>this.menu).style.left = '-36rem';
         } else {
             (<HTMLElement>this.burger).style.transform = 'rotate(90deg)';
             (<HTMLElement>this.menu).style.left = '0';

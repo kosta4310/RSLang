@@ -1,11 +1,6 @@
 @import '../../../styles/variables.scss';
 
-.wrapper-book {
-}
-.container {
-}
-.book {
-}
+
 .card-words {
     display: flex;
     flex-direction: column;
@@ -21,16 +16,16 @@
     //  justify-content: space-between;
     // .card__image
     &__image {
+        display: flex;
         width: 39rem;
-        height: 26rem;
         img {
-            height: 26rem;
             width: 39rem;
             object-fit: cover;
         }
     }
 
     box-shadow: 0px 5px 10px darkgrey;
+    min-width: $width-container;
 
     // .card__context
 
@@ -63,22 +58,6 @@
         margin-right: 1rem;
     }
 
-    // .card__transcription
-
-    &__transcription {
-        // padding-right: 1rem;
-    }
-
-    // .card__right
-
-    &__right {
-    }
-
-    // .card__translate
-
-    &__translate {
-    }
-
     // .card__meaning
 
     &__meaning {
@@ -97,10 +76,6 @@
         padding-bottom: 1rem;
     }
 
-    // .card__translate-example
-
-    &__translate-example {
-    }
 
     // .card__button
 
@@ -121,13 +96,16 @@
         .hard-word svg:hover {
             fill: #ff1d1d;
         }
+
+        .sound.selected svg,
+        .hard-word.selected svg {
+            fill: #ff1d1d;
+        }
+
+        .easy-word.selected svg {
+            fill: #20df7f;
+        }
     }
-}
-.auth {
-    display: block;
-}
-.none {
-    display: none;
 }
 
 #words[data-complexity='0'] .card {
@@ -152,4 +130,48 @@
 
 #words[data-complexity='5'] .card {
     box-shadow: 0px 5px 10px $learnbook-color-c2;
+}
+
+#words[data-complexity="6"] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-hard-words;
+}
+
+.card__statistics {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.card__statistics-title {
+    border-radius: 1.8rem;
+    align-self: flex-start;
+    background-color: $color-base;
+    padding: 0.5rem 2rem;
+    min-width: 18rem;
+    text-align: center;
+}
+
+.card__statistics-container  {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card__statistics-line {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.card__statistics-left {
+    @include font-ABeeZee(3rem, 400);
+}
+
+.auth {
+    display: block;
+}
+.none {
+    display: none;
 }

@@ -26,6 +26,14 @@ $learnbook-color-b1: #ff6d4d;
 $learnbook-color-b2: #d91f54;
 $learnbook-color-c1: #9c224d;
 $learnbook-color-c2: #6b2155;
+$learnbook-color-hard-words: #5863F8;
+
+$learnbook-color-a1-all-learned-background: rgba(94, 219, 144, 0.26);
+$learnbook-color-a2-all-learned-background: rgba(255, 199, 57, 0.26);
+$learnbook-color-b1-all-learned-background: rgba(255, 110, 77, 0.26);
+$learnbook-color-b2-all-learned-background: rgba(217, 31, 84, 0.26);
+$learnbook-color-c1-all-learned-background: rgba(156, 34, 77, 0.26);
+$learnbook-color-c2-all-learned-background: rgba(107, 33, 85, 0.26);
 
 @mixin font-ABeeZee($size, $weight) {
     font-family: ABeeZee;

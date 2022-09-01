@@ -31,9 +31,11 @@
     background-color: $color-card-capabilities;
     border-radius: 1rem;
     overflow: hidden;
+    
     // .item__image
 
     &__image {
+        min-height: 220px;
         height: 22rem;
         max-width: 30rem;
         img {
@@ -41,6 +43,7 @@
             max-height: 100%;
             max-width: 100%;
         }
+        margin: 2rem;
     }
 
     // .item__content
@@ -55,16 +58,13 @@
         margin-bottom: 2rem;
     }
 
-    &__title span:first-child {
-        @include font-Inter(2.5rem, 400);
-    }
-
     // .item__text
 
     &__text {
-        text-align: left;
+        text-align: center;
         margin: 0 auto;
         width: 26rem;
         @include font-Inter(2rem, 400);
+        margin-bottom: 2rem;
     }
 }

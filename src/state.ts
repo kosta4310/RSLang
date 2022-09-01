@@ -1,16 +1,6 @@
 import { IndexObject } from './components/types';
 
 export const state = {
-    // isAuth() {
-    //     const rsLangString = localStorage.getItem('rslang');
-    //     if (rsLangString) {
-    //         const rsLang = JSON.parse(rsLangString);
-    //         return rsLang.auth;
-    //     }
-    //     return false;
-    // },
-    // page: 0,
-    // complexity: 0,
     isFromBook: false,
     complexityMainGame: 0,
     isGame:false,
