@@ -3,7 +3,7 @@ import { IndexObject } from './components/types';
 export const state = {
     isFromBook: false,
     complexityMainGame: 0,
-
+    isGame: false,
     setItem(data: IndexObject) {
         const rsLangString = localStorage.getItem('rsLang');
 

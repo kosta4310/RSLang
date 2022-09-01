@@ -29,6 +29,9 @@ export class Sprint {
     arrayTappedWords: Array<IWord>;
     isFromBook: boolean;
     newWordInGame: number;
+    keyboardListenerState: number;
+    iterator: null | IterableIterator<[string, string]>;
+    // isGame: boolean;
 
     constructor() {
         this.startPage = new StartGamePage();
@@ -46,6 +49,10 @@ export class Sprint {
         this.arrayTappedWords = [];
         this.isFromBook = state.getItem('isFromBook');
         this.newWordInGame = 0;
+        this.keyboardListenerState = 1;
+        // this.isGame = false;
+        state.isGame = false;
+        this.iterator = null;
     }
 
     init() {
@@ -69,6 +76,7 @@ export class Sprint {
         this.numberOfTimesPressed = 0;
         this.arrayTappedWords = [];
         this.newWordInGame = 0;
+        state.isGame = false;
     }
 
     restart() {
@@ -104,12 +112,16 @@ export class Sprint {
             item = item - 1;
             if (item < 0) {
                 clearInterval(this.interval);
-                this.showStatistic();
+                if (state.isGame) {
+                    this.showStatistic();
+                    state.isGame = false;
+                }
             }
         }, 1000);
     }
 
     listen(iterator: IterableIterator<[string, string]>) {
+        this.iterator = iterator;
         const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
         btnCancel.addEventListener(
             'click',
@@ -125,23 +137,30 @@ export class Sprint {
 
         buttonsBlock.addEventListener('click', (e) => {
             this.handlerToButtons(e, iterator);
+            console.log(iterator);
         });
 
-        document.addEventListener('keydown', (e) => {
-            this.handlerKeysDown(e, iterator);
-        });
+        if (this.keyboardListenerState === 1) {
+            this.keyboardListenerState = 2;
 
-        document.addEventListener('keyup', (e) => {
-            this.handlerKeysUp(e);
-        });
+            document.addEventListener('keydown', (e) => {
+                if (this.iterator) {
+                    this.handlerKeysDown(e, this.iterator);
+                }
+            });
+
+            document.addEventListener('keyup', this.handlerKeysUp);
+        }
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
         await this.setSortArraysWords(complexity, page);
         const iterator = this.mapWordPairs.entries();
+        this.iterator = iterator;
         this.timer();
         this.tempWordsPair = <{ word: string; wordRandomTranslate: string }>this.iteration(iterator);
         this.listen(iterator);
+        state.isGame = true;
     }
 
     showWords(word: string, wordTranslate: string) {
@@ -207,22 +226,27 @@ export class Sprint {
     }
 
     handlerKeysDown(e: KeyboardEvent, iterator: IterableIterator<[string, string]>) {
-        if (e.key === 'ArrowLeft') {
-            this.addActiveToButtonYes();
-            this.checkRightTranslate(iterator, true);
-        } else if (e.key === 'ArrowRight') {
-            this.addActiveToButtonNo();
-            this.checkRightTranslate(iterator, false);
+        if (state.isGame) {
+            if (e.key === 'ArrowLeft') {
+                this.addActiveToButtonYes();
+                this.checkRightTranslate(iterator, true);
+            } else if (e.key === 'ArrowRight') {
+                this.addActiveToButtonNo();
+                this.checkRightTranslate(iterator, false);
+            }
         }
     }
 
-    handlerKeysUp(e: KeyboardEvent) {
-        if (e.key === 'ArrowLeft') {
-            this.deleteActiveToButtonYes();
-        } else if (e.key === 'ArrowRight') {
-            this.deleteActiveToButtonNo();
+    handlerKeysUp = (e: KeyboardEvent) => {
+        if (state.isGame) {
+            this.keyboardListenerState = 2;
+            if (e.key === 'ArrowLeft') {
+                this.deleteActiveToButtonYes();
+            } else if (e.key === 'ArrowRight') {
+                this.deleteActiveToButtonNo();
+            }
         }
-    }
+    };
 
     iteration(iterator: IterableIterator<[string, string]>) {
         const nextElement = iterator.next();
@@ -306,10 +330,12 @@ export class Sprint {
     stopGame() {
         if (this.interval) {
             clearInterval(this.interval);
+            state.isGame = false;
         }
     }
 
     async showStatistic() {
+        state.isGame = false;
         const wrapper = <HTMLElement>document.querySelector('.wrapper');
         wrapper.parentNode?.removeChild(wrapper);
 
