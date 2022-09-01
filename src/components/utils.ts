@@ -25,17 +25,17 @@ export const saveWord = async function(wordId: string, complexity: Difficulty = 
     optional: initOption
   }
   
-  // и потом присваиваем новые свойства если есть
-  Object.assign(body.optional, options);
-
   const userWord = await API.getUserWordById(userId, wordId, token);
   let result;
   if (typeof userWord === 'string') {
     console.log('POST');
+    // и потом присваиваем новые свойства если есть
+    Object.assign(body.optional, options);
     result = await API.createUserWord(userId, wordId, token, body);
   } else {
     console.log('PUT');
     Object.assign(body.optional, userWord.optional);
+    Object.assign(body.optional, options)
     result = await API.updateUserWord(userId, wordId, token, body);
   }
   console.log(result);
