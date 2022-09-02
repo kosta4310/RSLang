@@ -42,6 +42,7 @@ enum Constants {
     COMPLEXITY_HARDWORDS = 6,
     WORDS_PER_PAGE = 20,
     HUGE_NUMBER = 10000,
+    QUANTITY_WORD_IN_GAME_SPRINT = 20,
 }
 
 interface IStatisticDay {
