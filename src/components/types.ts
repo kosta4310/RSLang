@@ -11,20 +11,23 @@ type IndexObject = {
     [key: string]: string | boolean;
 };
 
-interface IStatistic {
-    // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
-    learnedWordCount: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
-    sprintCorrect: number; // кол-во правильно угаданных
-    sprintTotal: number;
-    sprintNewWords: number;
-    audioCallNewWords: number;
-    sprintCorrectInLineCount: number; // серия правильных ответов
-    sprintAudioCallCorrect: number;
-    audioCallTotal: number;
-}
+// interface IStatistic {
+//     // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
+//     learnedWords: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
+//     optional: IOptionalToStatistic;
+// }
 
 interface IOptionalToStatistic {
-    [date: string]: IStatistic;
+    [currentDay: string]: {
+        sprintCorrect: number; // кол-во правильно угаданных
+        sprintTotal: number;
+        sprintNewWords: number;
+        audioCallNewWords: number;
+        sprintCorrectInLineCount: number; // серия правильных ответов
+        audioCallCorrectInLineCount: number; // серия правильных ответов
+        audioCallCorrect: number;
+        audioCallTotal: number;
+    };
 }
 
 interface IOptionalToWord {
@@ -38,7 +41,17 @@ interface IOptionalToWord {
 enum Constants {
     COMPLEXITY_HARDWORDS = 6,
     WORDS_PER_PAGE = 20,
-    HUGE_NUMBER = 10000,
+    TOTAL_AVAILABLE_WORDS = 3600,
+    QUANTITY_WORD_IN_GAME_SPRINT = 20,
+    TIME_OF_SPRINT_GAME = 59,
+    MAX_NUMBER_WORDS_IN_GROUP = 600,
 }
 
-export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants };
+interface IStatisticDay {
+    newWordInGame: number;
+    longestSequenceCorrectAnswers: number;
+    sprintCorrect: number;
+    sprintTotal: number;
+}
+
+export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants, IOptionalToStatistic, IStatisticDay };

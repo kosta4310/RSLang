@@ -6,6 +6,7 @@ import { Book } from '../learn-book/learnbook.component';
 import { Sprint } from '../sprint/sprint.component';
 import { state } from './../../state';
 
+
 export class Router {
     router: Navigo;
     authorization: Authorization;
@@ -30,6 +31,7 @@ export class Router {
             })
             .on('/learnbook', () => {
                 state.isGame = false;
+                state.setItem({ complexity: '0', page: '0' });
                 this.book.init();
             })
             .on('/statistic', () => {

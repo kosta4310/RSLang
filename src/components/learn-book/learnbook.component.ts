@@ -17,11 +17,13 @@ export class Book {
     controlPanel: ControlPanel;
     pagination: Pagination;
 
-    get complexity() { return this._complexity ?? 0; }
+    get complexity() {
+        return this._complexity ?? 0;
+    }
 
     set complexity(value: number) {
-        const container = <HTMLElement>document.querySelector('.wrapper-book')
-        container?.setAttribute('data-complexity', value.toString())
+        const container = <HTMLElement>document.querySelector('.wrapper-book');
+        container?.setAttribute('data-complexity', value.toString());
         this._complexity = value;
     }
 
@@ -66,11 +68,10 @@ export class Book {
             wrapper?.classList.remove('all-learned');
         }
     }
-    
 
     async renderWords() {
         const { userId, token } = state.getItem('auth') ?? {};
-        
+
         let arrayWords: IWord[];
         if (userId) {
             if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
@@ -81,12 +82,12 @@ export class Book {
         } else {
             arrayWords = await this.getArrayWords(this.complexity, this.page);
         }
-        
+
         const words = <HTMLElement>document.body.querySelector('#words');
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
         const isAuth = <boolean>state.getItem('isAuth');
-        
+
         arrayWords.map((word) => {
             words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
         });
@@ -99,19 +100,20 @@ export class Book {
 
     async getArrayUserWords(complexity: number, page: number, userId: string, token: string) {
         const response = await API.getAllUserAggWords(userId, token, {
-            group: complexity.toString(),
-            page: page.toString(),
-            wordsPerPage: Constants.WORDS_PER_PAGE.toString()
-        })
-        return response[0].paginatedResults;
+            wordsPerPage: Constants.WORDS_PER_PAGE.toString(), 
+            filter: JSON.stringify({ $and: [{ group: complexity }, { page: page }] }),
+        });
+        const [{paginatedResults}] = response;
+        return paginatedResults;
     }
 
     async getArrayHardUserWords(userId: string, token: string) {
         const response = await API.getAllUserAggWords(userId, token, {
-            wordsPerPage: Constants.HUGE_NUMBER.toString(),
-            filter: JSON.stringify({"$and":[{"userWord.difficulty":"hard"}]})
-        })
-        return response[0].paginatedResults;
+            wordsPerPage: Constants.TOTAL_AVAILABLE_WORDS.toString(),
+            filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard' }] }),
+        });
+        const [{paginatedResults}] = response;
+        return paginatedResults;
     }
 
     listen() {
@@ -183,7 +185,7 @@ export class Book {
                     await saveWord(wordId, 'easy', {});
                     card.classList.add('learned-word');
                     this.checkForAllLearned();
-                    if(this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+                    if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                         card.remove();
                     } else {
                         easyWord.classList.add('selected');
