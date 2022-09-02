@@ -7,9 +7,36 @@
         @include font-Inter(2.3rem, 400);
     }
 
+    .stat__plot-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 5rem;
+    }
+
+    #plot1,
+    #plot2 {
+        width: 100%;
+    }
+
+    .plotly {
+        display: flex;
+        justify-content: center;
+    }
+
     .stat__game-container {
         display: flex;
         justify-content: space-around;
+    }
+
+    .stat__subplot-container {
+        min-width: 50%;
+        text-align: center;
+        margin-top: 2rem;
+        justify-content: space-around;
+
+        h2 {
+            min-height: 5rem;
+        }
     }
 
     .stat__game-card {

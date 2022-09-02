@@ -15,6 +15,7 @@
     "author": "Maxim, Artem, Kostyantyn",
     "devDependencies": {
         "@types/node": "^18.7.6",
+        "@types/plotly.js-dist-min": "^2.3.0",
         "@typescript-eslint/eslint-plugin": "^5.30.0",
         "@typescript-eslint/parser": "^5.30.0",
         "clean-webpack-plugin": "^3.0.0",
@@ -40,5 +41,8 @@
         "webpack-cli": "^4.5.0",
         "webpack-dev-server": "^3.11.2",
         "webpack-merge": "^5.7.3"
+    },
+    "dependencies": {
+        "plotly.js-dist-min": "^2.14.0"
     }
 }

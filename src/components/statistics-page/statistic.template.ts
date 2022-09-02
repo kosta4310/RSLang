@@ -53,16 +53,16 @@ export const STATISTIC_TEMPLATE = (rightCount: number, wrongCount: number) => {
                 </div>
             </div>
         </div>
-    </div>`;
-};
-
-export const STATISTIC_WORD = (audio: string, word: string, wordTranslate: string) => {
-    return `<div class="word-result">
-    <div class="sound-btn" data-audio=${audio}><svg class="sound-svg" height="30" width="30" fill="#000"><use xlink:href="../../../assets/svg/icons.svg#sound" height="30" width="30"></use></svg>
-    </div>
-    <div class="word">
-       <div class="word-statistic word-english">${word}</div>
-       <div class="word-statistic word-wordTranslate">${wordTranslate}</div>
-    </div>
+        <h2 class="statistic-title">Статистика за всё время</h2>
+        <div class="stat__plot-container">
+            <div class="stat__subplot-container">
+                <h2>Количество новых слов за каждый день</h2>
+                <div id="plot1"></div>
+            </div>
+            <div class="stat__subplot-container">
+                <h2>Количество изученных слов накопительным итогом за весь период обучения</h2>
+                <div id="plot2"></div>
+            </div>
+        </div>
     </div>`;
 };
