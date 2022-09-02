@@ -1,7 +1,7 @@
 import { BASE } from '../../config';
 import { state } from '../../state';
 import { getChunkOfWords } from '../api/api';
-import { IWord, NoteToWord, Statistic, UserWord } from '../api/types';
+import { AggregatedWord, IWord, NoteToWord, Statistic, UserWord } from '../api/types';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
@@ -212,24 +212,37 @@ export class Sprint {
     }
 
     async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
-        const tempArr = await getChunkOfWords(group, page);
-        const arr = [];
-        if (isFromBook && isAuth) {
-            for (let i = 0; i < tempArr.length; i++) {
-                const iword = tempArr[i];
-                const isEasy = await this.isWordNotEasy(iword);
-                if (isEasy) {
-                    arr.push(iword);
-                }
-            }
+        const { userId, token } = state.getItem('auth');
 
-            return arr;
-        } else return tempArr;
+        if (group === '6') {
+            const res = await API.getAllUserAggWords(userId, token, {
+                filter: JSON.stringify({ 'userWord.difficulty': 'hard' }),
+            });
+            const [{ paginatedResults }] = res;
+            return paginatedResults;
+        } else {
+            const tempArr = await getChunkOfWords(group, page);
+
+            if (isFromBook && isAuth) {
+                // const arr = [];
+
+                // for (let i = 0; i < tempArr.length; i++) {
+                //     const iword = tempArr[i];
+                //     const isEasy = await this.isWordNotEasy(iword);
+                //     if (isEasy) {
+                //         arr.push(iword);
+                //     }
+                // }
+
+                const arr = await this.getArray(group, page);
+                return arr;
+            } else return tempArr;
+        }
     }
 
     async isWordNotEasy({ id }: IWord) {
         const { userId, token } = state.getItem('auth');
-        const word = await API.getUserWordById(userId, id, token);
+        const word = await API.getUserWordById(userId, <string>id, token);
         if (typeof word === 'object' && word.difficulty === 'easy') {
             return false;
         }
@@ -404,8 +417,18 @@ export class Sprint {
     }
 
     async writeStatisticWords() {
+        const isHardWord = state.getItem('complexity') === '6';
         const promises = this.arrayTappedWords.map(async (iword) => {
-            const { id, word } = iword;
+            let id = '';
+            if (isHardWord) {
+                id = <string>iword._id;
+            } else id = <string>iword.id;
+            const word = iword.word;
+
+            console.log(iword);
+
+            console.log(`id: ${id}, word: ${word}`);
+
             const isRight = <boolean>this.resultOfGame.get(word);
             await this.setStatisticWord(id, isRight);
         });
@@ -523,5 +546,31 @@ export class Sprint {
         console.log(initStat);
 
         API.upsertStatistics(userId, token, initStat);
+    }
+
+    async getArray(group: string, page: string) {
+        const tempArr = await API.getChunkOfWords(group, page);
+        const { userId, token } = state.getItem('auth');
+        const [{ paginatedResults }] = await API.getAllUserAggWords(userId, token, {
+            filter: JSON.stringify({
+                group: group,
+                difficulty: 'easy',
+            }),
+        });
+        const easyKeyArray = paginatedResults.map((iword) => iword._id);
+
+        const filteredArray = tempArr.filter((iword) => !easyKeyArray.includes(iword.id));
+
+        async function rec(group: string, page: string, array: Array<IWord>): Promise<Array<IWord>> {
+            if (array.length >= Constants.QUANTITY_WORD_IN_GAME_SPRINT) return array;
+            if (Number(page) < 0) return array;
+
+            const tempArr = await API.getChunkOfWords(group, page);
+            const filteredArray = tempArr.filter((iword) => !easyKeyArray.includes(iword.id));
+
+            return await rec(group, (Number(page) - 1).toString(), [...array, ...filteredArray]);
+        }
+
+        return await rec(group, page, filteredArray);
     }
 }
