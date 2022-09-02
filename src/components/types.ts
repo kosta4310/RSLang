@@ -11,23 +11,26 @@ type IndexObject = {
     [key: string]: string | boolean;
 };
 
-// interface IStatistic {
-//     // ключ - строка-дата вида '2022-08-29' (new Date().toISOString().slice(0, 10))
-//     learnedWords: number; // кол-во выученных слов в этот день, увеличиваем этот счетчик когда какому-то слову меняем значение difficulty на 'easy'
-//     optional: IOptionalToStatistic;
-// }
-
 interface IOptionalToStatistic {
-    [currentDay: string]: {
-        sprintCorrect: number; // кол-во правильно угаданных
-        sprintTotal: number;
-        sprintNewWords: number;
-        audioCallNewWords: number;
-        sprintCorrectInLineCount: number; // серия правильных ответов
-        audioCallCorrectInLineCount: number; // серия правильных ответов
-        audioCallCorrect: number;
-        audioCallTotal: number;
-    };
+    [currentDay: string]: IStatisticGamePerDay;
+}
+
+interface IStatisticGamePerDay {
+    learnedWords: number;
+    sprintCorrect: number; // кол-во правильно угаданных
+    sprintTotal: number;
+    sprintNewWords: number;
+    audioCallNewWords: number;
+    sprintCorrectInLineCount: number; // серия правильных ответов
+    audioCallCorrectInLineCount: number; // серия правильных ответов
+    audioCallCorrect: number;
+    audioCallTotal: number;
+}
+
+interface IStatisticDataAll {
+    learnedWords: number;
+    quantityNewWord: number;
+    rateRightAnswers: number;
 }
 
 interface IOptionalToWord {
@@ -52,4 +55,14 @@ interface IStatisticDay {
     sprintTotal: number;
 }
 
-export { StateParam, ParamPage, IndexObject, IOptionalToWord, Constants, IOptionalToStatistic, IStatisticDay };
+export {
+    StateParam,
+    ParamPage,
+    IndexObject,
+    IOptionalToWord,
+    Constants,
+    IOptionalToStatistic,
+    IStatisticDay,
+    IStatisticGamePerDay,
+    IStatisticDataAll,
+};

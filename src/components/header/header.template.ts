@@ -1,3 +1,5 @@
+import { state } from '../../state';
+
 export const templateHeader = `
 <div class="wrapper-header">
     <div class="container">
@@ -32,8 +34,8 @@ export const templateHeader = `
                                 <span>Спринт</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="/statistic" data-navigo>
+                        <${state.getItem('isAuth') ? 'li' : 'li style="display:none;"'}>
+                            <a href="/statistic" data-navigo >
                                 <img class="learnbook__icon" src="./assets/svg/stat.svg" alt="" class="src">
                                 <span>Статистика</span>
                             </a>
