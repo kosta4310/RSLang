@@ -201,7 +201,8 @@ export class Sprint {
             wordTranslateArray.push(wordTranslate);
         });
 
-        wordTranslateArray = shuffle(wordTranslateArray);
+        // wordTranslateArray = shuffle(wordTranslateArray);
+        wordTranslateArray = this.getSortArray(wordTranslateArray);
 
         for (let i = 0; i < this.arrayWords.length; i++) {
             this.mapWordPairs.set(wordArray[i], wordTranslateArray[i]);
@@ -559,5 +560,39 @@ export class Sprint {
         }
 
         return await rec(group, page, filteredArray);
+    }
+
+    getSortArray(arr: Array<string>) {
+        // 20,18,16 - quantity of words per page, experimental numbers
+        if (arr.length === 20 || arr.length === 18 || arr.length === 16) {
+            if (Math.random() > 0.5) {
+                const permanenetArray = [];
+                let changeableArray = [];
+                const isReverse = Math.random() > 0.5;
+                for (let i = 0; i < arr.length; i++) {
+                    const el = arr[i];
+                    if (isReverse) {
+                        i % 2 === 0 ? permanenetArray.push(el) : changeableArray.push(el);
+                    } else {
+                        i % 2 !== 0 ? permanenetArray.push(el) : changeableArray.push(el);
+                    }
+                }
+                changeableArray = shuffle(changeableArray);
+                const res = [];
+                for (let i = 0; i < permanenetArray.length; i++) {
+                    const elem1 = permanenetArray[i];
+                    const elem2 = changeableArray[i];
+                    if (isReverse) {
+                        res.push(elem1);
+                        res.push(elem2);
+                    } else {
+                        res.push(elem2);
+                        res.push(elem1);
+                    }
+                }
+
+                return res;
+            } else return shuffle(arr);
+        } else return shuffle(arr);
     }
 }
