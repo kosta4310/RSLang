@@ -111,8 +111,6 @@ export class Book {
             wordsPerPage: Constants.HUGE_NUMBER.toString(),
             filter: JSON.stringify({"$and":[{"userWord.difficulty":"hard"}]})
         })
-        console.log(`getArrayHardUserWords:`);
-        console.log(response)
         return response[0].paginatedResults;
     }
 
@@ -182,7 +180,6 @@ export class Book {
                 if (!easyWord.classList.contains('selected')) {
                     const card = <HTMLElement>target.closest('.card');
                     const wordId = <string>card.getAttribute('data-id');
-                    console.log(`wordId: ${wordId}`)
                     await saveWord(wordId, 'easy', {});
                     card.classList.add('learned-word');
                     this.checkForAllLearned();

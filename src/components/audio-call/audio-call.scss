@@ -1,5 +1,12 @@
 @import '../../styles/variables.scss';
 
+.loader-container_forGame {
+    height: calc(100vh - 10rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .game-container__audio-call {
     padding: 5rem;
     display: flex;
@@ -15,6 +22,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    .right-image {
+        border-radius: 1rem;
+    }
     .audio-call__choiceBtns {
         display: flex;
         align-items: center;
@@ -28,15 +38,15 @@
         gap: 0.7rem;
         width: 30rem;
         height: 20rem;
-        
-        .sound-btn{
+
+        .sound-btn {
             cursor: pointer;
         }
     }
-    .right-sound{
+    .right-sound {
         height: 10rem;
     }
-    .right-word{
+    .right-word {
         @include font-Inter(2rem, 700);
     }
     .btn-choice,
@@ -47,13 +57,13 @@
         border-radius: 1rem;
         @include font-Inter(1.4rem, 400);
     }
-    .right-button{
-        background-color:$color-lightgreen
+    .right-button {
+        background-color: $color-lightgreen;
     }
-    .btn-choice:disabled{
-        color:$color-black
+    .btn-choice:disabled {
+        color: $color-black;
     }
-    .wrong-answer{
+    .wrong-answer {
         background-color: $color-red;
     }
     .next {

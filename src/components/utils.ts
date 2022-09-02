@@ -9,7 +9,6 @@ export const getTodayString = function() {
 
 export const saveWord = async function(wordId: string, complexity: Difficulty = "hard", options: Partial<IOptionalToWord> = {}) {
   const { token, userId } = <Auth>state.getItem('auth');
-  console.log(userId, wordId, token);
 
   const initOption = <IOptionalToWord>{
     sprintCorrect: 0,
@@ -31,10 +30,8 @@ export const saveWord = async function(wordId: string, complexity: Difficulty = 
   const userWord = await API.getUserWordById(userId, wordId, token);
   let result;
   if (typeof userWord === 'string') {
-    console.log('POST');
     result = await API.createUserWord(userId, wordId, token, body);
   } else {
-    console.log('PUT');
     result = await API.updateUserWord(userId, wordId, token, body);
   }
   console.log(result);

@@ -11,9 +11,10 @@ import {
     RIGHT_ANSWER_IMAGE,
     RIGHT_ANSWER_WORD,
     SOUND_SVG,
+    LOADER_TEMPLATE,
 } from './audio-call.template';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
-import { getChunkOfWords } from '../api/api';
+import { getAllUserAggWords, getChunkOfWords } from '../api/api';
 import { IWord } from '../api/types';
 import { STATISTIC_TEMPLATE } from '../statistic/statistic.template';
 
@@ -63,19 +64,66 @@ export class AudioCall {
                 this.complexity = state.getItem('complexity');
                 this.page = state.getItem('page');
             }
-            this.learnBookGame = false;
-            state.isGame = true;
+            this.renderLoading();
             this.game();
+            state.isGame = true;
         });
     }
 
     async game() {
-        const arrayWords = await this.getArrayWords(this.complexity, this.page);
+        const arrayWords = await this.getArrayForGame(
+            this.complexity.toString(),
+            this.page.toString(),
+            this.learnBookGame,
+            state.getItem('isAuth')
+        );
         this.renderWord(arrayWords, this.indexWord);
         this.mouseGame(arrayWords);
         this.keyboardGame(arrayWords);
     }
-    
+
+    renderLoading() {
+        const words = <HTMLElement>document.body.querySelector('.start-game_container');
+        words.innerHTML = LOADER_TEMPLATE
+    }
+
+    async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
+        const tempArr = await getChunkOfWords(group, page);
+        if (isFromBook && isAuth) {
+            return await this.getArray(group, page);
+        } else return tempArr;
+    }
+
+    async getArray(group: string, page: string) {
+        const tempArr = await getChunkOfWords(group, page);
+        const { userId, token } = state.getItem('auth');
+        const [{ paginatedResults }] = await getAllUserAggWords(userId, token, {
+            group: group,
+            page: '0',
+            wordsPerPage: '600',
+            filter: JSON.stringify({
+                'userWord.difficulty': 'easy',
+            }),
+        });
+        const easyKeyArray = <Array<string>>paginatedResults.map((iWord) => iWord._id);
+        const filteredArray = tempArr.filter((iWord) => {
+            return !easyKeyArray.includes(<string>iWord.id);
+        });
+
+        async function rec(group: string, page: string, array: Array<IWord>): Promise<Array<IWord>> {
+            if (array.length >= 20) return array;
+            if (Number(page) <= 0) return array;
+
+            const tempArr = await getChunkOfWords(group, (Number(page) - 1).toString());
+            const filteredArray = tempArr.filter((iWord) => !easyKeyArray.includes(<string>iWord.id));
+            const newArray = [...array, ...filteredArray].slice(0, 20);
+
+            return newArray.length < 20 ? await rec(group, (Number(page) - 1).toString(), newArray) : newArray;
+        }
+
+        return await rec(group, page, filteredArray);
+    }
+
     mouseGame(arrayWords: IWord[]) {
         document.querySelector('.wrapper')?.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;
@@ -193,10 +241,6 @@ export class AudioCall {
         const pathAudio = `${BASE}/${(<HTMLElement>document.querySelector('.sound-btn')).getAttribute('data-audio')}`;
         this.playSound(pathAudio);
         this.playWordOnClick(<HTMLElement>document.querySelector('.sound-btn'), pathAudio);
-    }
-
-    async getArrayWords(complexity: number, page: number) {
-        return getChunkOfWords(complexity.toString(), page.toString());
     }
 
     wordForButtons(arr: IWord[], index: number) {

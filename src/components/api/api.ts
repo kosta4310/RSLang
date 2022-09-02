@@ -165,7 +165,6 @@ async function deleteUserWord(userId: string, wordId: string, token: string): Pr
 async function getAllUserAggWords(userId: string, token: string, param: InputAllUserAggWords): Promise<AggregatedWordResponse> {
     const urlSearchParams = new URLSearchParams(param);
 
-    console.log(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`);
     const response = await fetch(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`, {
         method: 'GET',
         credentials: 'same-origin',

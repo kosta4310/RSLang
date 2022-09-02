@@ -137,7 +137,6 @@ export class Sprint {
 
         buttonsBlock.addEventListener('click', (e) => {
             this.handlerToButtons(e, iterator);
-            console.log(iterator);
         });
 
         if (this.keyboardListenerState === 1) {

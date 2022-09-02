@@ -2,7 +2,7 @@ import { state } from '../../../state';
 import './controlPanel.style.scss';
 
 const MY_WORDS_TEMPLATE = `
-        <div class="learnbook__button pr10 hard-words">
+        <div class="learnbook__button hard-words">
             <div class="learnbook__icon-container mr10">
                 <img class="learnbook__icon" src="./assets/svg/fire.svg" alt="fire" class="src">
             </div>
