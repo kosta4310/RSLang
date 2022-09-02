@@ -30,6 +30,7 @@ export class Router {
             })
             .on('/learnbook', () => {
                 state.isGame = false;
+                state.setItem({ complexity: '0', page: '0' });
                 this.book.init();
             })
             .on('/statistic', () => {
