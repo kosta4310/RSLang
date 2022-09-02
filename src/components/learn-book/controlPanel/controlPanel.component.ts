@@ -22,7 +22,6 @@ export class ControlPanel {
 
     enableGamesButtons(isEnabled = true) {
         const links = document.querySelectorAll('.games_buttons a');
-        console.log(links);
         if (isEnabled) {
             links.forEach((link) => {
                 link.classList.remove('disabled');

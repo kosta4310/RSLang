@@ -182,7 +182,6 @@ export class Book {
                 if (!easyWord.classList.contains('selected')) {
                     const card = <HTMLElement>target.closest('.card');
                     const wordId = <string>card.getAttribute('data-id');
-                    console.log(`wordId: ${wordId}`);
                     await saveWord(wordId, 'easy', {});
                     card.classList.add('learned-word');
                     this.checkForAllLearned();
