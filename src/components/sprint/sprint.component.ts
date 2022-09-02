@@ -425,10 +425,6 @@ export class Sprint {
             } else id = <string>iword.id;
             const word = iword.word;
 
-            console.log(iword);
-
-            console.log(`id: ${id}, word: ${word}`);
-
             const isRight = <boolean>this.resultOfGame.get(word);
             await this.setStatisticWord(id, isRight);
         });
@@ -552,21 +548,26 @@ export class Sprint {
         const tempArr = await API.getChunkOfWords(group, page);
         const { userId, token } = state.getItem('auth');
         const [{ paginatedResults }] = await API.getAllUserAggWords(userId, token, {
+            group: group,
+            page: '0',
+            wordsPerPage: '50',
             filter: JSON.stringify({
-                group: group,
-                difficulty: 'easy',
+                'userWord.difficulty': 'easy',
             }),
         });
-        const easyKeyArray = paginatedResults.map((iword) => iword._id);
 
-        const filteredArray = tempArr.filter((iword) => !easyKeyArray.includes(iword.id));
+        const easyKeyArray = <Array<string>>paginatedResults.map((iword) => iword._id);
+
+        const filteredArray = tempArr.filter((iword) => {
+            return !easyKeyArray.includes(<string>iword.id);
+        });
 
         async function rec(group: string, page: string, array: Array<IWord>): Promise<Array<IWord>> {
             if (array.length >= Constants.QUANTITY_WORD_IN_GAME_SPRINT) return array;
             if (Number(page) < 0) return array;
 
             const tempArr = await API.getChunkOfWords(group, page);
-            const filteredArray = tempArr.filter((iword) => !easyKeyArray.includes(iword.id));
+            const filteredArray = tempArr.filter((iword) => !easyKeyArray.includes(<string>iword.id));
 
             return await rec(group, (Number(page) - 1).toString(), [...array, ...filteredArray]);
         }
