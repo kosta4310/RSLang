@@ -1,18 +1,41 @@
 import './statistic.scss';
 
 export const STATISTIC_TEMPLATE = (rightCount: number, wrongCount: number) => {
-    return `<div class="statistic-container">
-    <div class="statistic-title">Результаты</div>
-    <div class="words-container">
-        <div class="right-container">
-            <div class="answer-title">Я знаю<span class="right-count">${rightCount}</span></div>
-            <div class="right-word"></div>
+    return `
+    <div class="stat__container">
+        <h2 class="statistic-title">Статистика по играм</h2>
+        <div class="stat__game-container">
+            <div class="stat__game-card">
+                <h2>Аудиовызов</h2>
+                <div class="stat__game-line-container">
+                    <div class="answer-title">количество новых слов за день</div>
+                    <div class="right-word">${20}</div>
+                </div>
+                <div class="stat__game-line-container">
+                    <div class="answer-title">процент правильных ответов</div>
+                    <div class="right-word">${50}</div>
+                </div>
+                <div class="stat__game-line-container">
+                    <div class="answer-title">самая длинная серия правильных ответов</div>
+                    <div class="right-word">${40}</div>
+                </div>
+            </div>
+            <div class="stat__game-card">
+                <h2>Спринт</h2>
+                <div class="stat__game-line-container">
+                    <div class="answer-title">количество новых слов за день</div>
+                    <div class="right-word">${20}</div>
+                </div>
+                <div class="stat__game-line-container">
+                    <div class="answer-title">процент правильных ответов</div>
+                    <div class="right-word">${50}</div>
+                </div>
+                <div class="stat__game-line-container">
+                    <div class="answer-title">самая длинная серия правильных ответов</div>
+                    <div class="right-word">${40}</div>
+                </div>
+            </div>
         </div>
-        <div class="wrong-container">
-            <div class="answer-title">Я не знаю<span class="wrong-count">${wrongCount}</span></div>
-            <div class="wrong-word"></div>
-        </div>
-    </div>
     </div>`;
 };
 
