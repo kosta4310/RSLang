@@ -18,9 +18,9 @@ async function getNewUserToken(userId: string, refreshToken: string): Promise<Au
     });
 
     if (response.status === StatusCodes.FORBIDDEN || response.status === StatusCodes.UNAUTHORIZED) {
-        state.setItem({ isAuth: false });
-        state.delItem('auth');
         // перейти на главную страницу
+        // state.setItem({ isAuth: false });
+        // state.delItem('auth');
         // window.location.href = '/';
     }
 
