@@ -107,7 +107,7 @@ export class Book {
 
     async getArrayHardUserWords(userId: string, token: string) {
         const response = await API.getAllUserAggWords(userId, token, {
-            wordsPerPage: Constants.HUGE_NUMBER.toString(),
+            wordsPerPage: Constants.TOTAL_AVAILABLE_WORDS.toString(),
             filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard' }] }),
         });
         console.log(`getArrayHardUserWords:`);
