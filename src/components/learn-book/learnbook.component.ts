@@ -103,7 +103,8 @@ export class Book {
             wordsPerPage: Constants.WORDS_PER_PAGE.toString(), 
             filter: JSON.stringify({ $and: [{ group: complexity }, { page: page }] }),
         });
-        return response[0].paginatedResults;
+        const [{paginatedResults}] = response;
+        return paginatedResults;
     }
 
     async getArrayHardUserWords(userId: string, token: string) {
@@ -111,9 +112,8 @@ export class Book {
             wordsPerPage: Constants.TOTAL_AVAILABLE_WORDS.toString(),
             filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard' }] }),
         });
-        console.log(`getArrayHardUserWords:`);
-        console.log(response);
-        return response[0].paginatedResults;
+        const [{paginatedResults}] = response;
+        return paginatedResults;
     }
 
     listen() {
