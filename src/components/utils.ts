@@ -7,6 +7,7 @@ export const getTodayString = function () {
     return new Date().toISOString().slice(0, 10);
 };
 
+
 export const saveWord = async function (
     wordId: string,
     complexity: Difficulty = 'hard',
@@ -28,6 +29,7 @@ export const saveWord = async function (
         difficulty: complexity,
         optional: initOption,
     };
+
 
     const userWord = await API.getUserWordById(userId, wordId, token);
     let result;

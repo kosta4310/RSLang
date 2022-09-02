@@ -46,6 +46,8 @@ enum Constants {
     WORDS_PER_PAGE = 20,
     TOTAL_AVAILABLE_WORDS = 3600,
     QUANTITY_WORD_IN_GAME_SPRINT = 20,
+    TIME_OF_SPRINT_GAME = 59,
+    MAX_NUMBER_WORDS_IN_GROUP = 600,
 }
 
 interface IStatisticDay {
