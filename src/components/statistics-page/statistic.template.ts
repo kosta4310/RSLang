@@ -3,12 +3,12 @@ import './statistic.scss';
 export const STATISTIC_TEMPLATE = (rightCount: number, wrongCount: number) => {
     return `
     <div class="stat__container">
-        <h2 class="statistic-title">Статистика по играм</h2>
+        <h2 class="statistic-title">Статистика по играм за день</h2>
         <div class="stat__game-container">
             <div class="stat__game-card">
                 <h2>Аудиовызов</h2>
                 <div class="stat__game-line-container">
-                    <div class="answer-title">количество новых слов за день</div>
+                    <div class="answer-title">количество новых слов</div>
                     <div class="right-word">${20}</div>
                 </div>
                 <div class="stat__game-line-container">
@@ -32,6 +32,23 @@ export const STATISTIC_TEMPLATE = (rightCount: number, wrongCount: number) => {
                 </div>
                 <div class="stat__game-line-container">
                     <div class="answer-title">самая длинная серия правильных ответов</div>
+                    <div class="right-word">${40}</div>
+                </div>
+            </div>
+        </div>
+        <h2 class="statistic-title">Статистика по словам за день</h2>
+        <div class="stat__word-container">
+            <div class="stat__word-card">
+                <div class="stat__word-line-container">
+                    <div class="answer-title">количество новых слов</div>
+                    <div class="right-word">${20}</div>
+                </div>
+                <div class="stat__word-line-container">
+                    <div class="answer-title">процент правильных ответов</div>
+                    <div class="right-word">${50}</div>
+                </div>
+                <div class="stat__word-line-container">
+                    <div class="answer-title">количество изученных слов</div>
                     <div class="right-word">${40}</div>
                 </div>
             </div>

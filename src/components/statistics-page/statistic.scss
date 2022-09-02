@@ -27,6 +27,25 @@
         }
     }
 
+    .stat__word-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4rem;
+    }
+
+    .stat__word-card {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        width: 60rem; 
+        .answer-title,
+        .right-word {
+            @include font-Inter(2.8rem, 400);
+        }       
+    }
+
+    .stat__word-line-container,
     .stat__game-line-container {
         display: flex;
         justify-content: space-between;
