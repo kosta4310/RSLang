@@ -108,15 +108,31 @@ export class Statistic {
                 type: 'scatter',
             };
         } else {
+            delete dataAll['2021-09-01'];
+
+            const orderedData = <IOptionalToStatistic>Object.keys(dataAll)
+                .sort()
+                .reduce((acc: IOptionalToStatistic, key) => {
+                    acc[key] = dataAll[key];
+                    return acc;
+                }, {});
+            let keys = Object.keys(orderedData);
+            const obj = Object.values(orderedData);
+            const value1 = obj.map((val) => val.sprintNewWords + val.audioCallNewWords);
+            const value2 = obj.map((val) => val.learnedWords);
+
+            keys = keys.splice(-10);
+            console.log(`value1: ${value1}, value2: ${value2}`);
+
             trace1 = {
-                x: [0, 0, 0, 0],
-                y: [0, 0, 0, 0],
+                x: keys,
+                y: value1,
                 type: 'scatter',
             };
 
             trace2 = {
-                x: [1, 2, 3, 4],
-                y: [16, 5, 11, 9],
+                x: keys,
+                y: value2,
                 type: 'scatter',
             };
         }

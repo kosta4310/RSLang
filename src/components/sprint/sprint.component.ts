@@ -5,7 +5,7 @@ import { IWord, NoteToWord, Statistic, UserWord } from '../api/types';
 import { Header } from '../header/header.component';
 import { templateHeader } from '../header/header.template';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
-import { Constants, IOptionalToWord, IStatisticDay, ParamPage } from '../types';
+import { Constants, IOptionalToWord, IStatisticDay, IStatisticGamePerDay, ParamPage } from '../types';
 import { shuffle } from '../utils';
 import { SPRINT_DESCRIPTION, SPRINT_TEMPLATE, SPRINT_TITLE } from './sprint.template';
 import { templateStatisticGameSprint, templateTableLine } from './statisticSprintGame.template';
@@ -483,7 +483,8 @@ export class Sprint {
     async setStatisticDay() {
         const { userId, token } = state.getItem('auth');
         const currentDay = new Date().toISOString().slice(0, 10);
-        let currenDayObject = {
+        // const currentDay = '2022-08-31';
+        let currenDayObject = <IStatisticGamePerDay>{
             learnedWords: 0,
             sprintCorrect: 0,
             sprintTotal: 0,
@@ -568,7 +569,7 @@ export class Sprint {
     getSortArray(arr: Array<string>) {
         // 20,18,16 - quantity of words per page, experimental numbers
         if (arr.length === 20 || arr.length === 18 || arr.length === 16) {
-            if (Math.random() > 0.5) {
+            if (Math.random() < 0.6) {
                 const permanenetArray = [];
                 let changeableArray = [];
                 const isReverse = Math.random() > 0.5;
