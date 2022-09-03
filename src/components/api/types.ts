@@ -32,6 +32,11 @@ type CreatedUser = {
     email: string;
 };
 
+type RefreshTokenResponse = {
+    token: string;
+    refreshToken: string;
+};
+
 type Auth = {
     message: string;
     token: string;
@@ -87,4 +92,5 @@ export {
     AggregatedWordResponse,
     Difficulty,
     AggregatedWord,
+    RefreshTokenResponse
 };

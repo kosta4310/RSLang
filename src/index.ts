@@ -4,7 +4,13 @@ import './state';
 import { state } from './state';
 // import * as API from './components/api/api';
 
-// state.setItem({ page: '0', complexity: '0' });
+function initState() {
+  const page = state.getItem('page') ?? '0';
+  const complexity = state.getItem('complexity') ?? '0';
+  state.setItem({ page: page, complexity: complexity });
+}
+
+initState();
 
 // const { userId, token, refreshToken } = state.getItem('auth');
 // API.getNewUserToken(userId, refreshToken);
