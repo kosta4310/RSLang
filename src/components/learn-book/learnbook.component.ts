@@ -59,7 +59,7 @@ export class Book {
     checkForAllLearned() {
         const learnedWords = document.querySelectorAll('.learned-word');
         const wrapper = document.querySelector('.wrapper-book');
-        if (learnedWords.length >= Constants.WORDS_PER_PAGE) {
+        if (this.complexity !== Constants.COMPLEXITY_HARDWORDS && learnedWords.length >= Constants.WORDS_PER_PAGE) {
             this.controlPanel.enableGamesButtons(false);
             this.controlPanel.enableAllLearnedText(true);
             wrapper?.classList.add('all-learned');

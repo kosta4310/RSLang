@@ -15,8 +15,13 @@ export class ControlPanel {
         const controlPanel = <HTMLElement>document.querySelector('#control-panel');
         controlPanel.insertAdjacentHTML('beforeend', CONTROL_PANEL_TEMPLATE);
         const complexity = this.parent.complexity;
-        const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
-        elem.classList.add('learnbook__button_selected');
+        if (complexity !== Constants.COMPLEXITY_HARDWORDS) {
+            const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
+            elem.classList.add('learnbook__button_selected');
+        } else {
+            const complexWordsBtn = <HTMLElement>document.querySelector('.hard-words');
+            complexWordsBtn.classList.add('hard-words_selected');
+        }
         this.listen();
     }
 
