@@ -193,6 +193,7 @@ export class Sprint {
         let wordTranslateArray = <Array<string>>[];
 
         this.arrayWords = await this.getArrayForGame(group, page, this.isFromBook, state.getItem('isAuth'));
+        console.log(this.arrayWords);
 
         this.arrayWords.map((words) => {
             const { word, wordTranslate } = words;
@@ -552,6 +553,7 @@ export class Sprint {
         const filteredArray = tempArr.filter((iword) => {
             return !easyKeyArray.includes(<string>iword.id);
         });
+        console.log(filteredArray);
 
         async function rec(group: string, page: string, array: Array<IWord>): Promise<Array<IWord>> {
             if (array.length >= Constants.QUANTITY_WORD_IN_GAME_SPRINT) return array;

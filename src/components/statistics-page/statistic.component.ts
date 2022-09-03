@@ -97,14 +97,10 @@ export class Statistic {
 
         if (dataAll === Constants.STATUS_CODE_NULL_DATA) {
             trace1 = {
-                x: [0],
-                y: [0],
                 type: 'scatter',
             };
 
             trace2 = {
-                x: [0],
-                y: [0],
                 type: 'scatter',
             };
         } else {

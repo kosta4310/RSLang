@@ -123,12 +123,12 @@ async function deleteUser(userId: string, token: string): Promise<Response | boo
 }
 
 async function getChunkOfWords(group: string, page: string): Promise<Array<IWord>> {
-    const response = await retry(`${WORDS}?group=${group}&page=${page}`);
+    const response = await fetch(`${WORDS}?group=${group}&page=${page}`);
     return response.json();
 }
 
 async function getWordById(wordId: string): Promise<IWord> {
-    const response = await retry(`${WORDS}/${wordId}`);
+    const response = await fetch(`${WORDS}/${wordId}`);
     return response.json();
 }
 
