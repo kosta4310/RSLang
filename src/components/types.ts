@@ -51,6 +51,8 @@ enum Constants {
     TIME_OF_SPRINT_GAME = 59,
     MAX_NUMBER_WORDS_IN_GROUP = 600,
     STATUS_CODE_NULL_DATA = 1,
+    KLS_ONE = 1 /**Показывает что слушатель для клавиатуры еще не добавлен */,
+    KLS_TWO = 2 /**Показывает что слушатель для клавиатуры уже добавлен */,
 }
 
 interface IStatisticDay {

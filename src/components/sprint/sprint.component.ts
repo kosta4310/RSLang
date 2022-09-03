@@ -49,7 +49,7 @@ export class Sprint {
         this.arrayTappedWords = [];
         this.isFromBook = state.getItem('isFromBook');
         this.newWordInGame = 0;
-        this.keyboardListenerState = 1;
+        this.keyboardListenerState = Constants.KLS_ONE;
         state.isGame = false;
         this.iterator = null;
         this.statisticDay = {
@@ -154,8 +154,8 @@ export class Sprint {
             this.handlerToButtons(e, iterator);
         });
 
-        if (this.keyboardListenerState === 1) {
-            this.keyboardListenerState = 2;
+        if (this.keyboardListenerState === Constants.KLS_ONE) {
+            this.keyboardListenerState = Constants.KLS_TWO;
 
             document.addEventListener('keydown', (e) => {
                 if (this.iterator) {
@@ -168,7 +168,6 @@ export class Sprint {
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
-
         await this.setSortArraysWords(complexity, page);
         const iterator = this.mapWordPairs.entries();
         this.iterator = iterator;
@@ -247,7 +246,7 @@ export class Sprint {
 
     handlerKeysUp = (e: KeyboardEvent) => {
         if (state.isGame) {
-            this.keyboardListenerState = 2;
+            this.keyboardListenerState = Constants.KLS_TWO;
             if (e.key === 'ArrowLeft') {
                 this.deleteActiveToButtonYes();
             } else if (e.key === 'ArrowRight') {
@@ -467,7 +466,6 @@ export class Sprint {
     async setStatisticDay() {
         const { userId, token } = state.getItem('auth');
         const currentDay = new Date().toISOString().slice(0, 10);
-        // const currentDay = '2022-08-31';
         let currenDayObject = <IStatisticGamePerDay>{
             learnedWords: 0,
             sprintCorrect: 0,

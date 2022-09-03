@@ -30,7 +30,6 @@ export class Statistic {
         document.body.insertAdjacentHTML('beforeend', STATISTIC_TEMPLATE(statisticGamePerDay, statisticDataAll));
 
         this.getStatisticAllDays().then((res) => {
-            console.log(res);
             this.showGraphics(res);
         });
     }
@@ -38,8 +37,6 @@ export class Statistic {
     async getStatisticGamePerDay() {
         const { userId, token } = state.getItem('auth');
         const response = await API.getStatistics(userId, token);
-        console.log(response);
-
         const currentDay = new Date().toISOString().slice(0, 10);
 
         const initDataStatistic = <IStatisticGamePerDay>{
@@ -104,8 +101,6 @@ export class Statistic {
                 type: 'scatter',
             };
         } else {
-            delete dataAll['2021-09-01'];
-
             const orderedData = <IOptionalToStatistic>Object.keys(dataAll)
                 .sort()
                 .reduce((acc: IOptionalToStatistic, key) => {
@@ -118,7 +113,6 @@ export class Statistic {
             const value2 = obj.map((val) => val.learnedWords);
 
             keys = keys.splice(-10);
-            console.log(`value1: ${value1}, value2: ${value2}`);
 
             trace1 = {
                 x: keys,
