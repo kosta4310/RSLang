@@ -50,7 +50,6 @@ export class Sprint {
         this.isFromBook = state.getItem('isFromBook');
         this.newWordInGame = 0;
         this.keyboardListenerState = 1;
-        // this.isGame = false;
         state.isGame = false;
         this.iterator = null;
         this.statisticDay = {
@@ -169,7 +168,6 @@ export class Sprint {
     }
 
     async gameProcess({ page, complexity }: ParamPage) {
-        console.log(`page ${page}, group: ${complexity}`);
 
         await this.setSortArraysWords(complexity, page);
         const iterator = this.mapWordPairs.entries();
@@ -193,17 +191,14 @@ export class Sprint {
         let wordTranslateArray = <Array<string>>[];
 
         this.arrayWords = await this.getArrayForGame(group, page, this.isFromBook, state.getItem('isAuth'));
-        console.log(this.arrayWords);
 
         this.arrayWords.map((words) => {
             const { word, wordTranslate } = words;
-
             this.mapRightWords.set(word, wordTranslate);
             wordArray.push(word);
             wordTranslateArray.push(wordTranslate);
         });
 
-        // wordTranslateArray = shuffle(wordTranslateArray);
         wordTranslateArray = this.getSortArray(wordTranslateArray);
 
         for (let i = 0; i < this.arrayWords.length; i++) {
@@ -229,17 +224,6 @@ export class Sprint {
             } else return await getChunkOfWords(group, page);
         }
     }
-
-    // async isWordNotEasy({ id }: IWord) {
-    //     const { userId, token } = state.getItem('auth');
-    //     const word = await API.getUserWordById(userId, <string>id, token);
-
-    //     if (typeof word === 'object' && word.difficulty === 'easy') {
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
 
     handlerToButtons(e: MouseEvent, iterator: IterableIterator<[string, string]>) {
         if ((<HTMLElement>e.target).closest('.btn-yes')) {
@@ -459,8 +443,7 @@ export class Sprint {
             difficulty: userWord.difficulty,
             optional: JSON.parse(JSON.stringify(userWord.optional)),
         };
-        const res = await API.updateUserWord(userId, wordId, token, noteToWord);
-        console.log(res);
+        await API.updateUserWord(userId, wordId, token, noteToWord);
     }
 
     getStatistic() {
@@ -531,7 +514,6 @@ export class Sprint {
         optional[currentDay] = currenDayObject;
         initStat.optional = optional;
         initStat.learnedWords += this.learnedWords;
-        console.log(initStat);
 
         API.upsertStatistics(userId, token, initStat);
     }
@@ -553,7 +535,6 @@ export class Sprint {
         const filteredArray = tempArr.filter((iword) => {
             return !easyKeyArray.includes(<string>iword.id);
         });
-        console.log(filteredArray);
 
         async function rec(group: string, page: string, array: Array<IWord>): Promise<Array<IWord>> {
             if (array.length >= Constants.QUANTITY_WORD_IN_GAME_SPRINT) return array;
@@ -565,7 +546,7 @@ export class Sprint {
             return await rec(group, (Number(page) - 1).toString(), [...array, ...filteredArray]);
         }
 
-        return await rec(group, page, filteredArray);
+        return await rec(group, (Number(page) - 1).toString(), filteredArray);
     }
 
     getSortArray(arr: Array<string>) {
