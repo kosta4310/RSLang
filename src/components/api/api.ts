@@ -1,4 +1,4 @@
-import { AggregatedWordResponse, Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
+import { AggregatedWordResponse, Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, RefreshTokenResponse, Statistic, UserWord } from './types';
 import { StatusCodes } from 'http-status-codes';
 import { BASE } from '../../config';
 import { state } from '../../state';
@@ -7,7 +7,7 @@ const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
 
 
-async function getNewUserToken(userId: string, refreshToken: string): Promise<Auth | string> {
+async function getNewUserToken(userId: string, refreshToken: string): Promise<RefreshTokenResponse | string> {
     const response = await fetch(`${USERS}/${userId}/tokens`, {
         method: 'GET',
         credentials: 'same-origin',
@@ -37,16 +37,18 @@ async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
         console.log(`TOKEN HAS EXPIRED, TRY TO GET NEW TOKEN`);
         const { userId, refreshToken } = state.getItem('auth');
         if (refreshToken) {
-            const authResponse = await getNewUserToken(userId, refreshToken);
-            if (typeof authResponse === 'string') {
+            const refreshTokenResponse = await getNewUserToken(userId, refreshToken);
+            if (typeof refreshTokenResponse === 'string') {
                 // не получили новый токен, поэтому возвращаем просто предыдущий ответ
                 return response;
             }
+            const auth = state.getItem('auth') ?? {};
+            Object.assign(auth, refreshTokenResponse)
             // иначе считаем что получили токен и сохраняем его в хранилище
-            state.setItem({ auth: authResponse, isAuth: true });
+            state.setItem({ auth: auth, isAuth: true });
             // делаем запрос снова, но уже с другим токеном авторизации
             if (init?.headers) {
-                Object.assign(init.headers, {Authorization: `Bearer ${authResponse.token}`});
+                Object.assign(init.headers, {Authorization: `Bearer ${refreshTokenResponse.token}`});
             }
             response = await fetch(input, init);
         }
