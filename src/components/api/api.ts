@@ -1,12 +1,61 @@
 import { AggregatedWordResponse, Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
 import { StatusCodes } from 'http-status-codes';
 import { BASE } from '../../config';
+import { state } from '../../state';
 
 const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
 
+
+async function getNewUserToken(userId: string, refreshToken: string): Promise<Auth | string> {
+    const response = await fetch(`${USERS}/${userId}/tokens`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            Authorization: `Bearer ${refreshToken}`,
+            accept: 'application/json'
+        },
+    });
+
+    if (response.status === StatusCodes.FORBIDDEN || response.status === StatusCodes.UNAUTHORIZED) {
+        // перейти на главную страницу
+        // state.setItem({ isAuth: false });
+        // state.delItem('auth');
+        // window.location.href = '/';
+    }
+
+    return response.status === StatusCodes.OK ? response.json() : response.text();
+}
+
+// функция-обёртка
+// Если token истёк, пробуем получить новый и отправить запрос заново
+async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
+    let response = await fetch(input, init);
+    // 402 для /users/{id}/words
+    // 401 для других эндпоинтов
+    if (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.PAYMENT_REQUIRED) {
+        console.log(`TOKEN HAS EXPIRED, TRY TO GET NEW TOKEN`);
+        const { userId, refreshToken } = state.getItem('auth');
+        if (refreshToken) {
+            const authResponse = await getNewUserToken(userId, refreshToken);
+            if (typeof authResponse === 'string') {
+                // не получили новый токен, поэтому возвращаем просто предыдущий ответ
+                return response;
+            }
+            // иначе считаем что получили токен и сохраняем его в хранилище
+            state.setItem({ auth: authResponse, isAuth: true });
+            // делаем запрос снова, но уже с другим токеном авторизации
+            if (init?.headers) {
+                Object.assign(init.headers, {Authorization: `Bearer ${authResponse.token}`});
+            }
+            response = await fetch(input, init);
+        }
+    }
+    return response;
+}
+
 async function createUser(user: IUser): Promise<IUser | number> {
-    const response = await fetch(USERS, {
+    const response = await retry(USERS, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
@@ -15,7 +64,7 @@ async function createUser(user: IUser): Promise<IUser | number> {
 }
 
 async function getUser(userId: string, token: string): Promise<IUser | string> {
-    const response = await fetch(`${USERS}/${userId}`, {
+    const response = await retry(`${USERS}/${userId}`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -28,7 +77,7 @@ async function getUser(userId: string, token: string): Promise<IUser | string> {
 }
 
 async function signIn(user: IUser): Promise<Auth | number> {
-    const response = await fetch(`${BASE}/signin`, {
+    const response = await retry(`${BASE}/signin`, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
@@ -37,7 +86,7 @@ async function signIn(user: IUser): Promise<Auth | number> {
 }
 
 async function updateUser(userId: string, token: string, body: Omit<IUser, 'name'>): Promise<Auth | string> {
-    const response = await fetch(`${USERS}/${userId}`, {
+    const response = await retry(`${USERS}/${userId}`, {
         method: 'PUT',
         credentials: 'same-origin',
         headers: {
@@ -51,7 +100,7 @@ async function updateUser(userId: string, token: string, body: Omit<IUser, 'name
 }
 
 async function deleteUser(userId: string, token: string): Promise<Response | boolean> {
-    const response = await fetch(`${USERS}/${userId}`, {
+    const response = await retry(`${USERS}/${userId}`, {
         method: 'DELETE',
         credentials: 'same-origin',
         headers: {
@@ -62,30 +111,19 @@ async function deleteUser(userId: string, token: string): Promise<Response | boo
     return response.status === StatusCodes.NO_CONTENT ? true : response;
 }
 
-async function getNewUserToken(userId: string, refreshToken: string): Promise<Auth | string> {
-    const response = await fetch(`${USERS}/${userId}/tokens`, {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-            Authorization: `Bearer ${refreshToken}`,
-            accept: 'application/json',
-        },
-    });
-    return response.status === StatusCodes.OK ? response.json() : response.text();
-}
 
 async function getChunkOfWords(group: string, page: string): Promise<Array<IWord>> {
-    const response = await fetch(`${WORDS}?group=${group}&page=${page}`);
+    const response = await retry(`${WORDS}?group=${group}&page=${page}`);
     return response.json();
 }
 
 async function getWordById(wordId: string): Promise<IWord> {
-    const response = await fetch(`${WORDS}/${wordId}`);
+    const response = await retry(`${WORDS}/${wordId}`);
     return response.json();
 }
 
 async function getAllUserWords(userId: string, token: string): Promise<Array<UserWord> | string> {
-    const response = await fetch(`${USERS}/${userId}/words`, {
+    const response = await retry(`${USERS}/${userId}/words`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -103,7 +141,7 @@ async function createUserWord(
     token: string,
     body: NoteToWord
 ): Promise<UserWord | string> {
-    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+    const response = await retry(`${USERS}/${userId}/words/${wordId}`, {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -117,7 +155,7 @@ async function createUserWord(
 }
 
 async function getUserWordById(userId: string, wordId: string, token: string): Promise<UserWord | string> {
-    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+    const response = await retry(`${USERS}/${userId}/words/${wordId}`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -135,7 +173,7 @@ async function updateUserWord(
     token: string,
     body: NoteToWord
 ): Promise<UserWord | string> {
-    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+    const response = await retry(`${USERS}/${userId}/words/${wordId}`, {
         method: 'PUT',
         credentials: 'same-origin',
         headers: {
@@ -149,7 +187,7 @@ async function updateUserWord(
 }
 
 async function deleteUserWord(userId: string, wordId: string, token: string): Promise<Response | boolean> {
-    const response = await fetch(`${USERS}/${userId}/words/${wordId}`, {
+    const response = await retry(`${USERS}/${userId}/words/${wordId}`, {
         method: 'DELETE',
         credentials: 'same-origin',
         headers: {
@@ -180,7 +218,7 @@ async function getAllUserAggWords(userId: string, token: string, param: InputAll
 // Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
 // иметь поле userWord со своими полями
 async function getUserAggWordById(userId: string, wordId: string, token: string) {
-    const response = await fetch(`${USERS}/${userId}/aggregatedWords/${wordId}`, {
+    const response = await retry(`${USERS}/${userId}/aggregatedWords/${wordId}`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -193,7 +231,7 @@ async function getUserAggWordById(userId: string, wordId: string, token: string)
 }
 
 async function getStatistics(userId: string, token: string): Promise<(Statistic & { id: string }) | string> {
-    const response = await fetch(`${USERS}/${userId}/statistics`, {
+    const response = await retry(`${USERS}/${userId}/statistics`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -210,7 +248,7 @@ async function upsertStatistics(
     token: string,
     body: Statistic
 ): Promise<(Statistic & { id: string }) | string> {
-    const response = await fetch(`${USERS}/${userId}/statistics`, {
+    const response = await retry(`${USERS}/${userId}/statistics`, {
         method: 'PUT',
         credentials: 'same-origin',
         headers: {

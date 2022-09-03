@@ -1,3 +1,5 @@
+import { Auth } from "./api/types";
+
 type StateParam = {
     page: string;
     complexity: string;
@@ -7,8 +9,9 @@ type StateParam = {
 
 type ParamPage = Pick<StateParam, 'page' | 'complexity'>;
 
+
 type IndexObject = {
-    [key: string]: string | boolean;
+    [key: string]: string | boolean | Auth;
 };
 
 // interface IStatistic {
