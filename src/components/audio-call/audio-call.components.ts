@@ -84,14 +84,23 @@ export class AudioCall {
 
     renderLoading() {
         const words = <HTMLElement>document.body.querySelector('.start-game_container');
-        words.innerHTML = LOADER_TEMPLATE
+        words.innerHTML = LOADER_TEMPLATE;
     }
 
     async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
-        const tempArr = await getChunkOfWords(group, page);
-        if (isFromBook && isAuth) {
-            return await this.getArray(group, page);
-        } else return tempArr;
+        if (!isAuth) return await getChunkOfWords(group, page);
+        const { userId, token } = state.getItem('auth');
+        if (group === '6') {
+            const res = await getAllUserAggWords(userId, token, {
+                filter: JSON.stringify({ 'userWord.difficulty': 'hard' }),
+            });
+            const [{ paginatedResults }] = res;
+            return paginatedResults;
+        } else {
+            if (isFromBook && isAuth) {
+                return await this.getArray(group, page);
+            } else return await getChunkOfWords(group, page);
+        }
     }
 
     async getArray(group: string, page: string) {
