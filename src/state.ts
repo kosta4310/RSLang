@@ -5,6 +5,16 @@ export const state = {
     complexityMainGame: 0,
     isGame:false,
 
+    init() {
+        const page = this.getItem('page') ?? '0';
+        const complexity = this.getItem('complexity') ?? '0';
+        this.setItem({ page: page, complexity: complexity });
+    },
+
+    reset() {
+        this.setItem({ page: '0', complexity: '0' });
+    },
+
     setItem(data: IndexObject) {
         const rsLangString = localStorage.getItem('rsLang');
 

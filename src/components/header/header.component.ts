@@ -57,6 +57,7 @@ export class Header {
             authBtn.addEventListener('click', () => {
                 state.delItem('auth');
                 state.delItem('isAuth');
+                state.reset();
                 authBtn.innerHTML = 'Войти';
                 setTimeout(() => {
                     authBtn.href = '/auth';

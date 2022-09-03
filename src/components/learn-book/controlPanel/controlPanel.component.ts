@@ -19,8 +19,9 @@ export class ControlPanel {
             const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
             elem.classList.add('learnbook__button_selected');
         } else {
-            const complexWordsBtn = <HTMLElement>document.querySelector('.hard-words');
-            complexWordsBtn.classList.add('hard-words_selected');
+            // если разлогиниться то этого элемента нет, поэтому здесь ? ставим
+            const complexWordsBtn = document.querySelector('.hard-words');
+            complexWordsBtn?.classList.add('hard-words_selected');
         }
         this.listen();
     }
