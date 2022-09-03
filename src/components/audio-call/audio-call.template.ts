@@ -30,7 +30,7 @@ export const AUDIO_CALL_BUTTONS = (word: string) => {
 };
 
 export const RIGHT_ANSWER_IMAGE = (pathImage: string) => {
-    return `<div class="right-image"><img src="${pathImage}"</div>`;
+    return `<div class="right-image"><img class="right-image" src="${pathImage}"</div>`;
 };
 export const RIGHT_ANSWER_WORD = (word: string) => {
     return `<div class="right-word">${word}</div>`;
@@ -38,3 +38,4 @@ export const RIGHT_ANSWER_WORD = (word: string) => {
  export const SOUND_SVG = (size:number)=>{
     return `<svg class="sound-svg" height="${size}" width="${size}" fill="#000"><use xlink:href="../../../assets/svg/icons.svg#sound" height="${size}" width="${size}"></use></svg>`
  }
+ export const LOADER_TEMPLATE=`<div class="loader-container_forGame"><img class="loader" src="./assets/svg/loader.svg" alt=""></div>`

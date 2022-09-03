@@ -20,17 +20,14 @@ export class ControlPanel {
         this.listen();
     }
 
-    
-
     enableGamesButtons(isEnabled = true) {
         const links = document.querySelectorAll('.games_buttons a');
-        console.log(links);
         if (isEnabled) {
-            links.forEach(link => {
+            links.forEach((link) => {
                 link.classList.remove('disabled');
             });
         } else {
-            links.forEach(link => {
+            links.forEach((link) => {
                 link.classList.add('disabled');
             });
         }
@@ -75,6 +72,7 @@ export class ControlPanel {
         const complexWordsBtn = document.querySelector('.hard-words');
         complexWordsBtn?.addEventListener('click', () => {
             this.parent.complexity = Constants.COMPLEXITY_HARDWORDS;
+            state.setItem({ complexity: Constants.COMPLEXITY_HARDWORDS.toString() });
             this.parent.renderWords();
             const pagination = <HTMLElement>document.querySelector('.pagination__container');
             pagination.classList.add('hidden');

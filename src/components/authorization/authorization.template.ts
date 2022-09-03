@@ -1,6 +1,6 @@
 import './authorization.style.scss';
 
-export const AUTHORIZATION_TEMPLATE = `<div class="container">
+export const AUTHORIZATION_TEMPLATE = `<div class="container auth-container">
 <div class="auth-wrapper">
   <ul class="links-btn">
     <li class="links-btn__signIn active-link">Вход</li>  

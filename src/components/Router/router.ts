@@ -1,11 +1,11 @@
-import { state } from './../../state';
 import { AudioCall } from './../audio-call/audio-call.components';
 import { Authorization } from './../authorization/authorization.components';
 import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
 import { Book } from '../learn-book/learnbook.component';
 import { Sprint } from '../sprint/sprint.component';
-import { state } from '../../state';
+import { state } from './../../state';
+
 
 export class Router {
     router: Navigo;
@@ -31,6 +31,7 @@ export class Router {
             })
             .on('/learnbook', () => {
                 state.isGame = false;
+                state.setItem({ complexity: '0', page: '0' });
                 this.book.init();
             })
             .on('/statistic', () => {
