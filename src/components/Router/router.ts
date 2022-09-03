@@ -4,8 +4,8 @@ import Navigo from 'navigo';
 import { HomePage } from '../first-page/homepage.component';
 import { Book } from '../learn-book/learnbook.component';
 import { Sprint } from '../sprint/sprint.component';
+import { Statistic } from '../statistics-page/statistic.component';
 import { state } from './../../state';
-
 
 export class Router {
     router: Navigo;
@@ -14,6 +14,7 @@ export class Router {
     book: Book;
     audioCall: AudioCall;
     sprint: Sprint;
+    statistic: Statistic
 
     constructor() {
         this.homePage = new HomePage();
@@ -22,6 +23,7 @@ export class Router {
         this.book = new Book();
         this.audioCall = new AudioCall();
         this.sprint = new Sprint();
+        this.statistic = new Statistic()
     }
     init() {
         this.router
@@ -36,6 +38,7 @@ export class Router {
             })
             .on('/statistic', () => {
                 state.isGame = false;
+                this.statistic.init();
             })
             .on('/audio-call', () => {
                 state.isGame = false;

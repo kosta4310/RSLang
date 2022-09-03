@@ -122,6 +122,7 @@ export class Sprint {
     timer() {
         const countdown = <HTMLElement>document.querySelector('.timer__time');
         let item = Constants.TIME_OF_SPRINT_GAME;
+
         this.interval = setInterval(() => {
             countdown.innerHTML = `${item}`;
             item = item - 1;
@@ -483,6 +484,7 @@ export class Sprint {
         const { userId, token } = state.getItem('auth');
         const currentDay = new Date().toISOString().slice(0, 10);
         let currenDayObject = {
+            learnedWords: 0,
             sprintCorrect: 0,
             sprintTotal: 0,
             sprintNewWords: 0,
@@ -522,6 +524,7 @@ export class Sprint {
         currenDayObject.sprintNewWords += newWordInGame;
         currenDayObject.sprintCorrect += sprintCorrect;
         currenDayObject.sprintTotal += sprintTotal;
+        currenDayObject.learnedWords += this.learnedWords;
 
         optional[currentDay] = currenDayObject;
         initStat.optional = optional;
