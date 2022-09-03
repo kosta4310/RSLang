@@ -59,6 +59,12 @@ interface IStatisticDay {
     sprintCorrect: number;
     sprintTotal: number;
 }
+interface IStatisticDayAudioCall {
+    newWordInGame: number;
+    longestSequenceCorrectAnswers: number;
+    audioCallCorrect: number;
+    audioCallTotal: number;
+}
 
 export {
     StateParam,
@@ -68,6 +74,7 @@ export {
     Constants,
     IOptionalToStatistic,
     IStatisticDay,
+    IStatisticDayAudioCall,
     IStatisticGamePerDay,
     IStatisticDataAll,
 };

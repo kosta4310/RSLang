@@ -14,9 +14,18 @@ import {
     LOADER_TEMPLATE,
 } from './audio-call.template';
 import { StartGamePage } from '../start-page-game/start-page-game.components';
-import { getAllUserAggWords, getChunkOfWords } from '../api/api';
-import { IWord } from '../api/types';
+import {
+    createUserWord,
+    getAllUserAggWords,
+    getChunkOfWords,
+    getStatistics,
+    getUserWordById,
+    updateUserWord,
+    upsertStatistics,
+} from '../api/api';
+import { IWord, NoteToWord, Statistic, UserWord } from '../api/types';
 import { STATISTIC_TEMPLATE } from '../statistic/statistic.template';
+import { IOptionalToWord, IStatisticDayAudioCall } from '../types';
 
 export class AudioCall {
     header: Header;
@@ -27,6 +36,10 @@ export class AudioCall {
     indexWord: number;
     isRightAnswer: boolean;
     answers: { right: IWord[]; wrong: IWord[] };
+    arraySeriesOfCorrectAnswers: number[];
+    seriesOfCorrectAnswers: number;
+    statisticDay: IStatisticDayAudioCall;
+    learnedWords: number;
 
     constructor() {
         this.header = new Header();
@@ -36,10 +49,19 @@ export class AudioCall {
         this.indexWord = 0;
         this.learnBookGame = false;
         this.isRightAnswer = false;
+        this.arraySeriesOfCorrectAnswers = [];
+        this.seriesOfCorrectAnswers = 0;
         this.answers = {
             right: [],
             wrong: [],
         };
+        this.statisticDay = {
+            newWordInGame: 0,
+            longestSequenceCorrectAnswers: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+        };
+        this.learnedWords = 0;
     }
 
     init() {
@@ -84,14 +106,23 @@ export class AudioCall {
 
     renderLoading() {
         const words = <HTMLElement>document.body.querySelector('.start-game_container');
-        words.innerHTML = LOADER_TEMPLATE
+        words.innerHTML = LOADER_TEMPLATE;
     }
 
     async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
-        const tempArr = await getChunkOfWords(group, page);
-        if (isFromBook && isAuth) {
-            return await this.getArray(group, page);
-        } else return tempArr;
+        if (!isAuth) return await getChunkOfWords(group, page);
+        const { userId, token } = state.getItem('auth');
+        if (group === '6') {
+            const res = await getAllUserAggWords(userId, token, {
+                filter: JSON.stringify({ 'userWord.difficulty': 'hard' }),
+            });
+            const [{ paginatedResults }] = res;
+            return paginatedResults;
+        } else {
+            if (isFromBook && isAuth) {
+                return await this.getArray(group, page);
+            } else return await getChunkOfWords(group, page);
+        }
     }
 
     async getArray(group: string, page: string) {
@@ -136,12 +167,14 @@ export class AudioCall {
                     this.playSound('../../assets/sounds/correct2.mp3');
                     this.answers.right.push(searchWord);
                     this.checkLastWord(arrayWords);
+                    this.seriesOfCorrectAnswers += 1;
                 } else {
                     target.classList.add('wrong-answer');
                     this.playSound('../../assets/sounds/incorrect2.mp3');
                     this.rightAnswer(pathImage, searchWord);
                     this.answers.wrong.push(searchWord);
                     this.checkLastWord(arrayWords);
+                    this.seriesOfCorrectAnswers += 0;
                 }
                 this.isRightAnswer = true;
             }
@@ -163,12 +196,15 @@ export class AudioCall {
                         this.playSound('../../assets/sounds/correct2.mp3');
                         this.answers.right.push(searchWord);
                         this.checkLastWord(arrayWords);
+                        this.seriesOfCorrectAnswers += 1;
                     } else {
                         this.playSound('../../assets/sounds/incorrect2.mp3');
                         this.rightAnswer(pathImage, searchWord);
                         this.answers.wrong.push(searchWord);
                         this.checkLastWord(arrayWords);
                         buttons[index].classList.add('wrong-answer');
+                        this.arraySeriesOfCorrectAnswers.push(this.seriesOfCorrectAnswers);
+                        this.seriesOfCorrectAnswers = 0;
                     }
                     this.isRightAnswer = true;
                 };
@@ -198,6 +234,7 @@ export class AudioCall {
         };
         document.addEventListener('keydown', keyboard);
     }
+
     nextButton(arrayWords: IWord[], searchWord: IWord, pathImage: string) {
         if (!this.isRightAnswer) {
             this.rightAnswer(pathImage, searchWord);
@@ -205,7 +242,9 @@ export class AudioCall {
             this.answers.wrong.push(searchWord);
             this.playSound('../../assets/sounds/incorrect2.mp3');
             this.checkLastWord(arrayWords);
+            this.seriesOfCorrectAnswers = 0;
         } else {
+            this.arraySeriesOfCorrectAnswers.push(this.seriesOfCorrectAnswers);
             if (this.indexWord === arrayWords.length - 1) {
                 this.showStatistic(this.answers.right, this.answers.wrong);
             } else {
@@ -290,6 +329,15 @@ export class AudioCall {
             right: [],
             wrong: [],
         };
+        this.arraySeriesOfCorrectAnswers = [];
+        this.seriesOfCorrectAnswers = 0;
+        this.statisticDay = {
+            newWordInGame: 0,
+            longestSequenceCorrectAnswers: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+        };
+        this.learnedWords = 0;
     }
 
     playWordOnClick(element: HTMLElement, pathAudio: string) {
@@ -328,5 +376,125 @@ export class AudioCall {
             const pathAudio = `${BASE}/${el.getAttribute('data-audio')}`;
             this.playWordOnClick(el, pathAudio);
         });
+        const isAuth = <boolean>state.getItem('isAuth');
+        if (isAuth) {
+            this.getStatistic();
+            this.setStatisticWord(this.answers.right, true);
+            this.setStatisticWord(this.answers.wrong, false);
+            this.setStatisticDay();
+        }
+    }
+
+    async setStatisticWord(array: IWord[], isRight: boolean) {
+        const isHardWord = state.getItem('complexity') === '6';
+        array.forEach((el) => {
+            let id = '';
+            if (isHardWord) {
+                id = <string>el._id;
+            } else id = <string>el.id;
+            this.statisticWord(id, isRight);
+        });
+    }
+
+    getStatistic() {
+        const audioCallCorrect = this.answers.right.length;
+        const audioCallTotal = this.answers.right.length + this.answers.wrong.length;
+        const longestSequenceCorrectAnswers = this.arraySeriesOfCorrectAnswers.sort((a, b) => b - a)[0];
+
+        this.statisticDay.longestSequenceCorrectAnswers = longestSequenceCorrectAnswers;
+        this.statisticDay.audioCallCorrect = audioCallCorrect;
+        this.statisticDay.audioCallTotal = audioCallTotal;
+    }
+
+    async statisticWord(wordId: string, isRight: boolean) {
+        const { userId, token } = state.getItem('auth');
+        const initOption = <IOptionalToWord>{
+            sprintCorrect: 0,
+            sprintTotal: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+            correctInLineCount: 0,
+        };
+
+        let userWord = await getUserWordById(userId, wordId, token);
+        if (typeof userWord === 'string') {
+            this.statisticDay.newWordInGame += 1;
+            userWord = <UserWord>(
+                await createUserWord(userId, wordId, token, { difficulty: 'normal', optional: initOption })
+            );
+        }
+
+        if (isRight) {
+            userWord.optional.audioCallCorrect += 1;
+            userWord.optional.correctInLineCount += 1;
+            if (
+                (userWord.difficulty === 'normal' && userWord.optional.correctInLineCount >= 3) ||
+                (userWord.difficulty === 'hard' && userWord.optional.correctInLineCount >= 5)
+            ) {
+                userWord.difficulty = 'easy';
+                this.learnedWords += 1;
+            }
+        } else {
+            userWord.optional.correctInLineCount = 0;
+            if (userWord.difficulty === 'easy') userWord.difficulty = 'normal';
+        }
+
+        userWord.optional.audioCallTotal += 1;
+        const noteToWord = <NoteToWord>{
+            difficulty: userWord.difficulty,
+            optional: JSON.parse(JSON.stringify(userWord.optional)),
+        };
+        await updateUserWord(userId, wordId, token, noteToWord);
+    }
+
+    async setStatisticDay() {
+        const { userId, token } = state.getItem('auth');
+        const currentDay = new Date().toISOString().slice(0, 10);
+        let currentDayObject = {
+            sprintCorrect: 0,
+            sprintTotal: 0,
+            sprintNewWords: 0,
+            audioCallNewWords: 0,
+            sprintCorrectInLineCount: 0,
+            audioCallCorrectInLineCount: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+        };
+        const initStat = <Statistic>{
+            learnedWords: 0,
+            optional: {
+                [currentDay]: currentDayObject,
+            },
+        };
+        const response = await getStatistics(userId, token);
+
+        if (typeof response !== 'string') {
+            const { learnedWords, optional } = response;
+            initStat.learnedWords = learnedWords;
+            initStat.optional = JSON.parse(JSON.stringify(optional));
+        }
+
+        const optional = initStat.optional;
+
+        // eslint-disable-next-line no-prototype-builtins
+        if (optional.hasOwnProperty(currentDay)) {
+            currentDayObject = JSON.parse(JSON.stringify(optional[currentDay]));
+        } else optional[currentDay] = currentDayObject;
+
+        const { audioCallCorrect, audioCallTotal, longestSequenceCorrectAnswers, newWordInGame } = this.statisticDay;
+
+        currentDayObject.sprintCorrectInLineCount =
+            currentDayObject.sprintCorrectInLineCount > longestSequenceCorrectAnswers
+                ? currentDayObject.sprintCorrectInLineCount
+                : longestSequenceCorrectAnswers;
+        currentDayObject.sprintNewWords += newWordInGame;
+        currentDayObject.sprintCorrect += audioCallCorrect;
+        currentDayObject.sprintTotal += audioCallTotal;
+
+        optional[currentDay] = currentDayObject;
+        initStat.optional = optional;
+        initStat.learnedWords += this.learnedWords;
+
+        upsertStatistics(userId, token, initStat);
     }
 }

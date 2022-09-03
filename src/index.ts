@@ -1,7 +1,7 @@
 import { Router } from './components/Router/router';
 import './style.scss';
 import './state';
-import { state } from './state';
+// import { state } from './state';
 // import * as API from './components/api/api';
 
 
