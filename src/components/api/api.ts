@@ -1,4 +1,13 @@
-import { AggregatedWordResponse, Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, Statistic, UserWord } from './types';
+import {
+    AggregatedWordResponse,
+    Auth,
+    InputAllUserAggWords,
+    IUser,
+    IWord,
+    NoteToWord,
+    Statistic,
+    UserWord,
+} from './types';
 import { StatusCodes } from 'http-status-codes';
 import { BASE } from '../../config';
 import { state } from '../../state';
@@ -6,14 +15,13 @@ import { state } from '../../state';
 const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
 
-
 async function getNewUserToken(userId: string, refreshToken: string): Promise<Auth | string> {
     const response = await fetch(`${USERS}/${userId}/tokens`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
             Authorization: `Bearer ${refreshToken}`,
-            accept: 'application/json'
+            accept: 'application/json',
         },
     });
 
@@ -46,7 +54,7 @@ async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
             state.setItem({ auth: authResponse, isAuth: true });
             // делаем запрос снова, но уже с другим токеном авторизации
             if (init?.headers) {
-                Object.assign(init.headers, {Authorization: `Bearer ${authResponse.token}`});
+                Object.assign(init.headers, { Authorization: `Bearer ${authResponse.token}` });
             }
             response = await fetch(input, init);
         }
@@ -110,7 +118,6 @@ async function deleteUser(userId: string, token: string): Promise<Response | boo
     });
     return response.status === StatusCodes.NO_CONTENT ? true : response;
 }
-
 
 async function getChunkOfWords(group: string, page: string): Promise<Array<IWord>> {
     const response = await retry(`${WORDS}?group=${group}&page=${page}`);
@@ -200,7 +207,11 @@ async function deleteUserWord(userId: string, wordId: string, token: string): Pr
 
 // Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
 // иметь поле userWord со своими полями
-async function getAllUserAggWords(userId: string, token: string, param: InputAllUserAggWords): Promise<AggregatedWordResponse> {
+async function getAllUserAggWords(
+    userId: string,
+    token: string,
+    param: InputAllUserAggWords
+): Promise<AggregatedWordResponse> {
     const urlSearchParams = new URLSearchParams(param);
 
     const response = await retry(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`, {

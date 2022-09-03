@@ -29,7 +29,10 @@ export class Statistic {
     render(statisticGamePerDay: IStatisticGamePerDay, statisticDataAll: IStatisticDataAll) {
         document.body.insertAdjacentHTML('beforeend', STATISTIC_TEMPLATE(statisticGamePerDay, statisticDataAll));
 
-        this.getStatisticAllDays().then((res) => console.log(res));
+        this.getStatisticAllDays().then((res) => {
+            console.log(res);
+            this.showGraphics(res);
+        });
     }
 
     async getStatisticGamePerDay() {
@@ -89,17 +92,34 @@ export class Statistic {
     }
 
     showGraphics(dataAll: IOptionalToStatistic | Constants.STATUS_CODE_NULL_DATA) {
-        const trace1: Data = {
-            x: [0, 0, 0, 0],
-            y: [0, 0, 0, 0],
-            type: 'scatter',
-        };
+        let trace1: Data;
+        let trace2: Data;
 
-        const trace2: Data = {
-            x: [1, 2, 3, 4],
-            y: [16, 5, 11, 9],
-            type: 'scatter',
-        };
+        if (dataAll === Constants.STATUS_CODE_NULL_DATA) {
+            trace1 = {
+                x: [0],
+                y: [0],
+                type: 'scatter',
+            };
+
+            trace2 = {
+                x: [0],
+                y: [0],
+                type: 'scatter',
+            };
+        } else {
+            trace1 = {
+                x: [0, 0, 0, 0],
+                y: [0, 0, 0, 0],
+                type: 'scatter',
+            };
+
+            trace2 = {
+                x: [1, 2, 3, 4],
+                y: [16, 5, 11, 9],
+                type: 'scatter',
+            };
+        }
 
         const layout1: Partial<Layout> = {
             xaxis: {
