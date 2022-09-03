@@ -6,7 +6,7 @@ import { STATISTIC_TEMPLATE } from './statistic.template';
 import Plotly, { Data, Layout } from 'plotly.js-dist-min';
 import * as API from '../api/api';
 import { state } from '../../state';
-import { IStatisticDataAll, IStatisticGamePerDay } from '../types';
+import { Constants, IOptionalToStatistic, IStatisticDataAll, IStatisticGamePerDay } from '../types';
 
 export class Statistic {
     header: Header;
@@ -28,18 +28,110 @@ export class Statistic {
 
     render(statisticGamePerDay: IStatisticGamePerDay, statisticDataAll: IStatisticDataAll) {
         document.body.insertAdjacentHTML('beforeend', STATISTIC_TEMPLATE(statisticGamePerDay, statisticDataAll));
-        // setTimeout(() => {
-        const trace1: Data = {
-            x: [0, 0, 0, 0],
-            y: [0, 0, 0, 0],
-            type: 'scatter',
-        };
 
-        const trace2: Data = {
-            x: [1, 2, 3, 4],
-            y: [16, 5, 11, 9],
-            type: 'scatter',
+        this.getStatisticAllDays().then((res) => {
+            console.log(res);
+            this.showGraphics(res);
+        });
+    }
+
+    async getStatisticGamePerDay() {
+        const { userId, token } = state.getItem('auth');
+        const response = await API.getStatistics(userId, token);
+        console.log(response);
+
+        const currentDay = new Date().toISOString().slice(0, 10);
+
+        const initDataStatistic = <IStatisticGamePerDay>{
+            learnedWords: 0,
+            sprintCorrect: 0,
+            sprintTotal: 0,
+            sprintNewWords: 0,
+            audioCallNewWords: 0,
+            sprintCorrectInLineCount: 0,
+            audioCallCorrectInLineCount: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
         };
+        if (typeof response === 'string') {
+            return { learnedWords: 0, initDataStatistic };
+        } else {
+            const { learnedWords, optional } = response;
+            // eslint-disable-next-line no-prototype-builtins
+            if (optional.hasOwnProperty(currentDay)) {
+                Object.assign(initDataStatistic, optional[currentDay]);
+            }
+
+            return { learnedWords, initDataStatistic };
+        }
+    }
+
+    async getStatisticDataAll() {
+        const { learnedWords, initDataStatistic } = await this.getStatisticGamePerDay();
+        const quantityNewWord = initDataStatistic.audioCallNewWords + initDataStatistic.sprintNewWords;
+        const rateRightAnswers = Math.floor(
+            (initDataStatistic.audioCallCorrect +
+                initDataStatistic.sprintCorrect / (initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal)) *
+                100
+        );
+
+        return { learnedWords, quantityNewWord, rateRightAnswers };
+    }
+
+    async getStatisticAllDays() {
+        const { userId, token } = state.getItem('auth');
+        const response = await API.getStatistics(userId, token);
+
+        if (typeof response === 'string') {
+            return Constants.STATUS_CODE_NULL_DATA;
+        } else {
+            const { optional } = response;
+
+            return optional;
+        }
+    }
+
+    showGraphics(dataAll: IOptionalToStatistic | Constants.STATUS_CODE_NULL_DATA) {
+        let trace1: Data;
+        let trace2: Data;
+
+        if (dataAll === Constants.STATUS_CODE_NULL_DATA) {
+            trace1 = {
+                type: 'scatter',
+            };
+
+            trace2 = {
+                type: 'scatter',
+            };
+        } else {
+            delete dataAll['2021-09-01'];
+
+            const orderedData = <IOptionalToStatistic>Object.keys(dataAll)
+                .sort()
+                .reduce((acc: IOptionalToStatistic, key) => {
+                    acc[key] = dataAll[key];
+                    return acc;
+                }, {});
+            let keys = Object.keys(orderedData);
+            const obj = Object.values(orderedData);
+            const value1 = obj.map((val) => val.sprintNewWords + val.audioCallNewWords);
+            const value2 = obj.map((val) => val.learnedWords);
+
+            keys = keys.splice(-10);
+            console.log(`value1: ${value1}, value2: ${value2}`);
+
+            trace1 = {
+                x: keys,
+                y: value1,
+                type: 'scatter',
+            };
+
+            trace2 = {
+                x: keys,
+                y: value2,
+                type: 'scatter',
+            };
+        }
 
         const layout1: Partial<Layout> = {
             xaxis: {
@@ -89,64 +181,5 @@ export class Statistic {
 
         Plotly.newPlot('plot1', [trace1], layout1);
         Plotly.newPlot('plot2', [trace2], layout2);
-        // }, 0);
     }
-
-    async getStatisticGamePerDay() {
-        const { userId, token } = state.getItem('auth');
-        const response = await API.getStatistics(userId, token);
-        console.log(response);
-
-        const currentDay = new Date().toISOString().slice(0, 10);
-
-        const initDataStatistic = <IStatisticGamePerDay>{
-            learnedWords: 0,
-            sprintCorrect: 0,
-            sprintTotal: 0,
-            sprintNewWords: 0,
-            audioCallNewWords: 0,
-            sprintCorrectInLineCount: 0,
-            audioCallCorrectInLineCount: 0,
-            audioCallCorrect: 0,
-            audioCallTotal: 0,
-        };
-        if (typeof response === 'string') {
-            return { learnedWords: 0, initDataStatistic };
-        } else {
-            const { learnedWords, optional } = response;
-            // eslint-disable-next-line no-prototype-builtins
-            if (optional.hasOwnProperty(currentDay)) {
-                Object.assign(initDataStatistic, optional[currentDay]);
-            }
-
-            return { learnedWords, initDataStatistic };
-        }
-    }
-
-    async getStatisticDataAll() {
-        const { learnedWords, initDataStatistic } = await this.getStatisticGamePerDay();
-        const quantityNewWord = initDataStatistic.audioCallNewWords + initDataStatistic.sprintNewWords;
-        const rateRightAnswers = Math.floor(
-            (initDataStatistic.audioCallCorrect +
-                initDataStatistic.sprintCorrect / (initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal)) *
-                100
-        );
-
-        return { learnedWords, quantityNewWord, rateRightAnswers };
-    }
-
-    async getStatisticAll() {
-        const { userId, token } = state.getItem('auth');
-        const response = await API.getStatistics(userId, token);
-
-        if (typeof response === 'string') {
-            return [];
-        } else {
-            const { optional } = response;
-
-            return optional;
-        }
-    }
-
-    // showGraphics() {}
 }

@@ -1,4 +1,14 @@
-import { AggregatedWordResponse, Auth, InputAllUserAggWords, IUser, IWord, NoteToWord, RefreshTokenResponse, Statistic, UserWord } from './types';
+import {
+    AggregatedWordResponse,
+    Auth,
+    InputAllUserAggWords,
+    IUser,
+    IWord,
+    NoteToWord,
+    RefreshTokenResponse,
+    Statistic,
+    UserWord,
+} from './types';
 import { StatusCodes } from 'http-status-codes';
 import { BASE } from '../../config';
 import { state } from '../../state';
@@ -6,14 +16,13 @@ import { state } from '../../state';
 const USERS = `${BASE}/users`;
 const WORDS = `${BASE}/words`;
 
-
 async function getNewUserToken(userId: string, refreshToken: string): Promise<RefreshTokenResponse | string> {
     const response = await fetch(`${USERS}/${userId}/tokens`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
             Authorization: `Bearer ${refreshToken}`,
-            accept: 'application/json'
+            accept: 'application/json',
         },
     });
 
@@ -43,12 +52,12 @@ async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
                 return response;
             }
             const auth = state.getItem('auth') ?? {};
-            Object.assign(auth, refreshTokenResponse)
+            Object.assign(auth, refreshTokenResponse);
             // иначе считаем что получили токен и сохраняем его в хранилище
             state.setItem({ auth: auth, isAuth: true });
             // делаем запрос снова, но уже с другим токеном авторизации
             if (init?.headers) {
-                Object.assign(init.headers, {Authorization: `Bearer ${refreshTokenResponse.token}`});
+                Object.assign(init.headers, { Authorization: `Bearer ${refreshTokenResponse.token}` });
             }
             response = await fetch(input, init);
         }
@@ -113,14 +122,13 @@ async function deleteUser(userId: string, token: string): Promise<Response | boo
     return response.status === StatusCodes.NO_CONTENT ? true : response;
 }
 
-
 async function getChunkOfWords(group: string, page: string): Promise<Array<IWord>> {
-    const response = await retry(`${WORDS}?group=${group}&page=${page}`);
+    const response = await fetch(`${WORDS}?group=${group}&page=${page}`);
     return response.json();
 }
 
 async function getWordById(wordId: string): Promise<IWord> {
-    const response = await retry(`${WORDS}/${wordId}`);
+    const response = await fetch(`${WORDS}/${wordId}`);
     return response.json();
 }
 
@@ -202,7 +210,11 @@ async function deleteUserWord(userId: string, wordId: string, token: string): Pr
 
 // Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
 // иметь поле userWord со своими полями
-async function getAllUserAggWords(userId: string, token: string, param: InputAllUserAggWords): Promise<AggregatedWordResponse> {
+async function getAllUserAggWords(
+    userId: string,
+    token: string,
+    param: InputAllUserAggWords
+): Promise<AggregatedWordResponse> {
     const urlSearchParams = new URLSearchParams(param);
 
     const response = await retry(`${USERS}/${userId}/aggregatedWords?${urlSearchParams}`, {
