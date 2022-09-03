@@ -68,14 +68,14 @@ export class AudioCall {
         document.body.innerHTML = '';
         document.body.insertAdjacentHTML('beforeend', templateHeader);
         this.header.init();
+        this.learnBookGame = state.isFromBook;  
         this.startGame();
+        state.isFromBook = false;
     }
 
     startGame() {
-        this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.isFromBook);
-        this.learnBookGame = state.isFromBook;
+        this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, this.learnBookGame);
         this.resetParam();
-        state.isFromBook = false;
         this.imitationKeydown();
 
         document.querySelector('.start-game')?.addEventListener('click', () => {
@@ -191,22 +191,24 @@ export class AudioCall {
                 const pathImage = `${BASE}/${searchWord.image}`;
                 const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
                 const keyboardButton = (index: number) => {
-                    if (buttons[index].innerHTML === searchWord.wordTranslate) {
-                        this.rightAnswer(pathImage, searchWord);
-                        this.playSound('../../assets/sounds/correct2.mp3');
-                        this.answers.right.push(searchWord);
-                        this.checkLastWord(arrayWords);
-                        this.seriesOfCorrectAnswers += 1;
-                    } else {
-                        this.playSound('../../assets/sounds/incorrect2.mp3');
-                        this.rightAnswer(pathImage, searchWord);
-                        this.answers.wrong.push(searchWord);
-                        this.checkLastWord(arrayWords);
-                        buttons[index].classList.add('wrong-answer');
-                        this.arraySeriesOfCorrectAnswers.push(this.seriesOfCorrectAnswers);
-                        this.seriesOfCorrectAnswers = 0;
+                    if (!buttons[index].disabled) {
+                        if (buttons[index].innerHTML === searchWord.wordTranslate) {
+                            this.rightAnswer(pathImage, searchWord);
+                            this.playSound('../../assets/sounds/correct2.mp3');
+                            this.answers.right.push(searchWord);
+                            this.checkLastWord(arrayWords);
+                            this.seriesOfCorrectAnswers += 1;
+                        } else {
+                            this.playSound('../../assets/sounds/incorrect2.mp3');
+                            this.rightAnswer(pathImage, searchWord);
+                            this.answers.wrong.push(searchWord);
+                            this.checkLastWord(arrayWords);
+                            buttons[index].classList.add('wrong-answer');
+                            this.arraySeriesOfCorrectAnswers.push(this.seriesOfCorrectAnswers);
+                            this.seriesOfCorrectAnswers = 0;
+                        }
+                        this.isRightAnswer = true;
                     }
-                    this.isRightAnswer = true;
                 };
                 switch (event.code) {
                     case 'Space':
@@ -451,6 +453,7 @@ export class AudioCall {
         const { userId, token } = state.getItem('auth');
         const currentDay = new Date().toISOString().slice(0, 10);
         let currentDayObject = {
+            learnedWords: 0,
             sprintCorrect: 0,
             sprintTotal: 0,
             sprintNewWords: 0,
@@ -483,18 +486,19 @@ export class AudioCall {
 
         const { audioCallCorrect, audioCallTotal, longestSequenceCorrectAnswers, newWordInGame } = this.statisticDay;
 
-        currentDayObject.sprintCorrectInLineCount =
-            currentDayObject.sprintCorrectInLineCount > longestSequenceCorrectAnswers
-                ? currentDayObject.sprintCorrectInLineCount
+        currentDayObject.audioCallCorrectInLineCount =
+            currentDayObject.audioCallCorrectInLineCount > longestSequenceCorrectAnswers
+                ? currentDayObject.audioCallCorrectInLineCount
                 : longestSequenceCorrectAnswers;
-        currentDayObject.sprintNewWords += newWordInGame;
-        currentDayObject.sprintCorrect += audioCallCorrect;
-        currentDayObject.sprintTotal += audioCallTotal;
+        currentDayObject.audioCallNewWords += newWordInGame;
+        currentDayObject.audioCallCorrect += audioCallCorrect;
+        currentDayObject.audioCallTotal += audioCallTotal;
+        currentDayObject.learnedWords += this.learnedWords;
 
         optional[currentDay] = currentDayObject;
         initStat.optional = optional;
         initStat.learnedWords += this.learnedWords;
 
-        upsertStatistics(userId, token, initStat);
+        await upsertStatistics(userId, token, initStat);
     }
 }
