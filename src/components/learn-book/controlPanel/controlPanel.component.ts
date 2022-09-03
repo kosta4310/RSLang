@@ -15,8 +15,14 @@ export class ControlPanel {
         const controlPanel = <HTMLElement>document.querySelector('#control-panel');
         controlPanel.insertAdjacentHTML('beforeend', CONTROL_PANEL_TEMPLATE);
         const complexity = this.parent.complexity;
-        const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
-        elem.classList.add('learnbook__button_selected');
+        if (complexity !== Constants.COMPLEXITY_HARDWORDS) {
+            const elem = <HTMLElement>document.querySelector(`.learnbook__button[data-complexity="${complexity}"]`);
+            elem.classList.add('learnbook__button_selected');
+        } else {
+            // если разлогиниться то этого элемента нет, поэтому здесь ? ставим
+            const complexWordsBtn = document.querySelector('.hard-words');
+            complexWordsBtn?.classList.add('hard-words_selected');
+        }
         this.listen();
     }
 
@@ -53,8 +59,10 @@ export class ControlPanel {
                 btn.classList.add('learnbook__button_selected');
                 const complexity = +(<string>btn.getAttribute('data-complexity'));
                 this.parent.complexity = complexity;
-                state.setItem({ complexity: complexity.toString() });
+                state.setItem({ complexity: complexity.toString(), page: '0' });
+                this.parent.page = 0;
                 this.parent.renderWords();
+                this.parent.updatePagination();
                 const pagination = <HTMLElement>document.querySelector('.pagination__container');
                 pagination.classList.remove('hidden');
                 const complexWordsBtn = document.querySelector('.hard-words');

@@ -4,7 +4,9 @@ import './state';
 // import { state } from './state';
 // import * as API from './components/api/api';
 
-// state.setItem({ page: '0', complexity: '0' });
+
+
+state.init();
 
 // const { userId, token, refreshToken } = state.getItem('auth');
 // API.getNewUserToken(userId, refreshToken);
