@@ -46,6 +46,7 @@ export class Book {
 
         this.renderLoading();
         await this.renderWords();
+        this.updatePagination();
         this.listen();
     }
 
@@ -67,6 +68,11 @@ export class Book {
             this.controlPanel.enableAllLearnedText(false);
             wrapper?.classList.remove('all-learned');
         }
+    }
+
+    updatePagination() {
+        this.pagination.currentPage = this.page + 1;
+        this.pagination.redraw();
     }
 
     async renderWords() {
