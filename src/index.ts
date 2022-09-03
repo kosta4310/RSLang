@@ -4,13 +4,9 @@ import './state';
 import { state } from './state';
 // import * as API from './components/api/api';
 
-function initState() {
-  const page = state.getItem('page') ?? '0';
-  const complexity = state.getItem('complexity') ?? '0';
-  state.setItem({ page: page, complexity: complexity });
-}
 
-initState();
+
+state.init();
 
 // const { userId, token, refreshToken } = state.getItem('auth');
 // API.getNewUserToken(userId, refreshToken);
