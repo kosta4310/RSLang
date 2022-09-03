@@ -191,22 +191,24 @@ export class AudioCall {
                 const pathImage = `${BASE}/${searchWord.image}`;
                 const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
                 const keyboardButton = (index: number) => {
-                    if (buttons[index].innerHTML === searchWord.wordTranslate) {
-                        this.rightAnswer(pathImage, searchWord);
-                        this.playSound('../../assets/sounds/correct2.mp3');
-                        this.answers.right.push(searchWord);
-                        this.checkLastWord(arrayWords);
-                        this.seriesOfCorrectAnswers += 1;
-                    } else {
-                        this.playSound('../../assets/sounds/incorrect2.mp3');
-                        this.rightAnswer(pathImage, searchWord);
-                        this.answers.wrong.push(searchWord);
-                        this.checkLastWord(arrayWords);
-                        buttons[index].classList.add('wrong-answer');
-                        this.arraySeriesOfCorrectAnswers.push(this.seriesOfCorrectAnswers);
-                        this.seriesOfCorrectAnswers = 0;
+                    if (!buttons[index].disabled) {
+                        if (buttons[index].innerHTML === searchWord.wordTranslate) {
+                            this.rightAnswer(pathImage, searchWord);
+                            this.playSound('../../assets/sounds/correct2.mp3');
+                            this.answers.right.push(searchWord);
+                            this.checkLastWord(arrayWords);
+                            this.seriesOfCorrectAnswers += 1;
+                        } else {
+                            this.playSound('../../assets/sounds/incorrect2.mp3');
+                            this.rightAnswer(pathImage, searchWord);
+                            this.answers.wrong.push(searchWord);
+                            this.checkLastWord(arrayWords);
+                            buttons[index].classList.add('wrong-answer');
+                            this.arraySeriesOfCorrectAnswers.push(this.seriesOfCorrectAnswers);
+                            this.seriesOfCorrectAnswers = 0;
+                        }
+                        this.isRightAnswer = true;
                     }
-                    this.isRightAnswer = true;
                 };
                 switch (event.code) {
                     case 'Space':
