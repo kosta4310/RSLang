@@ -54,7 +54,7 @@ export const STATISTIC_TEMPLATE = (statisticGamePerDay: IStatisticGamePerDay, st
                 </div>
                 <div class="stat__word-line-container">
                     <div class="answer-title">процент правильных ответов</div>
-                    <div class="right-word">${statisticDataAll.rateRightAnswers}</div>
+                    <div class="right-word">${statisticDataAll.rateRightAnswers}%</div>
                 </div>
                 <div class="stat__word-line-container">
                     <div class="answer-title">количество изученных слов</div>

@@ -67,8 +67,8 @@ export class Statistic {
         const { learnedWords, initDataStatistic } = await this.getStatisticGamePerDay();
         const quantityNewWord = initDataStatistic.audioCallNewWords + initDataStatistic.sprintNewWords;
         const rateRightAnswers = Math.floor(
-            (initDataStatistic.audioCallCorrect +
-                initDataStatistic.sprintCorrect / (initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal)) *
+            ((initDataStatistic.audioCallCorrect + initDataStatistic.sprintCorrect) /
+                (initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal)) *
                 100
         );
 

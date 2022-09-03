@@ -68,7 +68,7 @@ export class AudioCall {
         document.body.innerHTML = '';
         document.body.insertAdjacentHTML('beforeend', templateHeader);
         this.header.init();
-        this.learnBookGame = state.isFromBook;  
+        this.learnBookGame = state.isFromBook;
         this.startGame();
         state.isFromBook = false;
     }
