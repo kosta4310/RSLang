@@ -26,6 +26,7 @@ export class Header {
         (<Array<HTMLElement>>this.links).map((link) => link.addEventListener('click', () => this.openCloseMenu()));
 
         document.querySelector('.audio-call')?.addEventListener('click', () => {
+            state.isFromBook=false
             state.setItem({ isFromBook: false });
             if (document.location.hash === '#/audio-call') {
                 location.reload();
@@ -33,6 +34,7 @@ export class Header {
         });
 
         document.querySelector('.sprint')?.addEventListener('click', () => {
+            state.isFromBook=false
             state.setItem({ isFromBook: false });
             if (document.location.hash === '#/sprint') {
                 location.reload();

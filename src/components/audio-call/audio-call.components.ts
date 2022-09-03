@@ -68,14 +68,14 @@ export class AudioCall {
         document.body.innerHTML = '';
         document.body.insertAdjacentHTML('beforeend', templateHeader);
         this.header.init();
+        this.learnBookGame = state.isFromBook;  
         this.startGame();
+        state.isFromBook = false;
     }
 
     startGame() {
-        this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, state.isFromBook);
-        this.learnBookGame = state.isFromBook;
+        this.startPage.init(AUDIO_CALL_TITLE, AUDIO_CALL_DESCRIPTION, this.learnBookGame);
         this.resetParam();
-        state.isFromBook = false;
         this.imitationKeydown();
 
         document.querySelector('.start-game')?.addEventListener('click', () => {
