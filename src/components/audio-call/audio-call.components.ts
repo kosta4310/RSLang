@@ -451,6 +451,7 @@ export class AudioCall {
         const { userId, token } = state.getItem('auth');
         const currentDay = new Date().toISOString().slice(0, 10);
         let currentDayObject = {
+            learnedWords: 0,
             sprintCorrect: 0,
             sprintTotal: 0,
             sprintNewWords: 0,
@@ -483,18 +484,19 @@ export class AudioCall {
 
         const { audioCallCorrect, audioCallTotal, longestSequenceCorrectAnswers, newWordInGame } = this.statisticDay;
 
-        currentDayObject.sprintCorrectInLineCount =
-            currentDayObject.sprintCorrectInLineCount > longestSequenceCorrectAnswers
-                ? currentDayObject.sprintCorrectInLineCount
+        currentDayObject.audioCallCorrectInLineCount =
+            currentDayObject.audioCallCorrectInLineCount > longestSequenceCorrectAnswers
+                ? currentDayObject.audioCallCorrectInLineCount
                 : longestSequenceCorrectAnswers;
-        currentDayObject.sprintNewWords += newWordInGame;
-        currentDayObject.sprintCorrect += audioCallCorrect;
-        currentDayObject.sprintTotal += audioCallTotal;
+        currentDayObject.audioCallNewWords += newWordInGame;
+        currentDayObject.audioCallCorrect += audioCallCorrect;
+        currentDayObject.audioCallTotal += audioCallTotal;
+        currentDayObject.learnedWords += this.learnedWords;
 
         optional[currentDay] = currentDayObject;
         initStat.optional = optional;
         initStat.learnedWords += this.learnedWords;
 
-        upsertStatistics(userId, token, initStat);
+        await upsertStatistics(userId, token, initStat);
     }
 }
