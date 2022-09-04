@@ -74,18 +74,16 @@ export const templateOurTeam = `
                                 </a>
                                 <div class="team-item__content-right">developer</div>
                             </div>
-                            <p class="team-item__text">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore facilis maiores
-                                aspernatur dolorem tenetur explicabo impedit, autem nobis soluta earum, culpa minima
-                                possimus illo, asperiores dolore. Itaque explicabo quod non!
-                            </p>
                             <span class="team-item__color-title">
                                 Задачи
                             </span>
                             <p class="team-item__text">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor ex, possimus sunt
-                                pariatur alias obcaecati omnis voluptatem sequi nulla voluptas consectetur soluta, harum
-                                temporibus quo quia. Dolore nostrum autem dignissimos.
+                            <ul>
+                                <li>Макет дизайна в figma</li>
+                                <li>Страница "учебник"</li>
+                                <li>Статистика</li>
+                                <li>Обновление токена через refreshToken</li>
+                            </ul>
                             </p>
                         </div>
                     </div>

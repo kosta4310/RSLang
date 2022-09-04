@@ -59,6 +59,16 @@
         background-color: $color-card;
         @include font-ABeeZee(2.4rem, 400);
         align-items: stretch;
+
+        ul {
+            all: revert;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            li {
+                all: revert;
+            }
+        }
     }
 
     // .team-item__content-row
