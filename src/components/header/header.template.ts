@@ -1,5 +1,3 @@
-import { state } from '../../state';
-
 export const templateHeader = `
 <div class="wrapper-header">
     <div class="header">
