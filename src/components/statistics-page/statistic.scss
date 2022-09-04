@@ -22,6 +22,9 @@
     .plotly {
         display: flex;
         justify-content: center;
+        .svg-container {
+            z-index: -1;
+        }
     }
 
     .stat__game-container {
