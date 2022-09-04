@@ -127,7 +127,7 @@ export class Sprint {
             item = item - 1;
             if (item < 0) {
                 clearInterval(this.interval);
-                if (state.isGame) {
+                if (state.isGame && location.href.split('/').pop() === 'sprint') {
                     this.showStatistic();
                     state.isGame = false;
                 }
