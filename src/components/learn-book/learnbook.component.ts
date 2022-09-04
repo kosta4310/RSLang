@@ -58,16 +58,22 @@ export class Book {
     checkForAllLearned() {
         const learnedWords = document.querySelectorAll('.learned-word');
         const wrapper = document.querySelector('.wrapper-book');
-        if (this.complexity !== Constants.COMPLEXITY_HARDWORDS) {
-            if (learnedWords.length >= Constants.WORDS_PER_PAGE) {
-                this.controlPanel.enableGamesButtons(false);
-                this.controlPanel.enableAllLearnedText(true);
-                wrapper?.classList.add('all-learned');
-            } else {
-                this.controlPanel.enableGamesButtons(true);
-                this.controlPanel.enableAllLearnedText(false);
-                wrapper?.classList.remove('all-learned');
-            }
+        if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
+            this.controlPanel.enableAllLearnedText(false);
+            wrapper?.classList.remove('all-learned');
+            const allCards = document.querySelectorAll('.card');
+            this.controlPanel.enableGamesButtons(!!allCards.length);
+            return;
+        }
+
+        if (learnedWords.length >= Constants.WORDS_PER_PAGE) {
+            this.controlPanel.enableGamesButtons(false);
+            this.controlPanel.enableAllLearnedText(true);
+            wrapper?.classList.add('all-learned');
+        } else {
+            this.controlPanel.enableGamesButtons(true);
+            this.controlPanel.enableAllLearnedText(false);
+            wrapper?.classList.remove('all-learned');
         }
     }
 
@@ -97,14 +103,13 @@ export class Book {
 
         if (this.complexity === Constants.COMPLEXITY_HARDWORDS && !arrayWords.length) {
             this.displayNoHardWords();
-            this.updatePagination();
-            return;
+        } else {
+            const isAuth = <boolean>state.getItem('isAuth');
+            arrayWords.map((word) => {
+                words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
+            });
         }
 
-        const isAuth = <boolean>state.getItem('isAuth');
-        arrayWords.map((word) => {
-            words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
-        });
         this.updatePagination();
         this.checkForAllLearned();
     }
@@ -213,6 +218,10 @@ export class Book {
                     this.checkForAllLearned();
                     if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                         card.remove();
+                        const allCards = document.querySelectorAll('.card');
+                        if (!allCards.length) {
+                            this.displayNoHardWords();
+                        }
                     } else {
                         easyWord.classList.add('selected');
                         card.querySelector('.hard-word')?.classList.remove('selected');
