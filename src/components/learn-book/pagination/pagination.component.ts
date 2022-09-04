@@ -90,7 +90,15 @@ export class Pagination {
         item6.classList.add('pagination__more');
     }
 
-    redraw() {
+    redraw(display = true) {
+        const pagination = <HTMLElement>document.querySelector('#pagination');
+        const paginationContainer = <HTMLElement>document.querySelector('.pagination__container');
+        if (!display) {
+            paginationContainer.classList.add('hidden');
+            return;
+        } else {
+            paginationContainer.classList.remove('hidden');
+        }
         if (this.currentPage <= PAGINATION_BUTTONS.PAGE_FOR_RENDER_START) {
             this.renderStart();
         } else if (this.currentPage > PAGINATION_BUTTONS.PAGE_FOR_RENDER_END) {
@@ -98,7 +106,6 @@ export class Pagination {
         } else {
             this.renderMiddle(this.currentPage);
         }
-        const pagination = <HTMLElement>document.querySelector('#pagination');
         const items = <NodeListOf<HTMLElement>>pagination.querySelectorAll('.pagination__item');
         items.forEach((i) => {
             if (i.innerText === this.currentPage.toString()) {

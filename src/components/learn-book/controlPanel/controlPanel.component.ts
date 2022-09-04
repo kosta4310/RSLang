@@ -62,7 +62,6 @@ export class ControlPanel {
                 state.setItem({ complexity: complexity.toString(), page: '0' });
                 this.parent.page = 0;
                 this.parent.renderWords();
-                this.parent.updatePagination();
                 const pagination = <HTMLElement>document.querySelector('.pagination__container');
                 pagination.classList.remove('hidden');
                 const complexWordsBtn = document.querySelector('.hard-words');
@@ -82,8 +81,6 @@ export class ControlPanel {
             this.parent.complexity = Constants.COMPLEXITY_HARDWORDS;
             state.setItem({ complexity: Constants.COMPLEXITY_HARDWORDS.toString() });
             this.parent.renderWords();
-            const pagination = <HTMLElement>document.querySelector('.pagination__container');
-            pagination.classList.add('hidden');
             const complexityButtons = <HTMLElement>document.querySelector('.complexity__buttons');
             const buttons = complexityButtons.querySelectorAll('.learnbook__button');
             buttons.forEach((i) => i.classList.remove('learnbook__button_selected'));

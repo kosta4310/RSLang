@@ -43,10 +43,9 @@ export class Book {
         new Header().init();
         this.controlPanel.render();
         this.pagination.render();
-
+        
         this.renderLoading();
         await this.renderWords();
-        this.updatePagination();
         this.listen();
     }
 
@@ -59,20 +58,23 @@ export class Book {
     checkForAllLearned() {
         const learnedWords = document.querySelectorAll('.learned-word');
         const wrapper = document.querySelector('.wrapper-book');
-        if (this.complexity !== Constants.COMPLEXITY_HARDWORDS && learnedWords.length >= Constants.WORDS_PER_PAGE) {
-            this.controlPanel.enableGamesButtons(false);
-            this.controlPanel.enableAllLearnedText(true);
-            wrapper?.classList.add('all-learned');
-        } else {
-            this.controlPanel.enableGamesButtons(true);
-            this.controlPanel.enableAllLearnedText(false);
-            wrapper?.classList.remove('all-learned');
+        if (this.complexity !== Constants.COMPLEXITY_HARDWORDS) {
+            if (learnedWords.length >= Constants.WORDS_PER_PAGE) {
+                this.controlPanel.enableGamesButtons(false);
+                this.controlPanel.enableAllLearnedText(true);
+                wrapper?.classList.add('all-learned');
+            } else {
+                this.controlPanel.enableGamesButtons(true);
+                this.controlPanel.enableAllLearnedText(false);
+                wrapper?.classList.remove('all-learned');
+            }
         }
     }
 
     updatePagination() {
         this.pagination.currentPage = this.page + 1;
-        this.pagination.redraw();
+        const isDisplay = !(this.complexity === Constants.COMPLEXITY_HARDWORDS);
+        this.pagination.redraw(isDisplay);
     }
 
     async renderWords() {
@@ -92,12 +94,26 @@ export class Book {
         const words = <HTMLElement>document.body.querySelector('#words');
         words.setAttribute('data-complexity', this.complexity.toString());
         words.innerHTML = '';
-        const isAuth = <boolean>state.getItem('isAuth');
 
+        if (this.complexity === Constants.COMPLEXITY_HARDWORDS && !arrayWords.length) {
+            this.displayNoHardWords();
+            this.updatePagination();
+            return;
+        }
+
+        const isAuth = <boolean>state.getItem('isAuth');
         arrayWords.map((word) => {
             words.insertAdjacentHTML('beforeend', getCard(word, isAuth));
         });
+        this.updatePagination();
         this.checkForAllLearned();
+    }
+
+    displayNoHardWords() {
+        const words = <HTMLElement>document.body.querySelector('#words');
+        words.innerHTML = '';
+        this.controlPanel.enableGamesButtons(false);
+        words.innerHTML = '<div class="no-hard-words"><div>Нет сложных слов<div></div>'
     }
 
     async getArrayWords(complexity: number, page: number) {
@@ -180,6 +196,10 @@ export class Book {
                 if (buttonHard.classList.contains('selected') && this.complexity === Constants.COMPLEXITY_HARDWORDS) {
                     await saveWord(wordId, 'normal', {});
                     card.remove();
+                    const allCards = document.querySelectorAll('.card');
+                    if (!allCards.length) {
+                        this.displayNoHardWords();
+                    }
                 }
                 return;
             }
