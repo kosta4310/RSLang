@@ -36,4 +36,4 @@ export const SPRINT_TEMPLATE = `
         </div>
     `;
 export const SPRINT_TITLE = `Sprint`;
-export const SPRINT_DESCRIPTION = `This game for the real men`;
+export const SPRINT_DESCRIPTION = `Эта игра для улучшения визульного восприятия слов`;
