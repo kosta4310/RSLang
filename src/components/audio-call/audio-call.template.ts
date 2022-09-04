@@ -25,8 +25,8 @@ export const AUDIO_CALL_TEMPLATE = (audio: string) => {
     </div>`;
 };
 
-export const AUDIO_CALL_BUTTONS = (word: string) => {
-    return `<button class="btn-choice" data-word=${word}>${word}</button>`;
+export const AUDIO_CALL_BUTTONS = (word: string,index:number) => {
+    return `<button class="btn-choice" data-word=${word}>${index} ${word}</button>`;
 };
 
 export const RIGHT_ANSWER_IMAGE = (pathImage: string) => {
