@@ -148,6 +148,10 @@ export class Statistic {
                         color: '#7f7f7f',
                     },
                 },
+                // For example, to set the interval between ticks to one day, set `dtick` to 86400000.0
+                // https://plotly.com/javascript/reference/#layout-xaxis-dtick
+                dtick: 86400000.0,
+
             },
             yaxis: {
                 title: {
@@ -171,6 +175,7 @@ export class Statistic {
                         color: '#7f7f7f',
                     },
                 },
+                dtick: 86400000.0,
             },
             yaxis: {
                 title: {
