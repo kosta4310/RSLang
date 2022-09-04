@@ -1,4 +1,3 @@
-import { STATISTIC_WORD } from './../statistic/statistic.template';
 import { templateHeader } from './../header/header.template';
 import { Header } from './../header/header.component';
 import { BASE } from './../../config';
@@ -24,8 +23,9 @@ import {
     upsertStatistics,
 } from '../api/api';
 import { IWord, NoteToWord, Statistic, UserWord } from '../api/types';
-import { STATISTIC_TEMPLATE } from '../statistic/statistic.template';
-import { IOptionalToWord, IStatisticDayAudioCall } from '../types';
+import { Constants, IOptionalToWord, IStatisticDayAudioCall } from '../types';
+import { TEMPLATE_STATISTIC_AUDIO_CALL, TEMPLATE_TABLE_LINE } from './audio-call.statistic.template';
+import { sliceString } from './utils';
 
 export class AudioCall {
     header: Header;
@@ -40,6 +40,7 @@ export class AudioCall {
     seriesOfCorrectAnswers: number;
     statisticDay: IStatisticDayAudioCall;
     learnedWords: number;
+    arrayWords: IWord[];
 
     constructor() {
         this.header = new Header();
@@ -50,6 +51,7 @@ export class AudioCall {
         this.learnBookGame = false;
         this.isRightAnswer = false;
         this.arraySeriesOfCorrectAnswers = [];
+        this.arrayWords = [];
         this.seriesOfCorrectAnswers = 0;
         this.answers = {
             right: [],
@@ -81,7 +83,7 @@ export class AudioCall {
         document.querySelector('.start-game')?.addEventListener('click', () => {
             if (!this.learnBookGame) {
                 this.complexity = state.complexityMainGame;
-                this.page = Math.floor(Math.random() * 20);
+                this.page = Math.floor(Math.random() * Constants.WORDS_PER_PAGE);
             } else {
                 this.complexity = state.getItem('complexity');
                 this.page = state.getItem('page');
@@ -99,6 +101,7 @@ export class AudioCall {
             this.learnBookGame,
             state.getItem('isAuth')
         );
+        this.arrayWords = arrayWords;
         this.renderWord(arrayWords, this.indexWord);
         this.mouseGame(arrayWords);
         this.keyboardGame(arrayWords);
@@ -112,7 +115,7 @@ export class AudioCall {
     async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
         if (!isAuth) return await getChunkOfWords(group, page);
         const { userId, token } = state.getItem('auth');
-        if (group === '6') {
+        if (group === Constants.COMPLEXITY_HARDWORDS.toString()) {
             const res = await getAllUserAggWords(userId, token, {
                 filter: JSON.stringify({ 'userWord.difficulty': 'hard' }),
             });
@@ -131,7 +134,7 @@ export class AudioCall {
         const [{ paginatedResults }] = await getAllUserAggWords(userId, token, {
             group: group,
             page: '0',
-            wordsPerPage: '600',
+            wordsPerPage: Constants.MAX_NUMBER_WORDS_IN_GROUP.toString(),
             filter: JSON.stringify({
                 'userWord.difficulty': 'easy',
             }),
@@ -142,14 +145,14 @@ export class AudioCall {
         });
 
         async function rec(group: string, page: string, array: Array<IWord>): Promise<Array<IWord>> {
-            if (array.length >= 20) return array;
+            if (array.length >= Constants.WORDS_PER_PAGE) return array;
             if (Number(page) <= 0) return array;
 
             const tempArr = await getChunkOfWords(group, (Number(page) - 1).toString());
             const filteredArray = tempArr.filter((iWord) => !easyKeyArray.includes(<string>iWord.id));
             const newArray = [...array, ...filteredArray].slice(0, 20);
 
-            return newArray.length < 20 ? await rec(group, (Number(page) - 1).toString(), newArray) : newArray;
+            return newArray.length < Constants.WORDS_PER_PAGE ? await rec(group, (Number(page) - 1).toString(), newArray) : newArray;
         }
 
         return await rec(group, page, filteredArray);
@@ -162,7 +165,7 @@ export class AudioCall {
             const pathImage = `${BASE}/${searchWord.image}`;
 
             if (target.classList.contains('btn-choice')) {
-                if (target.innerHTML === searchWord.wordTranslate) {
+                if (sliceString(target.innerHTML) === searchWord.wordTranslate) {
                     this.rightAnswer(pathImage, searchWord);
                     this.playSound('../../assets/sounds/correct2.mp3');
                     this.answers.right.push(searchWord);
@@ -192,7 +195,7 @@ export class AudioCall {
                 const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
                 const keyboardButton = (index: number) => {
                     if (!buttons[index].disabled) {
-                        if (buttons[index].innerHTML === searchWord.wordTranslate) {
+                        if (sliceString(buttons[index].innerHTML) === searchWord.wordTranslate) {
                             this.rightAnswer(pathImage, searchWord);
                             this.playSound('../../assets/sounds/correct2.mp3');
                             this.answers.right.push(searchWord);
@@ -273,10 +276,10 @@ export class AudioCall {
         const arrForButtons = this.wordForButtons(arrayWords, index);
         (<HTMLElement>document.querySelector('.wrapper')).innerHTML = '';
         document.querySelector('.wrapper')?.insertAdjacentHTML('beforeend', AUDIO_CALL_TEMPLATE(searchWord.audio));
-        arrForButtons.forEach((el) => {
+        arrForButtons.forEach((el, i) => {
             document
                 .querySelector('.audio-call__choiceBtns')
-                ?.insertAdjacentHTML('beforeend', AUDIO_CALL_BUTTONS(el.wordTranslate));
+                ?.insertAdjacentHTML('beforeend', AUDIO_CALL_BUTTONS(el.wordTranslate, i + 1));
         });
         this.closeGame();
         const pathAudio = `${BASE}/${(<HTMLElement>document.querySelector('.sound-btn')).getAttribute('data-audio')}`;
@@ -304,7 +307,7 @@ export class AudioCall {
         const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-choice');
         buttons.forEach((el) => {
             el.disabled = true;
-            if (el.innerHTML === word.wordTranslate) {
+            if (sliceString(el.innerHTML) === word.wordTranslate) {
                 el.classList.add('right-button');
             }
         });
@@ -340,6 +343,7 @@ export class AudioCall {
             audioCallTotal: 0,
         };
         this.learnedWords = 0;
+        this.arrayWords = [];
     }
 
     playWordOnClick(element: HTMLElement, pathAudio: string) {
@@ -359,20 +363,24 @@ export class AudioCall {
 
     showStatistic(rightWords: IWord[], wrongWords: IWord[]) {
         state.isGame = false;
-        const gameWrapper = document.querySelector('.game-wrapper');
-        gameWrapper?.parentNode?.removeChild(gameWrapper);
-        document
-            .querySelector('.game-container__audio-call')
-            ?.insertAdjacentHTML('beforeend', STATISTIC_TEMPLATE(rightWords.length, wrongWords.length));
-        const renderWordStatistic = (arr: IWord[], className: string) => {
-            arr.forEach((el) => {
-                document
-                    .querySelector(className)
-                    ?.insertAdjacentHTML('beforeend', STATISTIC_WORD(el.audio, el.word, el.wordTranslate));
-            });
-        };
-        renderWordStatistic(rightWords, '.right-word');
-        renderWordStatistic(wrongWords, '.wrong-word');
+        const wrapper = <HTMLElement>document.querySelector('.wrapper');
+        wrapper.parentNode?.removeChild(wrapper);
+        document.body.insertAdjacentHTML('beforeend', TEMPLATE_STATISTIC_AUDIO_CALL);
+        const table = <HTMLElement>document.body.querySelector('.statistic-audio-call__table');
+        this.arrayWords.forEach((el) => {
+            if (rightWords.includes(el)) {
+                table.insertAdjacentHTML(
+                    'beforeend',
+                    TEMPLATE_TABLE_LINE(el.audio, el.word, el.transcription, el.wordTranslate, true)
+                );
+            } else {
+                table.insertAdjacentHTML(
+                    'beforeend',
+                    TEMPLATE_TABLE_LINE(el.audio, el.word, el.transcription, el.wordTranslate, false)
+                );
+            }
+        });
+        this.closeGame();
         const soundBtns = document.querySelectorAll<HTMLElement>('.sound-btn');
         soundBtns.forEach((el) => {
             const pathAudio = `${BASE}/${el.getAttribute('data-audio')}`;
@@ -381,14 +389,14 @@ export class AudioCall {
         const isAuth = <boolean>state.getItem('isAuth');
         if (isAuth) {
             this.getStatistic();
-            this.setStatisticWord(this.answers.right, true);
-            this.setStatisticWord(this.answers.wrong, false);
+            this.setStatisticWord(rightWords, true);
+            this.setStatisticWord(wrongWords, false);
             this.setStatisticDay();
         }
     }
 
     async setStatisticWord(array: IWord[], isRight: boolean) {
-        const isHardWord = state.getItem('complexity') === '6';
+        const isHardWord = state.getItem('complexity') === Constants.COMPLEXITY_HARDWORDS.toString();
         array.forEach((el) => {
             let id = '';
             if (isHardWord) {
