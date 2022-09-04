@@ -318,7 +318,7 @@ export class Sprint {
     }
 
     handlerCorrectAnswer(word: string) {
-        this.playSound('../../assets/sounds/correct1.mp3');
+        this.playSound('../../assets/sounds/correct2.mp3');
         this.resultOfGame.set(word, true);
         this.numberOfTimesPressed = this.numberOfTimesPressed + 1;
     }

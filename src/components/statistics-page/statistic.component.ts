@@ -2,7 +2,7 @@ export { STATISTIC_TEMPLATE } from './statistic.template';
 import { templateFooter } from '../footer/footer.template';
 import { templateHeader } from '../header/header.template';
 import { Header } from '../header/header.component';
-import { STATISTIC_TEMPLATE } from './statistic.template';
+import { STATISTIC_TEMPLATE, YOR_ARE_NOT_AUTHENTIFICATION_TEMPLATE } from './statistic.template';
 import Plotly, { Data, Layout } from 'plotly.js-dist-min';
 import * as API from '../api/api';
 import { state } from '../../state';
@@ -20,9 +20,14 @@ export class Statistic {
         body.innerHTML = '';
         body.insertAdjacentHTML('beforeend', templateHeader);
         this.header.init();
-        const { initDataStatistic } = await this.getStatisticGamePerDay();
-        const statisticDataAll = await this.getStatisticDataAll();
-        this.render(initDataStatistic, statisticDataAll);
+
+        if (state.getItem('isAuth')) {
+            const { initDataStatistic } = await this.getStatisticGamePerDay();
+            const statisticDataAll = await this.getStatisticDataAll();
+            this.render(initDataStatistic, statisticDataAll);
+        } else {
+            this.renderYouAreNotAuthentification();
+        }
         body.insertAdjacentHTML('beforeend', templateFooter);
     }
 
@@ -32,6 +37,10 @@ export class Statistic {
         this.getStatisticAllDays().then((res) => {
             this.showGraphics(res);
         });
+    }
+
+    renderYouAreNotAuthentification() {
+        document.body.insertAdjacentHTML('beforeend', YOR_ARE_NOT_AUTHENTIFICATION_TEMPLATE);
     }
 
     async getStatisticGamePerDay() {
@@ -66,11 +75,13 @@ export class Statistic {
     async getStatisticDataAll() {
         const { learnedWords, initDataStatistic } = await this.getStatisticGamePerDay();
         const quantityNewWord = initDataStatistic.audioCallNewWords + initDataStatistic.sprintNewWords;
-        const rateRightAnswers = Math.floor(
-            ((initDataStatistic.audioCallCorrect + initDataStatistic.sprintCorrect) /
-                (initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal)) *
-                100
-        );
+        const rateRightAnswers =
+            initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal &&
+            Math.floor(
+                ((initDataStatistic.audioCallCorrect + initDataStatistic.sprintCorrect) /
+                    (initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal)) *
+                    100
+            );
 
         return { learnedWords, quantityNewWord, rateRightAnswers };
     }
