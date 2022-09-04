@@ -29,18 +29,15 @@ export const saveWord = async function (
         optional: initOption,
     };
 
-
     const userWord = await API.getUserWordById(userId, wordId, token);
-    let result;
     if (typeof userWord === 'string') {
         // и потом присваиваем новые свойства если есть
         Object.assign(body.optional, options);
-        result = await API.createUserWord(userId, wordId, token, body);
+        await API.createUserWord(userId, wordId, token, body);
     } else {
-
         Object.assign(body.optional, userWord.optional);
         // Object.assign(body.optional, options)
-        result = await API.updateUserWord(userId, wordId, token, body);
+        await API.updateUserWord(userId, wordId, token, body);
     }
 };
 
