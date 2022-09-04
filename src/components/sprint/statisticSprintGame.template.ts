@@ -11,7 +11,7 @@ export function templateStatisticGameSprint() {
             </div>
             <div class="statistic-sprint__main">
             <h1 class="statistic-sprint__title">
-                  Рузультаты
+                  Результаты
             </h1>
             <div class="statistic-sprint__block">
                <div class="statistic-sprint__table">
