@@ -81,7 +81,7 @@ export const templateOurTeam = `
                             <ul>
                                 <li>Макет дизайна в figma</li>
                                 <li>Страница "учебник"</li>
-                                <li>Статистика</li>
+                                <li>Страница "статистика"</li>
                                 <li>Обновление токена через refreshToken</li>
                             </ul>
                             </p>
