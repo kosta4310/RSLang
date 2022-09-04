@@ -4,10 +4,10 @@ import './statistic.scss';
 export const STATISTIC_TEMPLATE = (statisticGamePerDay: IStatisticGamePerDay, statisticDataAll: IStatisticDataAll) => {
     const rateAudioCall =
         statisticGamePerDay.audioCallTotal &&
-        Math.floor((statisticGamePerDay.audioCallCorrect / statisticGamePerDay.audioCallTotal) * 100) + '%';
+        Math.floor((statisticGamePerDay.audioCallCorrect / statisticGamePerDay.audioCallTotal) * 100);
     const rateSprint =
         statisticGamePerDay.sprintTotal &&
-        Math.floor((statisticGamePerDay.sprintCorrect / statisticGamePerDay.sprintTotal) * 100) + '%';
+        Math.floor((statisticGamePerDay.sprintCorrect / statisticGamePerDay.sprintTotal) * 100);
 
     return `
     <div class="wrapper">
@@ -22,7 +22,7 @@ export const STATISTIC_TEMPLATE = (statisticGamePerDay: IStatisticGamePerDay, st
                 </div>
                 <div class="stat__game-line-container">
                     <div class="answer-title">процент правильных ответов</div>
-                    <div class="right-word">${rateAudioCall}</div>
+                    <div class="right-word">${rateAudioCall}%</div>
                 </div>
                 <div class="stat__game-line-container">
                     <div class="answer-title">самая длинная серия правильных ответов</div>
@@ -37,7 +37,7 @@ export const STATISTIC_TEMPLATE = (statisticGamePerDay: IStatisticGamePerDay, st
                 </div>
                 <div class="stat__game-line-container">
                     <div class="answer-title">процент правильных ответов</div>
-                    <div class="right-word">${rateSprint}</div>
+                    <div class="right-word">${rateSprint}%</div>
                 </div>
                 <div class="stat__game-line-container">
                     <div class="answer-title">самая длинная серия правильных ответов</div>
@@ -76,3 +76,15 @@ export const STATISTIC_TEMPLATE = (statisticGamePerDay: IStatisticGamePerDay, st
     </div>
     </div>`;
 };
+
+export const YOR_ARE_NOT_AUTHENTIFICATION_TEMPLATE = `
+<div class="wrapper wrapper__not-auth">
+      <div class="container container__not-auth">
+         <div class="not-auth">
+            <h1 class="not-auth__title">
+               Вы не авторизованы.<br>
+               Статистика доступна только авторизованным<br> пользователям.
+            </h1>
+         </div>
+      </div>
+   </div>`;
