@@ -129,8 +129,6 @@ export class Pagination {
                     )
                 ) {
                     this.currentPage = +target.innerText;
-                    console.log(state.getItem('page'));
-                    
                     this.redraw();
                     
                     this.parent.page = this.currentPage - 1;

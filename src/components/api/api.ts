@@ -43,7 +43,6 @@ async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
     // 402 для /users/{id}/words
     // 401 для других эндпоинтов
     if (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.PAYMENT_REQUIRED) {
-        console.log(`TOKEN HAS EXPIRED, TRY TO GET NEW TOKEN`);
         const { userId, refreshToken } = state.getItem('auth');
         if (refreshToken) {
             const refreshTokenResponse = await getNewUserToken(userId, refreshToken);

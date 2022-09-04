@@ -14,7 +14,6 @@ export const saveWord = async function (
     options: Partial<IOptionalToWord> = {}
 ) {
     const { token, userId } = <Auth>state.getItem('auth');
-    console.log(userId, wordId, token);
 
     const initOption = <IOptionalToWord>{
         sprintCorrect: 0,
@@ -34,17 +33,15 @@ export const saveWord = async function (
     const userWord = await API.getUserWordById(userId, wordId, token);
     let result;
     if (typeof userWord === 'string') {
-        console.log('POST');
         // и потом присваиваем новые свойства если есть
         Object.assign(body.optional, options);
         result = await API.createUserWord(userId, wordId, token, body);
     } else {
-        console.log('PUT');
+
         Object.assign(body.optional, userWord.optional);
         // Object.assign(body.optional, options)
         result = await API.updateUserWord(userId, wordId, token, body);
     }
-    console.log(result);
 };
 
 export function shuffle<T>(array: Array<T>): Array<T> {
