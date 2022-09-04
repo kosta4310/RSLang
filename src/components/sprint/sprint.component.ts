@@ -199,10 +199,27 @@ export class Sprint {
         });
 
         wordTranslateArray = this.getSortArray(wordTranslateArray);
+        // wordArray = shuffle(wordArray);
 
         for (let i = 0; i < this.arrayWords.length; i++) {
             this.mapWordPairs.set(wordArray[i], wordTranslateArray[i]);
         }
+
+        this.mapWordPairs = this.shuffleMap(this.mapWordPairs);
+
+        const temp = [];
+        for (const word of this.mapWordPairs.keys()) {
+            temp.push(this.arrayWords.find((iword) => iword.word === word) as IWord);
+        }
+
+        this.arrayWords = [...temp];
+    }
+
+    shuffleMap(map: Map<string, string>) {
+        const entries = Array.from(map);
+        const res = shuffle(entries);
+
+        return new Map(res);
     }
 
     async getArrayForGame(group: string, page: string, isFromBook: boolean, isAuth: boolean) {
@@ -550,34 +567,34 @@ export class Sprint {
     getSortArray(arr: Array<string>) {
         // 20,18,16 - quantity of words per page, experimental numbers
         if (arr.length === 20 || arr.length === 18 || arr.length === 16) {
-            if (Math.random() < 0.6) {
-                const permanenetArray = [];
-                let changeableArray = [];
-                const isReverse = Math.random() > 0.5;
-                for (let i = 0; i < arr.length; i++) {
-                    const el = arr[i];
-                    if (isReverse) {
-                        i % 2 === 0 ? permanenetArray.push(el) : changeableArray.push(el);
-                    } else {
-                        i % 2 !== 0 ? permanenetArray.push(el) : changeableArray.push(el);
-                    }
+            // if (Math.random() < 0.6) {
+            const permanenetArray = [];
+            let changeableArray = [];
+            const isReverse = Math.random() > 0.5;
+            for (let i = 0; i < arr.length; i++) {
+                const el = arr[i];
+                if (isReverse) {
+                    i % 2 === 0 ? permanenetArray.push(el) : changeableArray.push(el);
+                } else {
+                    i % 2 !== 0 ? permanenetArray.push(el) : changeableArray.push(el);
                 }
-                changeableArray = shuffle(changeableArray);
-                const res = [];
-                for (let i = 0; i < permanenetArray.length; i++) {
-                    const elem1 = permanenetArray[i];
-                    const elem2 = changeableArray[i];
-                    if (isReverse) {
-                        res.push(elem1);
-                        res.push(elem2);
-                    } else {
-                        res.push(elem2);
-                        res.push(elem1);
-                    }
+            }
+            changeableArray = shuffle(changeableArray);
+            const res = [];
+            for (let i = 0; i < permanenetArray.length; i++) {
+                const elem1 = permanenetArray[i];
+                const elem2 = changeableArray[i];
+                if (isReverse) {
+                    res.push(elem1);
+                    res.push(elem2);
+                } else {
+                    res.push(elem2);
+                    res.push(elem1);
                 }
+            }
 
-                return res;
-            } else return shuffle(arr);
+            return res;
+            // } else return shuffle(arr);
         } else return shuffle(arr);
     }
 }
