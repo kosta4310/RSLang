@@ -32,7 +32,7 @@ export const STATISTIC_TEMPLATE = (statisticGamePerDay: IStatisticGamePerDay, st
             <div class="stat__game-card">
                 <h2>Спринт</h2>
                 <div class="stat__game-line-container">
-                    <div class="answer-title">количество новых слов за день</div>
+                    <div class="answer-title">количество новых слов</div>
                     <div class="right-word">${statisticGamePerDay.sprintNewWords}</div>
                 </div>
                 <div class="stat__game-line-container">

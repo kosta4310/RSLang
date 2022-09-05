@@ -114,9 +114,6 @@ export class Statistic {
                 type: 'scatter',
             };
         } else {
-            delete dataAll['2021-09-01'];
-            delete dataAll['2022-09-01'];
-
             const orderedData = <IOptionalToStatistic>Object.keys(dataAll)
                 .sort()
                 .reduce((acc: IOptionalToStatistic, key) => {
@@ -127,28 +124,21 @@ export class Statistic {
             const obj = Object.values(orderedData);
             const value1 = obj.map((val) => val.sprintNewWords + val.audioCallNewWords);
 
-            // const value2 = obj.map((val) => val.learnedWords);
-            // const value2 = [];
             const value2: number[] = obj
                 .reduce(
                     (acc: number[], curr) => {
-                        // const temp = acc[acc.length - 1] + curr.learnedWords;
                         return [...acc, acc[acc.length - 1] + curr.learnedWords];
                     },
                     [0]
                 )
                 .slice(1);
 
-            console.log(`keys: ${keys}`);
-            console.log(`value1: ${value1}`);
-            console.log(`value2: ${value2}`);
-
             keys = keys.splice(-10);
 
             trace1 = {
                 x: keys,
                 y: value1,
-                type: 'scatter',
+                type: 'bar',
             };
 
             trace2 = {
@@ -168,8 +158,7 @@ export class Statistic {
                         color: '#7f7f7f',
                     },
                 },
-                // For example, to set the interval between ticks to one day, set `dtick` to 86400000.0
-                // https://plotly.com/javascript/reference/#layout-xaxis-dtick
+
                 dtick: 86400000.0,
             },
             yaxis: {
