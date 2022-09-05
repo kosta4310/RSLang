@@ -18,18 +18,16 @@ export const templateOurTeam = `
                                 </a> 
                                 <div class="team-item__content-right">team lead</div>
                             </div>
-                            <p class="team-item__text">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore facilis maiores
-                                aspernatur dolorem tenetur explicabo impedit, autem nobis soluta earum, culpa minima
-                                possimus illo, asperiores dolore. Itaque explicabo quod non!
-                            </p>
                             <span class="team-item__color-title">
                                 Задачи
                             </span>
                             <p class="team-item__text">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor ex, possimus sunt
-                                pariatur alias obcaecati omnis voluptatem sequi nulla voluptas consectetur soluta, harum
-                                temporibus quo quia. Dolore nostrum autem dignissimos.
+                                <ul>
+                                <li>Создание и распределение задач между членами команды</li>
+                                <li>Настройка сервера и начальная настройка проекта</li>
+                                <li>Разработка главной страницы и игры Sprint</li>
+                                <li>Разработка API для работы с базой данных</li>
+                            </ul>
                             </p>
                         </div>
                     </div>
