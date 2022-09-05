@@ -60,20 +60,22 @@ export class Statistic {
             audioCallTotal: 0,
         };
         if (typeof response === 'string') {
-            return { learnedWords: 0, initDataStatistic };
+            return { initDataStatistic };
         } else {
-            const { learnedWords, optional } = response;
+            const { optional } = response;
             // eslint-disable-next-line no-prototype-builtins
             if (optional.hasOwnProperty(currentDay)) {
                 Object.assign(initDataStatistic, optional[currentDay]);
             }
 
-            return { learnedWords, initDataStatistic };
+            return { initDataStatistic };
         }
     }
 
     async getStatisticDataAll() {
-        const { learnedWords, initDataStatistic } = await this.getStatisticGamePerDay();
+        const { initDataStatistic } = await this.getStatisticGamePerDay();
+        const learnedWords = initDataStatistic.learnedWords;
+
         const quantityNewWord = initDataStatistic.audioCallNewWords + initDataStatistic.sprintNewWords;
         const rateRightAnswers =
             initDataStatistic.audioCallTotal + initDataStatistic.sprintTotal &&
@@ -121,14 +123,22 @@ export class Statistic {
             let keys = Object.keys(orderedData);
             const obj = Object.values(orderedData);
             const value1 = obj.map((val) => val.sprintNewWords + val.audioCallNewWords);
-            const value2 = obj.map((val) => val.learnedWords);
+
+            const value2: number[] = obj
+                .reduce(
+                    (acc: number[], curr) => {
+                        return [...acc, acc[acc.length - 1] + curr.learnedWords];
+                    },
+                    [0]
+                )
+                .slice(1);
 
             keys = keys.splice(-10);
 
             trace1 = {
                 x: keys,
                 y: value1,
-                type: 'scatter',
+                type: 'bar',
             };
 
             trace2 = {
@@ -148,10 +158,8 @@ export class Statistic {
                         color: '#7f7f7f',
                     },
                 },
-                // For example, to set the interval between ticks to one day, set `dtick` to 86400000.0
-                // https://plotly.com/javascript/reference/#layout-xaxis-dtick
-                dtick: 86400000.0,
 
+                dtick: 86400000.0,
             },
             yaxis: {
                 title: {
