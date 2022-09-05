@@ -107,7 +107,7 @@ export class Statistic {
 
         if (dataAll === Constants.STATUS_CODE_NULL_DATA) {
             trace1 = {
-                type: 'scatter',
+                type: 'bar',
             };
 
             trace2 = {
@@ -144,7 +144,7 @@ export class Statistic {
             trace2 = {
                 x: keys,
                 y: value2,
-                type: 'bar',
+                type: 'scatter',
             };
         }
 
