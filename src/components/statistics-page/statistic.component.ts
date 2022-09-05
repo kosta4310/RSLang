@@ -197,7 +197,7 @@ export class Statistic {
             },
         };
 
-        Plotly.newPlot('plot1', [trace1], layout1, { displayModeBar: false });
-        Plotly.newPlot('plot2', [trace2], layout2, { displayModeBar: false });
+        Plotly.newPlot('plot1', [trace1], layout1);
+        Plotly.newPlot('plot2', [trace2], layout2);
     }
 }
