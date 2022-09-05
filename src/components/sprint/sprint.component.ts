@@ -103,6 +103,7 @@ export class Sprint {
             this.startGame();
         });
     }
+
     startGame() {
         const param = this.isFromBook
             ? { page: state.getItem('page'), complexity: state.getItem('complexity') }
@@ -199,7 +200,6 @@ export class Sprint {
         });
 
         wordTranslateArray = this.getSortArray(wordTranslateArray);
-        // wordArray = shuffle(wordArray);
 
         for (let i = 0; i < this.arrayWords.length; i++) {
             this.mapWordPairs.set(wordArray[i], wordTranslateArray[i]);

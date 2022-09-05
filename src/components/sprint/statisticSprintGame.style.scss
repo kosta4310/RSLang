@@ -10,6 +10,7 @@
 .container__statistic-sprint {
     height: 100%;
 }
+
 .statistic-sprint {
     // .statistic-sprint__block
     @include font-ABeeZee(2rem, 400);
@@ -43,10 +44,6 @@
         padding-bottom: 3rem;
     }
 
-    // .statistic-sprint__table
-
-    &__table {
-    }
 }
 .table {
     // .table__line
@@ -67,6 +64,7 @@
     &__sound {
         background-color: inherit;
         flex: 0 0 4rem;
+        
         svg:hover {
             fill: $color-red;
         }

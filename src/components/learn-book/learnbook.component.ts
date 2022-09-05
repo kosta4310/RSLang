@@ -34,7 +34,7 @@ export class Book {
 
     async init() {
         document.body.innerHTML = '';
-        //   document.body.style.height = '100%';
+
         document.body.insertAdjacentHTML('afterbegin', LEARNBOOK_PAGE_TEMPLATE);
         this.complexity = +(state.getItem('complexity') ?? 0);
         this.page = +(state.getItem('page') ?? 0);
@@ -43,7 +43,7 @@ export class Book {
         new Header().init();
         this.controlPanel.render();
         this.pagination.render();
-        
+
         this.renderLoading();
         await this.renderWords();
         this.listen();
@@ -118,7 +118,7 @@ export class Book {
         const words = <HTMLElement>document.body.querySelector('#words');
         words.innerHTML = '';
         this.controlPanel.enableGamesButtons(false);
-        words.innerHTML = '<div class="no-hard-words"><div>Нет сложных слов<div></div>'
+        words.innerHTML = '<div class="no-hard-words"><div>Нет сложных слов<div></div>';
     }
 
     async getArrayWords(complexity: number, page: number) {
@@ -127,10 +127,11 @@ export class Book {
 
     async getArrayUserWords(complexity: number, page: number, userId: string, token: string) {
         const response = await API.getAllUserAggWords(userId, token, {
-            wordsPerPage: Constants.WORDS_PER_PAGE.toString(), 
+            wordsPerPage: Constants.WORDS_PER_PAGE.toString(),
             filter: JSON.stringify({ $and: [{ group: complexity }, { page: page }] }),
         });
-        const [{paginatedResults}] = response;
+
+        const [{ paginatedResults }] = response;
         return paginatedResults;
     }
 
@@ -139,7 +140,8 @@ export class Book {
             wordsPerPage: Constants.TOTAL_AVAILABLE_WORDS.toString(),
             filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard' }] }),
         });
-        const [{paginatedResults}] = response;
+
+        const [{ paginatedResults }] = response;
         return paginatedResults;
     }
 

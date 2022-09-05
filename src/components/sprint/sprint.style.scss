@@ -33,6 +33,7 @@
             border-radius: 1rem;
             box-shadow: 0 0.9rem $color-shadow;
         }
+
         button:active {
             box-shadow: 0 0.5rem $color-shadow-dark;
             transform: translateY(0.4rem);
@@ -52,12 +53,7 @@
         }
     }
 }
-.btn-cancel {
-    // .btn-cancel__svg
 
-    &__svg {
-    }
-}
 .watch {
     padding: 2rem 0 2rem 0;
 
@@ -68,20 +64,16 @@
         height: 15.1rem;
     }
 }
+
 .timer {
     padding-bottom: 5rem;
-    // .timer__time
-
-    &__time {
-    }
 }
+
 .words {
     display: flex;
-    // justify-content: space-between;
     flex-direction: column;
     row-gap: 2rem;
     align-items: center;
-    // column-gap: 5rem;
     padding-bottom: 2rem;
     // .words__en
 
@@ -89,14 +81,11 @@
         font-size: 5rem;
         color: darken($color: $color-base, $amount: 30);
     }
-
-    // .words__ru
-
-    &__ru {
-    }
 }
+
 .btn-yes {
     background-color: $color-lightgreen;
+
     &:hover {
         background-color: darken($color: $color-lightgreen, $amount: 10);
     }
@@ -104,6 +93,7 @@
 
 .btn-no {
     background-color: $color-red;
+    
     &:hover {
         background-color: darken($color: $color-red, $amount: 10);
     }

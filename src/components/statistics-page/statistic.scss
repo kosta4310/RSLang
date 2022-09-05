@@ -67,6 +67,7 @@
         flex-direction: column;
         gap: 2rem;
         width: 60rem;
+
         .answer-title,
         .right-word {
             @include font-Inter(2.8rem, 400);
@@ -86,15 +87,18 @@
         padding: 1rem 0;
         border-bottom: 0.2rem solid $color-black;
     }
+
     .words-container {
         padding: 1rem;
         overflow: auto;
         height: 35rem;
     }
+
     .right-word,
     .answer-title {
         @include font-Inter(2.3rem, 400);
     }
+    
     .word-result {
         display: flex;
         gap: 1rem;

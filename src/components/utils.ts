@@ -7,7 +7,6 @@ export const getTodayString = function () {
     return new Date().toISOString().slice(0, 10);
 };
 
-
 export const saveWord = async function (
     wordId: string,
     complexity: Difficulty = 'hard',
@@ -23,7 +22,6 @@ export const saveWord = async function (
         correctInLineCount: 0,
     };
 
-    // инициализируем с нулевыми значениями
     const body: NoteToWord = {
         difficulty: complexity,
         optional: initOption,
@@ -31,12 +29,10 @@ export const saveWord = async function (
 
     const userWord = await API.getUserWordById(userId, wordId, token);
     if (typeof userWord === 'string') {
-        // и потом присваиваем новые свойства если есть
         Object.assign(body.optional, options);
         await API.createUserWord(userId, wordId, token, body);
     } else {
         Object.assign(body.optional, userWord.optional);
-        // Object.assign(body.optional, options)
         await API.updateUserWord(userId, wordId, token, body);
     }
 };

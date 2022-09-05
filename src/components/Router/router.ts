@@ -25,6 +25,7 @@ export class Router {
         this.sprint = new Sprint();
         this.statistic = new Statistic()
     }
+    
     init() {
         this.router
             .on('/', () => {

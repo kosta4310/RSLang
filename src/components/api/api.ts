@@ -26,35 +26,26 @@ async function getNewUserToken(userId: string, refreshToken: string): Promise<Re
         },
     });
 
-    if (response.status === StatusCodes.FORBIDDEN || response.status === StatusCodes.UNAUTHORIZED) {
-        // перейти на главную страницу
-        // state.setItem({ isAuth: false });
-        // state.delItem('auth');
-        // window.location.href = '/';
-    }
-
     return response.status === StatusCodes.OK ? response.json() : response.text();
 }
 
-// функция-обёртка
-// Если token истёк, пробуем получить новый и отправить запрос заново
 async function retry(input: RequestInfo | URL, init?: RequestInit | undefined) {
     let response = await fetch(input, init);
-    // 402 для /users/{id}/words
-    // 401 для других эндпоинтов
+
     if (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.PAYMENT_REQUIRED) {
         const { userId, refreshToken } = state.getItem('auth');
+
         if (refreshToken) {
             const refreshTokenResponse = await getNewUserToken(userId, refreshToken);
             if (typeof refreshTokenResponse === 'string') {
-                // не получили новый токен, поэтому возвращаем просто предыдущий ответ
                 return response;
             }
+
             const auth = state.getItem('auth') ?? {};
             Object.assign(auth, refreshTokenResponse);
-            // иначе считаем что получили токен и сохраняем его в хранилище
+
             state.setItem({ auth: auth, isAuth: true });
-            // делаем запрос снова, но уже с другим токеном авторизации
+
             if (init?.headers) {
                 Object.assign(init.headers, { Authorization: `Bearer ${refreshTokenResponse.token}` });
             }
@@ -207,8 +198,6 @@ async function deleteUserWord(userId: string, wordId: string, token: string): Pr
     return response.status === StatusCodes.NO_CONTENT ? true : response;
 }
 
-// Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
-// иметь поле userWord со своими полями
 async function getAllUserAggWords(
     userId: string,
     token: string,
@@ -228,8 +217,6 @@ async function getAllUserAggWords(
     return response.json();
 }
 
-// Вернет массив или пустой или со словом по ID и если это слово помечено пользователем то оно будет
-// иметь поле userWord со своими полями
 async function getUserAggWordById(userId: string, wordId: string, token: string) {
     const response = await retry(`${USERS}/${userId}/aggregatedWords/${wordId}`, {
         method: 'GET',

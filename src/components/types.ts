@@ -19,12 +19,12 @@ interface IOptionalToStatistic {
 
 interface IStatisticGamePerDay {
     learnedWords: number;
-    sprintCorrect: number; // кол-во правильно угаданных
+    sprintCorrect: number; 
     sprintTotal: number;
     sprintNewWords: number;
     audioCallNewWords: number;
-    sprintCorrectInLineCount: number; // серия правильных ответов
-    audioCallCorrectInLineCount: number; // серия правильных ответов
+    sprintCorrectInLineCount: number; 
+    audioCallCorrectInLineCount: number;
     audioCallCorrect: number;
     audioCallTotal: number;
 }

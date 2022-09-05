@@ -1,14 +1,12 @@
-.wrapper {
-}
-.container {
-}
 .not-auth {
+    
     // .not-auth__title
     height: calc(100vh - 16rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     &__title {
         text-align: center;
     }
