@@ -57,7 +57,7 @@
         flex: 1 1 80%;
         padding: 1rem 2rem;
         background-color: $color-card;
-        @include font-ABeeZee(2.4rem, 400);
+        @include font-Inter(2.4rem, 400);
         align-items: stretch;
 
         ul {
