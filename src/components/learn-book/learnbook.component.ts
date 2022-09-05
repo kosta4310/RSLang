@@ -8,8 +8,8 @@ import { ControlPanel } from './controlPanel/controlPanel.component';
 import { Pagination } from './pagination/pagination.component';
 import { state } from '../../state';
 import { saveWord } from '../utils';
-import { IWord } from '../api/types';
-import { Constants } from '../types';
+import { IWord, Statistic } from '../api/types';
+import { Constants, IStatisticGamePerDay } from '../types';
 
 export class Book {
     page = 0;
@@ -143,6 +143,49 @@ export class Book {
         return paginatedResults;
     }
 
+    async increaseLearnedWordsInStatisticsToday() {
+        const { userId, token } = state.getItem('auth');
+        const currentDay = new Date().toISOString().slice(0, 10);
+        let currenDayObject = <IStatisticGamePerDay>{
+            learnedWords: 0,
+            sprintCorrect: 0,
+            sprintTotal: 0,
+            sprintNewWords: 0,
+            audioCallNewWords: 0,
+            sprintCorrectInLineCount: 0,
+            audioCallCorrectInLineCount: 0,
+            audioCallCorrect: 0,
+            audioCallTotal: 0,
+        };
+        const initStat = <Statistic>{
+            learnedWords: 0,
+            optional: {
+                [currentDay]: currenDayObject,
+            },
+        };
+        const response = await API.getStatistics(userId, token);
+
+        if (typeof response !== 'string') {
+            const { learnedWords, optional } = response;
+            initStat.learnedWords = learnedWords;
+            initStat.optional = JSON.parse(JSON.stringify(optional));
+        }
+
+        const optional = initStat.optional;
+
+        // eslint-disable-next-line no-prototype-builtins
+        if (optional.hasOwnProperty(currentDay)) {
+            currenDayObject = JSON.parse(JSON.stringify(optional[currentDay]));
+        } else optional[currentDay] = currenDayObject;
+
+        currenDayObject.learnedWords += 1;
+        optional[currentDay] = currenDayObject;
+        initStat.optional = optional;
+        initStat.learnedWords += 1;
+
+        await API.upsertStatistics(userId, token, initStat);
+    }
+
     listen() {
         let isPlayed = false;
         let audio: HTMLAudioElement | null = null;
@@ -214,6 +257,7 @@ export class Book {
                     const card = <HTMLElement>target.closest('.card');
                     const wordId = <string>card.getAttribute('data-id');
                     await saveWord(wordId, 'easy', {});
+                    await this.increaseLearnedWordsInStatisticsToday();
                     card.classList.add('learned-word');
                     this.checkForAllLearned();
                     if (this.complexity === Constants.COMPLEXITY_HARDWORDS) {
