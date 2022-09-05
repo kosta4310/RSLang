@@ -1,0 +1,32 @@
+.menu {
+    display: inline-flex;
+    font-size: 3.2rem;
+    padding: 0 4rem;
+    padding-top: 2rem;
+    position: fixed;
+    left: -36rem;
+    top: 0;
+    bottom: 0;
+    margin-top: $height-header-footer;
+
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: $color-grey;
+    gap: 3rem 0;
+    line-height: 5rem;
+    transition: all ease-in-out 0.5s;
+
+    & img {
+        width: 3rem;
+    }
+
+    & a {
+        all: unset;
+        @include font-ABeeZee(3.6rem, 400);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        cursor: pointer;
+    }
+}

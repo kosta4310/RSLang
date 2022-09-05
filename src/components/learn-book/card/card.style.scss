@@ -1,0 +1,178 @@
+@import '../../../styles/variables.scss';
+
+.card-words {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    padding: 5rem 0;
+}
+.card {
+    display: flex;
+    @include font-ABeeZee(2.4rem, 400);
+    background-color: $color-card;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    &__image {
+        display: flex;
+        width: 39rem;
+
+        img {
+            width: 39rem;
+            object-fit: cover;
+        }
+    }
+
+    box-shadow: 0px 5px 10px darkgrey;
+    min-width: $width-container;
+
+    // .card__context
+
+    &__context {
+        flex: 1 1 auto;
+        padding: 1rem 2rem;
+    }
+
+    // .card__header
+
+    &__header {
+        display: flex;
+        align-items: center;
+        font-size: 3.4rem;
+        margin-bottom: 2rem;
+        column-gap: 3rem;
+    }
+
+    // .card__left
+
+    &__left {
+        display: flex;
+        align-items: center;
+    }
+
+    // .card__word
+
+    &__word {
+        margin-right: 1rem;
+    }
+
+    // .card__meaning
+
+    &__meaning {
+        padding-bottom: 1rem;
+    }
+
+    // .card__example
+
+    &__example {
+        padding-bottom: 2rem;
+    }
+
+    // .card__translate-meaning
+
+    &__translate-meaning {
+        padding-bottom: 1rem;
+    }
+
+    // .card__button
+
+    &__button {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0 1rem;
+
+        button {
+            background-color: inherit;
+        }
+
+        .sound svg:hover {
+            fill: #ff1d1d;
+        }
+
+        .easy-word svg:hover {
+            fill: #20df7f;
+        }
+
+        .hard-word svg:hover {
+            fill: #ff1d1d;
+        }
+
+        .sound.selected svg,
+        .hard-word.selected svg {
+            fill: #ff1d1d;
+        }
+
+        .easy-word.selected svg {
+            fill: #20df7f;
+        }
+    }
+}
+
+#words[data-complexity='0'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-a1;
+}
+
+#words[data-complexity='1'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-a2;
+}
+
+#words[data-complexity='2'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-b1;
+}
+
+#words[data-complexity='3'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-b2;
+}
+
+#words[data-complexity='4'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-c1;
+}
+
+#words[data-complexity='5'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-c2;
+}
+
+#words[data-complexity='6'] .card {
+    box-shadow: 0px 5px 10px $learnbook-color-hard-words;
+}
+
+.card__statistics {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.card__statistics-title {
+    border-radius: 1.8rem;
+    align-self: flex-start;
+    background-color: $color-base;
+    padding: 0.5rem 2rem;
+    min-width: 18rem;
+    text-align: center;
+}
+
+.card__statistics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card__statistics-line {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.card__statistics-left {
+    @include font-ABeeZee(3rem, 400);
+}
+
+.auth {
+    display: block;
+}
+.none {
+    display: none;
+}

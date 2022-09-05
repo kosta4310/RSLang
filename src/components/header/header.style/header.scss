@@ -1,0 +1,43 @@
+@import './burger.scss';
+@import './menu.scss';
+
+.wrapper-header {
+    background-color: $color-base; 
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $height-header-footer;
+    margin: 0 2rem;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    column-gap: 4rem;
+}
+
+.btn-enter {
+    display: block;
+    color: $color-orange;
+    line-height: 3.8rem;
+    padding: 1rem 3.8rem;
+    border: 2px solid $color-orange;
+    @include font-Inter(3.6rem, 400);
+}
+
+.header__mt {
+    width: 100%;
+    height: 8rem;
+}
+
+.logo-link {
+    all: unset;
+    cursor: pointer;
+}

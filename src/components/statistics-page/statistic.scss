@@ -1,0 +1,117 @@
+@import '../../styles/variables.scss';
+@import './not-auth.style.scss';
+
+.stat__container {
+    flex-grow: 1;
+
+    h2 {
+        @include font-Inter(2.3rem, 400);
+    }
+
+    .stat__plot-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 5rem;
+    }
+
+    #plot1,
+    #plot2 {
+        width: 100%;
+    }
+
+    .plotly {
+        display: flex;
+        justify-content: center;
+    }
+
+    .stat__game-container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .stat__subplot-container {
+        min-width: 50%;
+        text-align: center;
+        margin-top: 2rem;
+        justify-content: space-around;
+
+        h2 {
+            min-height: 5rem;
+        }
+    }
+
+    .stat__game-card {
+        border: 2px solid black;
+        border-radius: 15px;
+        padding: 1rem;
+        margin: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        h2 {
+            @include font-Inter(3rem, 700);
+            padding-bottom: 1rem;
+        }
+    }
+
+    .stat__word-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4rem;
+    }
+
+    .stat__word-card {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        width: 60rem;
+
+        .answer-title,
+        .right-word {
+            @include font-Inter(2.8rem, 400);
+        }
+    }
+
+    .stat__word-line-container,
+    .stat__game-line-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+
+    .statistic-title {
+        @include font-Inter(3rem, 700);
+        text-align: center;
+        padding: 1rem 0;
+        border-bottom: 0.2rem solid $color-black;
+    }
+
+    .words-container {
+        padding: 1rem;
+        overflow: auto;
+        height: 35rem;
+    }
+
+    .right-word,
+    .answer-title {
+        @include font-Inter(2.3rem, 400);
+    }
+    
+    .word-result {
+        display: flex;
+        gap: 1rem;
+
+        .word {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+
+            .word-statistic {
+                @include font-Inter(2rem, 400);
+            }
+        }
+    }
+}

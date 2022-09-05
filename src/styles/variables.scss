@@ -1,0 +1,62 @@
+$width-container: 1280px;
+$height-header-footer: 8rem;
+
+$color-base: #ffc53d;
+$color-addition: #ffb300;
+$color-second: #ffc53db5;
+$color-card-capabilities: #f0f0f0;
+$color-card: #d9d9d936;
+$color-grey: #d9d9d9;
+$color-violet: #5d6280;
+$color-turquoise: #224957;
+$color-green: #16302b;
+$color-blue: #2959ff;
+$color-black: #000;
+$color-orange: #ff5714;
+$color-white: #fff;
+$color-lightgreen: #20df7f;
+$color-red: #ff1d1d;
+$color-disabled-button: #605b5b36;
+$color-shadow: #999;
+$color-shadow-dark: #666;
+
+$learnbook-color-a1: #5edb8f;
+$learnbook-color-a2: #ffc839;
+$learnbook-color-b1: #ff6d4d;
+$learnbook-color-b2: #d91f54;
+$learnbook-color-c1: #9c224d;
+$learnbook-color-c2: #6b2155;
+$learnbook-color-hard-words: #5863F8;
+
+$learnbook-color-a1-all-learned-background: rgba(94, 219, 144, 0.26);
+$learnbook-color-a2-all-learned-background: rgba(255, 199, 57, 0.26);
+$learnbook-color-b1-all-learned-background: rgba(255, 110, 77, 0.26);
+$learnbook-color-b2-all-learned-background: rgba(217, 31, 84, 0.26);
+$learnbook-color-c1-all-learned-background: rgba(156, 34, 77, 0.26);
+$learnbook-color-c2-all-learned-background: rgba(107, 33, 85, 0.26);
+
+@mixin font-ABeeZee($size, $weight) {
+    font-family: ABeeZee;
+    font-size: $size;
+    font-weight: $weight;
+}
+
+@mixin font-Inter($size, $weight) {
+    font-family: Inter;
+    font-size: $size;
+    font-weight: $weight;
+}
+
+@mixin font-Roboto($size, $weight) {
+    font-family: Roboto;
+    font-size: $size;
+    font-weight: $weight;
+}
+
+h1 {
+    @include font-ABeeZee(4.8rem, 400);
+}
+
+h4 {
+    @include font-Inter(3.6rem, 400);
+}

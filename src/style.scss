@@ -1,0 +1,16 @@
+@import './styles/nullable.scss';
+@import './styles/variables.scss';
+@import './styles/fonts.scss';
+@import './components/first-page/styles/homepage.scss';
+@import './components/sprint/sprint.style.scss';
+
+.container {
+    max-width: $width-container;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
