@@ -1,1 +1,1 @@
-export const BASE = 'https://rs-lang-command-task.herokuapp.com';
+export const BASE = 'https://rslang-be-xxwz.onrender.com';
